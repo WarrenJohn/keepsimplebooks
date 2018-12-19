@@ -1,0 +1,32 @@
+{
+  "name": "keepsimplebooks",
+  "version": "1.0.0",
+  "description": "simple book keeping",
+  "main": "app.js",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "bytes": "^3.0.0",
+    "content-type": "^1.0.4",
+    "depd": "^1.1.2",
+    "destroy": "^1.0.4",
+    "ee-first": "^1.1.1",
+    "ejs": "^2.6.1",
+    "encodeurl": "^1.0.2",
+    "escape-html": "^1.0.3",
+    "etag": "^1.8.1",
+    "express": "^4.16.4",
+    "forwarded": "^0.1.2",
+    "fresh": "^0.5.2",
+    "vue": "^2.5.21"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "none"
+  },
+  "author": "warren john",
+  "license": "ISC"
+}

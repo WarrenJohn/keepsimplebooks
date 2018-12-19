@@ -1,0 +1,6 @@
+instance/
+test.*
+__pycache__
+*.txt
+*.db
+*.log
