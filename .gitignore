@@ -1,5 +1,6 @@
 instance/
 node_modules/
+accountactivity.*
 test.*
 __pycache__
 *.txt
