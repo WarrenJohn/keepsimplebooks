@@ -2,6 +2,7 @@ instance/
 node_modules/
 test.*
 __pycache__
+accountactivity.*
 *.txt
 *.db
 *.log
