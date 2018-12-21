@@ -3,6 +3,7 @@ node_modules/
 accountactivity.*
 test.*
 __pycache__
+accountactivity.*
 *.txt
 *.db
 *.log
