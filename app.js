@@ -1,3 +1,5 @@
+// csv API: https://csv.js.org/parse/api/
+// watch this: https://www.youtube.com/watch?v=j55fHUJqtyw&list=PLillGF-RfqbYSx-Ab1xWVanGKtowTsnNm
 // from: https://stackoverflow.com/questions/41776978/how-to-read-csv-file-in-node-js
 const fs = require('fs');
 var parse = require('csv-parse');
