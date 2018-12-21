@@ -1,4 +1,5 @@
 instance/
+node_modules/
 test.*
 __pycache__
 *.txt
