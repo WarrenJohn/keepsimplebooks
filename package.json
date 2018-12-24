@@ -25,11 +25,14 @@
     "vue": "^2.5.21"
   },
   "devDependencies": {
+    "jest": "^23.6.0",
     "nodemon": "^1.18.9"
   },
   "scripts": {
     "start": "node init.js",
-    "dev": "nodemon init.js"
+    "dev": "nodemon init.js",
+    "watch": "jest --watch *.js",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
