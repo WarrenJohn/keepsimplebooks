@@ -1,5 +1,4 @@
 require('dotenv').config({path:'../.env'});
-console.log(process.env.DB_PASSWORD);
 
 // // csv API: https://csv.js.org/parse/api/
 // // watch this: https://www.youtube.com/watch?v=j55fHUJqtyw&list=PLillGF-RfqbYSx-Ab1xWVanGKtowTsnNm
