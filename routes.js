@@ -11,7 +11,7 @@ You don’t! There’s no need to “render” HTML with the res.render() functi
 use the res.sendFile() function.
 If you are serving many assets from a directory, use the express.static() middleware function.
 */
-
+// TEST2 2
 app.get('/', (req, res) =>{
     console.log('GET: index');
     res.send('Index Page Test');
