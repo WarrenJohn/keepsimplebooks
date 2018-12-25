@@ -1,10 +1,11 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 require('dotenv').config({path:'../.env'});
 const app = express();
 const port = process.env.PORT;
 
 app.use(express.static('static'));
-
+app.use(bodyParser.json());
 /* How do I render plain HTML?
 You don’t! There’s no need to “render” HTML with the res.render() function. If you have a specific file,
 use the res.sendFile() function.
