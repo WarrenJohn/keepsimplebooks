@@ -43,58 +43,56 @@ const operatorsAliases = {
 // ^re: http://docs.sequelizejs.com/manual/tutorial/querying.html#operators-aliases
 
 // Connecting to the database
-const db = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PW, {
+const keepsimple_db = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PW, {
     dialect: 'postgres',
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     operatorsAliases: operatorsAliases
 });
 
-// Models are defined with sequelize.define('name', {attributes}, {options});
-// Sequelize will automatically add the columns: id, createdAt and updatedAt.
-const Test = db.define('Test',
+// Init DB table model.
+// sequelize.define('name', {attributes}, {options});
+const Bank = keepsimple_db.define('transactions',
     {
-      username: {
-        type: Sequelize.STRING
-        },
-      password: {
-        type: Sequelize.STRING
-        }
+      transaction_date: {type: Sequelize.TEXT},
+      description: {type: Sequelize.TEXT},
+      withdrawl: {type: Sequelize.TEXT},
+      deposit: {type: Sequelize.TEXT},
+      balance: {type: Sequelize.TEXT},
+      user: {type: Sequelize.TEXT}
     },
     {
-        tableName: 'my_test_table', // this will define the table's name
-        timestamps: true            // this will activate/deactivate the timestamp columns
+        tableName: 'transactions',
+        timestamps: true
     });
 
-// {force: true} will drop the table if it already exists
-// Test.sync({force: true})
-//     .then(() => {
-//         // Table created
-//         return Test.create({
-//             username: 'Warren',
-//             password: '1234'
-//         });
-//     })
-//     .catch((err) => {
-//         console.log(err);
-//     });
+// Sync DB
+// keepsimple_db.sync(); // Enable for production
+Bank.sync({force: true}); // DEV ONLY, using to easily drop tables
 
-// Test connection
-db.authenticate()
+// Verify connection
+keepsimple_db.authenticate()
     .then(() => {
         console.log("\nDatabase connected!\n");
     })
     .catch((err) => {
         console.log(err);
     });
+
+module.exports.insertRow = object =>{
+        Bank.create(object);
+        // {fields: ['transaction_date', 'description', 'withdrawl', 'deposit', 'balance']}
+    };
+
 // Grab all test
 // http://docs.sequelizejs.com/manual/tutorial/querying.html
 // https://sequelize.readthedocs.io/en/1.7.0/articles/getting-started/#managing-the-schema-of-your-database
-Test.findAll()
-    .then(users => {
-      console.log(users);
-    })
-    .catch(err => console.log(err));
+// User.findAll()
+// .then(users => {
+//     console.log(users);
+// })
+// .catch(err => console.log(err));
+
 
     /*
     // DON'T DO THIS

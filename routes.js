@@ -1,10 +1,13 @@
+require('dotenv').config({path:'../.env'});
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
-require('dotenv').config({path:'../.env'});
 const app = express();
 const port = process.env.PORT;
 const views = path.join(__dirname, 'views');
+
+const u = require('./utils.js');
+
 app.use(express.static('./static'));
 app.use(bodyParser.json());
 app.set('views', path.join(__dirname + 'views'));
@@ -15,6 +18,7 @@ You don’t! There’s no need to “render” HTML with the res.render() functi
 use the res.sendFile() function.
 If you are serving many assets from a directory, use the express.static() middleware function.
 */
+
 
 app.get('/', (req, res) =>{
     console.log('GET: index');
@@ -39,16 +43,25 @@ app.get('/signup', (req, res) =>{
     }
 );
 app.get('/dashboard', (req, res) =>{
+    // Show money flow in/out
+    // most common expenses
     console.log('GET: dashboard');
     res.send('Dashboard');
     }
 );
 app.get('/upload', (req, res) =>{
+    // User uploads CSV
+    // '' specify columns
+    // '' init upload
+    u.handleCSV('accountactivity.csv');
     console.log('GET: upload');
     res.send('Upload');
     }
 );
 app.get('/transactions', (req, res) =>{
+    // Manage transactions
+    // Tag transactions
+    // // incl. option whether transaction is HST taxable or not
     console.log('GET: transactions');
     res.send('Tag Transactions');
     }
