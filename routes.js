@@ -50,10 +50,11 @@ app.get('/dashboard', (req, res) =>{
     }
 );
 app.get('/upload', (req, res) =>{
+    // TODO:
     // User uploads CSV
     // '' specify columns
     // '' init upload
-    u.handleCSV('accountactivity.csv');
+    u.handleFullCSV('accountactivity.csv');
     console.log('GET: upload');
     res.send('Upload');
     }

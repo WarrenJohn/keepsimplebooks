@@ -2,6 +2,28 @@ const m = require('./models.js');
 const fs = require('fs');
 const parse = require('csv-parse');
 
+const createObjArray = data => {
+    // data must be array of arrays
+    let array = Array();
+    data.map(row => array.push({
+        transaction_date: row[0],
+        description: row[1],
+        withdrawl: row[2],
+        deposit: row[3],
+        balance: row[4],
+        user: 'warren'}));
+    return array;
+};
+
+module.exports.handleFullCSV = (file, ...callback) => {
+    fs.readFile(file, function (err, fileData) {
+        parse(fileData, {columns: false, trim: true}, function(err, data) {
+            // data is converted in an array of objects prior to db insertion
+            m.insertBulkRows(createObjArray(data));
+        });
+    });
+};
+
 module.exports.handleCSV = file => {
     fs.readFile(file, function (err, fileData) {
         parse(fileData, {columns: false, trim: true}, function(err, data) {

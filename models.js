@@ -52,7 +52,7 @@ const keepsimple_db = new Sequelize(process.env.DB_NAME, process.env.DB_USER, pr
 
 // Init DB table model.
 // sequelize.define('name', {attributes}, {options});
-const Bank = keepsimple_db.define('transactions',
+module.exports = Bank = keepsimple_db.define('transactions',
     {
       transaction_date: {type: Sequelize.TEXT},
       description: {type: Sequelize.TEXT},
@@ -79,10 +79,14 @@ keepsimple_db.authenticate()
         console.log(err);
     });
 
-module.exports.insertRow = object =>{
+// {fields: ['transaction_date', 'description', 'withdrawl', 'deposit', 'balance']}
+module.exports.insertRow = (object) =>{
         Bank.create(object);
-        // {fields: ['transaction_date', 'description', 'withdrawl', 'deposit', 'balance']}
     };
+
+module.exports.insertBulkRows = (object_array) => {
+    Bank.bulkCreate(object_array);
+};
 
 // Grab all test
 // http://docs.sequelizejs.com/manual/tutorial/querying.html
