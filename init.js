@@ -11,7 +11,7 @@ app.use(express.static('./static'));
 app.use(bodyParser.json());
 // app.set('views', path.join(__dirname + 'views'));
 require('./routes')(app);
-
+// Vue docs: https://cli.vuejs.org/guide/
 m.keepsimple_db.authenticate()
     .then(() => {
         // Test connection
