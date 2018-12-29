@@ -78,8 +78,8 @@ const Bank = keepsimple_db.define('transactions',
 //             console.log(err);
 //         })
 //     ); // Syncs all tables/models. Enable for production
-
-Bank.sync({force: true})
+// {force: true}
+Bank.sync()
     .then(
         // Verify connection
         keepsimple_db.authenticate()
@@ -91,15 +91,25 @@ Bank.sync({force: true})
         })
     ); // DEV ONLY, using to easily drop tables
 
-
+// columns: [ 'id', 'transaction_date', 'description', 'withdrawl', 'deposit', 'balance', 'user', 'createdAt', 'updatedAt' ]
 module.exports.userTransactions = query => {
     Bank.findAll({
-        where: {
-            user: query
-        }
+        where: {user: query}
     })
     .then((data) => {
-        console.log(data.dataValues);
+        let transactions = {};
+        let descriptions = Array();
+        data.map((obj) => {transactions.push({
+            id: obj.id,
+            date: obj.transaction_date,
+            description: obj.description,
+            withdrawl: obj.withdrawl,
+            deposit: obj.deposit,
+            balance: obj.balance}
+        );
+        descriptions.push(obj.description);
+        });
+        return transactions;
     });
 };
 

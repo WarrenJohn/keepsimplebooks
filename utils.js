@@ -15,8 +15,11 @@ const createObjArray = data => {
     return array;
 };
 
-module.exports.test = name => {
-    console.log(m.userTransactions(name));
+module.exports.parseTransactions = transactions => {
+    let parsed_obj = {};
+    transactions.map(obj => {
+        console.log(obj.description);
+    });
 };
 
 module.exports.handleCSV = file => {
@@ -24,11 +27,6 @@ module.exports.handleCSV = file => {
         parse(fileData, {columns: false, trim: true}, function(err, data) {
             // data is converted in an array of objects prior to db insertion
             m.insertBulkRows(createObjArray(data));
-            // createObjArray(data)
-            //     .then((obj_array) => {
-            //         m.insertBulkRows(obj_array);
-            //     })
-            //     .catch((err) => {console.log(err);});
         });
     });
 };

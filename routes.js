@@ -7,6 +7,7 @@ const port = process.env.PORT;
 const views = path.join(__dirname, 'views');
 
 const u = require('./utils.js');
+const m = require('./models.js');
 
 app.use(express.static('./static'));
 app.use(bodyParser.json());
@@ -63,24 +64,25 @@ app.get('/transactions', (req, res) =>{
     // Manage transactions
     // Tag transactions
     // -incl. option whether transaction is HST taxable or not
-    u.test('warren');
+    m.userTransactions('warren');
     console.log('GET: transactions');
     res.send('Tag Transactions');
     }
 );
 app.get('/history', (req, res) =>{
+    m.userTransactions('warren');
     console.log('GET: history');
     res.send('View History');
     }
 );
 
 app.use((req, res, next) => {
-    res.status(404).send("404: Not found");
+    res.status(404).send('<h1>404: Not found</h1>');
 });
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
-    res.status(500).send('500: Something broke!');
+    res.status(500).send('<h1>500: Something broke!</h1>');
 });
 
 app.listen(port, () => console.log(`Listening on port ${port}!`));
