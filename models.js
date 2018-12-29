@@ -1,6 +1,5 @@
 // http://docs.sequelizejs.com/manual/installation/usage.html
 // https://codeforgeek.com/2017/01/getting-started-sequelize-postgresql/
-
 require('dotenv').config({path:'../.env'});
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
@@ -66,38 +65,13 @@ const Bank = keepsimple_db.define('transactions',
         timestamps: true
     });
 
-// Sync DB
-// keepsimple_db.sync()
-//     .then(
-//         // Verify connection
-//         keepsimple_db.authenticate()
-//         .then(() => {
-//             console.log("\nDatabase connected!\n");
-//         })
-//         .catch((err) => {
-//             console.log(err);
-//         })
-//     ); // Syncs all tables/models. Enable for production
-// {force: true}
-Bank.sync()
-    .then(
-        // Verify connection
-        keepsimple_db.authenticate()
-        .then(() => {
-            console.log("\nDatabase connected!\n");
-        })
-        .catch((err) => {
-            console.log(err);
-        })
-    ); // DEV ONLY, using to easily drop tables
-
 // columns: [ 'id', 'transaction_date', 'description', 'withdrawl', 'deposit', 'balance', 'user', 'createdAt', 'updatedAt' ]
 module.exports.userTransactions = query => {
     Bank.findAll({
         where: {user: query}
     })
     .then((data) => {
-        let transactions = {};
+        let transactions = Array();
         let descriptions = Array();
         data.map((obj) => {transactions.push({
             id: obj.id,
@@ -134,31 +108,6 @@ module.exports.insertRow = object =>{
         });
     };
 
-// Grab all test
-// http://docs.sequelizejs.com/manual/tutorial/querying.html
-// https://sequelize.readthedocs.io/en/1.7.0/articles/getting-started/#managing-the-schema-of-your-database
-// User.findAll()
-// .then(users => {
-//     console.log(users);
-// })
-// .catch(err => console.log(err));
-
-
-    /*
-    // DON'T DO THIS
-    user = User.findOne()
-
-    console.log(user.get('firstName'));
-
-    will never work! This is because user is a promise object, not a data row from the DB. The right way to do it is:
-
-    User.findOne().then(user => {
-      console.log(user.get('firstName'));
-    });
-
-    When your environment or transpiler supports async/await this will work but only in the body of an async function:
-
-    user = await User.findOne()
-
-    console.log(user.get('firstName'));
-    */
+module.exports.Sequelize = Sequelize;
+module.exports.keepsimple_db = keepsimple_db;
+module.exports.Bank = Bank;

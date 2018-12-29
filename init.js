@@ -1,9 +1,32 @@
-// require('dotenv').config({path:'../.env'});
-// require('./models.js');
+require('dotenv').config({path:'../.env'});
+const express = require('express');
+const bodyParser = require('body-parser');
+const path = require('path');
+const m = require('./models');
 
-// // csv API: https://csv.js.org/parse/api/
-// // watch this: https://www.youtube.com/watch?v=j55fHUJqtyw&list=PLillGF-RfqbYSx-Ab1xWVanGKtowTsnNm
-// // from: https://stackoverflow.com/questions/41776978/how-to-read-csv-file-in-node-js
+const app = express();
+const port = process.env.PORT;
+const views = path.join(__dirname, 'views');
+app.use(express.static('./static'));
+app.use(bodyParser.json());
+// app.set('views', path.join(__dirname + 'views'));
+require('./routes')(app);
 
-// // Vue: https://www.youtube.com/watch?v=5LYrN_cAJoA&list=PL4cUxeGkcC9gQcYgjhBoeQH7wiAyZNrYa
-// // another: https://www.youtube.com/watch?v=Fa4cRMaTDUI
+m.keepsimple_db.authenticate()
+    .then(() => {
+        // Test connection
+        return console.log("\nDatabase connected!\n");
+    })
+    .then(() => {
+        // Sync the database to create any tables 'if not exists'
+        return m.Bank.sync();
+        // DEV ONLY, using to easily drop tables
+        // Use m.keepsimple_m.sync() for production
+    })
+    .then(() => {
+        // Start the server
+        app.listen(port, () => console.log(`\nListening on port ${port}!\n`));
+    })
+    .catch((err) => {
+        console.log(err);
+    });
