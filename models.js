@@ -52,7 +52,7 @@ const keepsimple_db = new Sequelize(process.env.DB_NAME, process.env.DB_USER, pr
 
 // Init DB table model.
 // sequelize.define('name', {attributes}, {options});
-module.exports = Bank = keepsimple_db.define('transactions',
+const Bank = keepsimple_db.define('transactions',
     {
       transaction_date: {type: Sequelize.TEXT},
       description: {type: Sequelize.TEXT},
