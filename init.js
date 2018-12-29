@@ -1,5 +1,6 @@
 require('dotenv').config({path:'../.env'});
 const express = require('express');
+var cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path');
 const m = require('./models');
@@ -9,6 +10,7 @@ const port = process.env.PORT;
 const views = path.join(__dirname, 'views');
 app.use(express.static('./static'));
 app.use(bodyParser.json());
+app.use(cors());
 // app.set('views', path.join(__dirname + 'views'));
 require('./routes')(app);
 // Vue docs: https://cli.vuejs.org/guide/
