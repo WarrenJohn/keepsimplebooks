@@ -24,6 +24,11 @@ module.exports.handleCSV = file => {
         parse(fileData, {columns: false, trim: true}, function(err, data) {
             // data is converted in an array of objects prior to db insertion
             m.insertBulkRows(createObjArray(data));
+            // createObjArray(data)
+            //     .then((obj_array) => {
+            //         m.insertBulkRows(obj_array);
+            //     })
+            //     .catch((err) => {console.log(err);});
         });
     });
 };

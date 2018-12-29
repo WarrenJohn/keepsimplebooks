@@ -97,14 +97,18 @@ module.exports.userTransactions = query => {
         where: {
             user: query
         }
+    })
+    .then((data) => {
+        console.log(data.dataValues);
     });
 };
 
 // {fields: ['transaction_date', 'description', 'withdrawl', 'deposit', 'balance']}
 module.exports.insertBulkRows = object_array => {
     Bank.sync() // .sync() is called to make sure the table exists prior to inserting data
-    .then(
-        Bank.bulkCreate(object_array))
+        .then(() => {
+            return Bank.bulkCreate(object_array);
+        })
         .catch(err => {
             console.log(err);
         });
@@ -112,8 +116,9 @@ module.exports.insertBulkRows = object_array => {
 
 module.exports.insertRow = object =>{
     Bank.sync()
-        .then(
-            Bank.create(object))
+        .then(() => {
+            return Bank.create(object);
+        })
         .catch(err => {
             console.log(err);
         });
