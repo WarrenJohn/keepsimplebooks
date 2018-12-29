@@ -54,7 +54,7 @@ app.get('/upload', (req, res) =>{
     // User uploads CSV
     // '' specify columns
     // '' init upload
-    u.handleFullCSV('accountactivity.csv');
+    u.handleCSV('accountactivity.csv');
     console.log('GET: upload');
     res.send('Upload');
     }
@@ -62,7 +62,8 @@ app.get('/upload', (req, res) =>{
 app.get('/transactions', (req, res) =>{
     // Manage transactions
     // Tag transactions
-    // // incl. option whether transaction is HST taxable or not
+    // -incl. option whether transaction is HST taxable or not
+    u.test('warren');
     console.log('GET: transactions');
     res.send('Tag Transactions');
     }

@@ -67,26 +67,57 @@ const Bank = keepsimple_db.define('transactions',
     });
 
 // Sync DB
-// keepsimple_db.sync(); // Enable for production
-Bank.sync({force: true}); // DEV ONLY, using to easily drop tables
+// keepsimple_db.sync()
+//     .then(
+//         // Verify connection
+//         keepsimple_db.authenticate()
+//         .then(() => {
+//             console.log("\nDatabase connected!\n");
+//         })
+//         .catch((err) => {
+//             console.log(err);
+//         })
+//     ); // Syncs all tables/models. Enable for production
 
-// Verify connection
-keepsimple_db.authenticate()
-    .then(() => {
-        console.log("\nDatabase connected!\n");
-    })
-    .catch((err) => {
-        console.log(err);
+Bank.sync({force: true})
+    .then(
+        // Verify connection
+        keepsimple_db.authenticate()
+        .then(() => {
+            console.log("\nDatabase connected!\n");
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+    ); // DEV ONLY, using to easily drop tables
+
+
+module.exports.userTransactions = query => {
+    Bank.findAll({
+        where: {
+            user: query
+        }
     });
+};
 
 // {fields: ['transaction_date', 'description', 'withdrawl', 'deposit', 'balance']}
-module.exports.insertRow = (object) =>{
-        Bank.create(object);
+module.exports.insertBulkRows = object_array => {
+    Bank.sync() // .sync() is called to make sure the table exists prior to inserting data
+    .then(
+        Bank.bulkCreate(object_array))
+        .catch(err => {
+            console.log(err);
+        });
     };
 
-module.exports.insertBulkRows = (object_array) => {
-    Bank.bulkCreate(object_array);
-};
+module.exports.insertRow = object =>{
+    Bank.sync()
+        .then(
+            Bank.create(object))
+        .catch(err => {
+            console.log(err);
+        });
+    };
 
 // Grab all test
 // http://docs.sequelizejs.com/manual/tutorial/querying.html

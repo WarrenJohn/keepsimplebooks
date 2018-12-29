@@ -15,7 +15,11 @@ const createObjArray = data => {
     return array;
 };
 
-module.exports.handleFullCSV = (file, ...callback) => {
+module.exports.test = name => {
+    console.log(m.userTransactions(name));
+};
+
+module.exports.handleCSV = file => {
     fs.readFile(file, function (err, fileData) {
         parse(fileData, {columns: false, trim: true}, function(err, data) {
             // data is converted in an array of objects prior to db insertion
@@ -24,7 +28,8 @@ module.exports.handleFullCSV = (file, ...callback) => {
     });
 };
 
-module.exports.handleCSV = file => {
+module.exports.handleCSV_rows = file => {
+    // inserts csv data row by row
     fs.readFile(file, function (err, fileData) {
         parse(fileData, {columns: false, trim: true}, function(err, data) {
             // CSV data is in an array of arrys passed to this callback as rows.
