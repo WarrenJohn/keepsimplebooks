@@ -7,6 +7,7 @@
     "body-parser": "^1.18.3",
     "bytes": "^3.0.0",
     "content-type": "^1.0.4",
+    "cors": "^2.8.5",
     "csv": "^5.0.1",
     "depd": "^1.1.2",
     "destroy": "^1.0.4",
