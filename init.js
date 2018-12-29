@@ -14,6 +14,10 @@ app.use(cors());
 // app.set('views', path.join(__dirname + 'views'));
 require('./routes')(app);
 // Vue docs: https://cli.vuejs.org/guide/
+
+// May not need body-parser:
+// https://expressjs.com/en/4x/api.html - express.json([options])
+// https://www.reddit.com/r/javascript/comments/78jjna/express_now_includes_bodyparser_middleware_by/
 m.keepsimple_db.authenticate()
     .then(() => {
         // Test connection
