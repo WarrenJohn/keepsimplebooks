@@ -15,8 +15,6 @@ module.exports = app => {
     app.get('/', (req, res) =>{
         console.log('GET: index');
         res.sendFile(path.join(views, '/index.html'));
-        // Vue will work if I write the code directly in a script tag
-        // in the index.html file, but not if I link the index.js in the script tag.
         }
     );
     app.get('/robots.txt', (req, res) =>{
