@@ -14,9 +14,10 @@ app.use(cors());
 // app.set('views', path.join(__dirname + 'views'));
 require('./routes')(app);
 // Vue docs: https://cli.vuejs.org/guide/
-// Multi-page mode:
-// https://cli.vuejs.org/config/#vue-config-js
-// Do I need the vue-router?
+// current vue tut
+// https://www.youtube.com/watch?v=xZMwg5z5VGk
+// Good VueRouter starter tutorial:
+// https://appdividend.com/2018/12/28/vue-router-tutorial-with-example-how-to-use-routing-in-vuejs/#Step_1_Install_Vue_Router
 
 // May not need body-parser:
 // https://expressjs.com/en/4x/api.html - express.json([options])
