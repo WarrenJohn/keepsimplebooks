@@ -1,8 +1,8 @@
 const path = require('path');
 const views = path.join(__dirname, 'views');
 
-const u = require('./utils.js');
-const m = require('./models.js');
+const u = require('./utils');
+const m = require('./models');
 
 
 /* How do I render plain HTML?
@@ -12,15 +12,61 @@ If you are serving many assets from a directory, use the express.static() middle
 */
 
 // Upload page function
-u.handleCSV('accountactivity.csv');
+// u.handleCSV('accountactivity.csv');
+
 // Transactions & History page function
-m.userTransactions('warren');
 
 module.exports = app => {
     // Need to build api for Vue
     app.get('/', (req, res) =>{
         console.log('GET: index');
-        res.sendFile(path.join(views, '/index.html'));
+        res.send('Index');
+        // res.sendFile(path.join(views, '/index.html'));
+        }
+    );
+
+    // Users: registering, logging in and modifying users
+    app.get('/users', (req, res) =>{
+        console.log('GET: Users');
+        res.send('Users');
+        // res.sendFile(path.join(views, '/index.html'));
+        }
+    );
+    app.post('/users', (req, res) =>{
+        console.log('Post: Users');
+        res.send('Users');
+        // res.sendFile(path.join(views, '/index.html'));
+        }
+    );
+    app.patch('/users', (req, res) =>{
+        console.log('Post: Users');
+        res.send('Users');
+        // res.sendFile(path.join(views, '/index.html'));
+        }
+    );
+
+    // Transactions uploading, viewing, tagging, modifying and deleting transactions
+    app.get('/transactions', (req, res) =>{
+        console.log('GET: Transactions');
+        m.userTransactions('warren').then(data => {res.send(data);});
+    }
+    );
+    app.post('/transactions', (req, res) =>{
+        console.log('POST: Transactions');
+        res.send('Transactions');
+        // res.sendFile(path.join(views, '/index.html'));
+        }
+    );
+    app.patch('/transactions', (req, res) =>{
+        console.log('PATCH: Transactions');
+        res.send('Transactions');
+        // res.sendFile(path.join(views, '/index.html'));
+        }
+    );
+    app.delete('/transactions', (req, res) =>{
+        console.log('DELETE: Transactions');
+        res.send('Transactions');
+        // res.sendFile(path.join(views, '/index.html'));
         }
     );
 };

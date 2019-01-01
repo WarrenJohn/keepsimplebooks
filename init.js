@@ -27,9 +27,10 @@ m.keepsimple_db.authenticate()
     })
     .then(() => {
         // Sync the database to create any tables 'if not exists'
-        return m.Bank.sync();
+        // return m.Bank.sync();
+        return m.keepsimple_db.sync();
         // DEV ONLY, using to easily drop tables
-        // Use m.keepsimple_m.sync() for production
+        // Use m.keepsimple_db.sync() for production
     })
     .then(() => {
         // Start the server
