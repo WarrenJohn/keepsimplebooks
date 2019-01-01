@@ -69,26 +69,26 @@ const Bank = keepsimple_db.define('transactions',
 module.exports.userTransactions = query => {
     return Bank.findAll({
         where: {user: query}
-    })
-    .then((data) => {
-        let transactions = Array();
-        let descriptions = Array();
-        data.map((obj) => {transactions.push({
-                id: obj.id,
-                date: obj.transaction_date,
-                description: obj.description,
-                withdrawl: obj.withdrawl,
-                deposit: obj.deposit,
-                balance: obj.balance}
-                );
-            descriptions.push(obj.description);
-            });
-        return transactions;
-    })
-    .catch(err => {
-        console.log("USER TRANSACTION ERROR: ", err);
-    });
-};
+        })
+        .then((data) => {
+            let transactions = Array();
+            let descriptions = Array();
+            data.map((obj) => {transactions.push({
+                    id: obj.id,
+                    date: obj.transaction_date,
+                    description: obj.description,
+                    withdrawl: obj.withdrawl,
+                    deposit: obj.deposit,
+                    balance: obj.balance}
+                    );
+                descriptions.push(obj.description);
+                });
+            return transactions;
+        })
+        .catch(err => {
+            console.log("USER TRANSACTION ERROR: ", err);
+        });
+    };
 
 // {fields: ['transaction_date', 'description', 'withdrawl', 'deposit', 'balance']}
 module.exports.insertBulkRows = object_array => {
