@@ -1,7 +1,8 @@
 <template>
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
+    <HelloWorld :msg="msg"></HelloWorld>
   </div>
 </template>
 
@@ -13,6 +14,10 @@ export default {
   name: 'home',
   components: {
     HelloWorld
+},
+  data(){
+      return{
+      msg:"This is how message gets into a component"}
   }
 }
 </script>
