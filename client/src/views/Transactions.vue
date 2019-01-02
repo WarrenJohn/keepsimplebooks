@@ -15,7 +15,42 @@
                         <th scope="row" class="col-10">
                             <b-btn block href="#" v-b-toggle=line.id variant="light">{{line.name}}</b-btn>
                             <b-collapse :id="line.id" accordion="transactions" role="tabpanel">
-                                <b-table outlined hover small :items="line.transactions" :fields="fields"></b-table>
+                                <!-- <b-table outlined hover small :items="line.transactions" :fields="fields"></b-table> -->
+
+                                <table class="table table-bordered table-hover table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Date</th>
+                                            <th scope="col">Description</th>
+                                            <th scope="col">Withdrawn</th>
+                                            <th scope="col">Deposited</th>
+                                            <th scope="col">Balance</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="row in line.transactions" :key="row.id + '-table'">
+                                            <th scope="row">{{row.date}}</th>
+                                            <td>{{ row.description }}</td>
+
+                                            <td v-if="row.withdrawl > 0" class="table-danger">{{ row.withdrawl }}</td>
+                                            <td v-else>{{ row.withdrawl }}</td>
+
+                                            <td v-if="row.deposit > 0" class="table-success">{{ row.deposit }}</td>
+                                            <td v-else>{{ row.deposit }}</td>
+
+                                            <td>{{ row.balance }}</td>
+                                        </tr>
+                                        <div v-for="(row, index) in line.transactions" :key="index + '-buttons'">
+                                            <div v-if="index == 0">
+                                                <b-button variant="outline-danger" size="sm">Description</b-button>
+                                                <b-button v-if="row.deposit == 0 " variant="outline-danger" size="sm">Withdrawl</b-button>
+                                                <b-button v-else variant="outline-danger" size="sm">Deposit</b-button>
+                                                <b-button variant="outline-success" size="sm">Tag</b-button>
+                                            </div>
+                                        </div>
+                                    </tbody>
+                                </table>
+
                             </b-collapse>
                         </th>
                         <td class="col-1">{{ line.count }}</td>
@@ -33,6 +68,9 @@ import axios from 'axios';
 export default{
     data () {
         return {
+            form: {
+                tag: ''
+            },
             fields: [
                 {
                     key: 'date',
@@ -85,7 +123,7 @@ export default{
                 response.data.forEach(res_obj => {
                     if (trans_obj.name === res_obj.description){
                         trans_obj.transactions.push(res_obj);
-                        trans_obj.id = res_obj.description.replace(' ', '');
+                        trans_obj.id = res_obj.description;
                     }
 
                 });
