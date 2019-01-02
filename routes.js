@@ -48,7 +48,8 @@ module.exports = app => {
     // Transactions uploading, viewing, tagging, modifying and deleting transactions
     app.get('/transactions', (req, res) =>{
         console.log('GET: Transactions');
-        m.userTransactions('warren').then(data => {res.send(data);});
+        // reversed to get newest transactions at the top
+        m.userTransactions('warren').then(data => {res.send(data.reverse());});
     }
     );
     app.post('/transactions', (req, res) =>{

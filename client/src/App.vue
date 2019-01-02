@@ -1,15 +1,15 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link> |
-      <router-link to="/register">Register</router-link> |
-      <router-link to="/login">Login</router-link> |
-      <router-link to="/dashboard">Dashboard</router-link> |
-      <router-link to="/history">History</router-link> |
-      <router-link to="/upload">Upload</router-link> |
-      <router-link to="/transactions">Transactions</router-link>
-    </div>
+    <b-nav fill tabs>
+        <b-nav-item to="/">Home</b-nav-item>
+        <b-nav-item to="/about">About</b-nav-item>
+        <b-nav-item to="/register">Register</b-nav-item>
+        <b-nav-item to="/login">Login</b-nav-item>
+        <b-nav-item to="/dashboard">Dashboard</b-nav-item>
+        <b-nav-item to="/history">History</b-nav-item>
+        <b-nav-item to="/transactions">Transactions</b-nav-item>
+        <b-nav-item to="/upload">Upload</b-nav-item>
+    </b-nav>
     <router-view/>
   </div>
 </template>
