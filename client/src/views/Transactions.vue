@@ -19,11 +19,11 @@
                         </b-form-input>
                         <b-dropdown-divider></b-dropdown-divider>
                     </div>
-                <!-- <ul>
+                <ul>
                     <li v-for="(item, index) in tags" :key="index + '-tagsd'">
                         {{item}}
                     </li>
-                </ul> -->
+                </ul>
                 </b-col>
                 <b-col sm="8">
                     <h1>This is the Transactions page</h1>
@@ -91,7 +91,7 @@
                                                             </div> -->
                                                             <b-button variant="outline-success"
                                                                 size="sm"
-                                                                @click.once="addTag">Tag
+                                                                @click.once="createTag(row.id)">Tag
                                                             </b-button>
                                                         </td>
                                                     </tr>
@@ -220,13 +220,22 @@ import axios from 'axios';
 export default{
     data () {
         return {
-            tags: [],
+            tags: Array(),
+            all_tags: Array(),
             info: ''
         }
     },
     methods:{
-        addTag: function(){
-            this.tags.push({category: '', description: '', amount: ''});
+        createTag: function(id){
+            this.all_tags.forEach(item => {
+                if (item.id === id){
+                this.tags.push(item);
+
+                }
+            })
+        },
+        postTag: function(){
+            
         }
     },
 
@@ -256,9 +265,9 @@ export default{
                     if (trans_obj.name === res_obj.description){
                         trans_obj.transactions.push(res_obj);
                         if (!res_obj.deposit){
-                                this.tags.push({id: res_obj.id, category: '', description: res_obj.description, amount: res_obj.withdrawl});
+                                this.all_tags.push({id: res_obj.id, category: '', description: res_obj.description, amount: res_obj.withdrawl});
                         }else{
-                            this.tags.push({id: res_obj.id, category: '', description: res_obj.description, amount: res_obj.deposit});
+                            this.all_tags.push({id: res_obj.id, category: '', description: res_obj.description, amount: res_obj.deposit});
                         }
                         trans_obj.id = res_obj.description;
                     }
