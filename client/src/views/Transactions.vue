@@ -282,6 +282,14 @@ export default{
                     }
 
                 });
+                this.tags.push(trans_obj)
+                // I might be using the wrong object for this.
+                // { "id": "CIBC MTGE CORP MTG", "name": "CIBC MTGE CORP MTG", "transactions": [ { "id": 24, "date": "12/20/2018", "description": "CIBC MTGE CORP MTG", "withdrawl": "918.46", "deposit": "", "balance": "17782.77" } ], "count": 1 }
+                // if (trans_obj.deposit < 0){
+                    // this.tags.push({category: '', description:trans_obj.name, amount: trans_obj.withdrawl});
+                // }else{
+                //     this.tags.push({category: '', description:trans_obj.name, amount: trans_obj.deposit});
+                // }
                 trans_obj.count = trans_obj.transactions.length;
             });
         this.info = transactions;
