@@ -53,7 +53,7 @@ module.exports = app => {
     }
     );
     app.post('/transactions', (req, res) =>{
-        console.log('POST: Transactions');
+        console.log('POST: Transactions', req.body);
         // need to verify that no repeat info is added i.e. if 2 csvs are uploaded and they have transactions that overlap
         res.send('Transactions');
         // res.sendFile(path.join(views, '/index.html'));

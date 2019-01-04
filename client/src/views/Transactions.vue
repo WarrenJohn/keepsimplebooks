@@ -4,6 +4,7 @@
         <b-container fluid>
             <b-row>
                 <b-col sm="4">
+                    <b-button @click="postTag">Post</b-button>
                     <div v-for="(tag, index) in tags" :key="index+'tags'">
                         <b-form-input type="text"
                             placeholder="Expense category"
@@ -235,7 +236,8 @@ export default{
             })
         },
         postTag: function(){
-            
+            axios
+            .post('http://localhost:5000/transactions', {tags: this.tags})
         }
     },
 

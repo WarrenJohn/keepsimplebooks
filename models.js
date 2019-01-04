@@ -40,6 +40,7 @@ const operatorsAliases = {
   $col: Op.col
 };
 // ^re: http://docs.sequelizejs.com/manual/tutorial/querying.html#operators-aliases
+//  It's here if needed
 
 // Connecting to the database
 const keepsimple_db = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PW, {
@@ -49,10 +50,35 @@ const keepsimple_db = new Sequelize(process.env.DB_NAME, process.env.DB_USER, pr
     operatorsAliases: operatorsAliases
 });
 
-// Init DB table model.
+// Init DB table models.
 // sequelize.define('name', {attributes}, {options});
-const Bank = keepsimple_db.define('transactions',
+const Users = keepsimple_db.define('users', {
+    username: {type: Sequelize.TEXT, unique: true},
+    email: {type: Sequelize.TEXT, unique: true},
+    password: {type: Sequelize.TEXT},
+    other: {type: Sequelize.TEXT}
+    },
     {
+        tableName: 'users',
+        timestamps: true
+    }
+);
+
+// Holds the user defined tags on their transactions
+const Tags = keepsimple_db.define('tags', {
+    category: {type: Sequelize.TEXT},
+    description: {type: Sequelize.TEXT},
+    amount: {type: Sequelize.TEXT},
+    user: {type: Sequelize.TEXT}
+    },
+    {
+        tableName: 'tags',
+        timestamps: true
+    }
+);
+
+// Holds all the financial info uploaded
+const Bank = keepsimple_db.define('transactions',{
       transaction_date: {type: Sequelize.TEXT},
       description: {type: Sequelize.TEXT},
       withdrawl: {type: Sequelize.TEXT},
