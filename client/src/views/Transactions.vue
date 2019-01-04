@@ -19,11 +19,11 @@
                         </b-form-input>
                         <b-dropdown-divider></b-dropdown-divider>
                     </div>
-                <ul>
+                <!-- <ul>
                     <li v-for="(item, index) in tags" :key="index + '-tagsd'">
                         {{item}}
                     </li>
-                </ul>
+                </ul> -->
                 </b-col>
                 <b-col sm="8">
                     <h1>This is the Transactions page</h1>
@@ -221,29 +221,6 @@ export default{
     data () {
         return {
             tags: [],
-
-            fields: [
-                {
-                    key: 'date',
-                    sortable: true
-                },
-                {
-                    key: 'description',
-                    sortable: true
-                },
-                {
-                    key: 'withdrawl',
-                    sortable: true
-                },
-                {
-                    key: 'deposit',
-                    sortable: true
-                },
-                {
-                    key: 'balance',
-                    sortable: true
-                }
-            ],
             info: ''
         }
     },
@@ -278,18 +255,14 @@ export default{
                 response.data.forEach(res_obj => {
                     if (trans_obj.name === res_obj.description){
                         trans_obj.transactions.push(res_obj);
+                        if (!res_obj.deposit){
+                                this.tags.push({id: res_obj.id, category: '', description: res_obj.description, amount: res_obj.withdrawl});
+                        }else{
+                            this.tags.push({id: res_obj.id, category: '', description: res_obj.description, amount: res_obj.deposit});
+                        }
                         trans_obj.id = res_obj.description;
                     }
-
                 });
-                this.tags.push(trans_obj)
-                // I might be using the wrong object for this.
-                // { "id": "CIBC MTGE CORP MTG", "name": "CIBC MTGE CORP MTG", "transactions": [ { "id": 24, "date": "12/20/2018", "description": "CIBC MTGE CORP MTG", "withdrawl": "918.46", "deposit": "", "balance": "17782.77" } ], "count": 1 }
-                // if (trans_obj.deposit < 0){
-                    // this.tags.push({category: '', description:trans_obj.name, amount: trans_obj.withdrawl});
-                // }else{
-                //     this.tags.push({category: '', description:trans_obj.name, amount: trans_obj.deposit});
-                // }
                 trans_obj.count = trans_obj.transactions.length;
             });
         this.info = transactions;
