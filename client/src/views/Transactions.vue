@@ -19,6 +19,7 @@
                         </b-form-input>
                         <b-dropdown-divider></b-dropdown-divider>
                     </div>
+                <!-- TESTING ONLY -->
                 <ul>
                     <li v-for="(item, index) in tags" :key="index + '-tagsd'">
                         {{item}}
@@ -29,6 +30,7 @@
                         {{item}}
                     </li>
                 </ul>
+                <!-- TESTING ONLY -->
                 </b-col>
                 <b-col sm="8">
                     <h1>This is the Transactions page</h1>
