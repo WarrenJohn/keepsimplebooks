@@ -1,6 +1,5 @@
 <template>
     <div id="transactions">
-        <!-- New -->
         <b-container fluid>
             <b-row>
                 <b-col sm="4">
@@ -25,6 +24,11 @@
                         {{item}}
                     </li>
                 </ul>
+                <ul>
+                    <li v-for="(item, index) in posted_tags" :key="index + '-tagsd'">
+                        {{item}}
+                    </li>
+                </ul>
                 </b-col>
                 <b-col sm="8">
                     <h1>This is the Transactions page</h1>
@@ -42,8 +46,6 @@
                                     <th scope="row" class="col-10">
                                         <b-btn block href="#" v-b-toggle=line.id variant="light">{{line.name}}</b-btn>
                                         <b-collapse :id="line.id" accordion="transactions" role="tabpanel">
-                                            <!-- <b-table outlined hover small :items="line.transactions" :fields="fields"></b-table> -->
-
                                             <table class="table table-bordered table-hover table-sm">
                                                 <thead>
                                                     <tr>
@@ -68,31 +70,9 @@
 
                                                         <td>{{ row.balance }}</td>
                                                         <td>
-                                                            <!-- <div v-for="(tag, index) in tags" :key="index+'tags'">
-                                                                <b-form-input type="text"
-                                                                    placeholder="Expense category"
-                                                                    v-model="tags[index].category">
-                                                                </b-form-input>
-                                                                <b-form-input type="text"
-                                                                    placeholder="Description"
-                                                                    :value="row.description"
-                                                                    v-model="tags[index].description">
-                                                                </b-form-input>
-                                                                <b-form-input v-if="row.deposit > 0"
-                                                                    type="text"
-                                                                    placeholder="Deposit Amt."
-                                                                    :value="row.deposit"
-                                                                    v-model="tags[index].amount">
-                                                                </b-form-input>
-                                                                <b-form-input v-else type="text"
-                                                                    placeholder="Withdrawl Amt."
-                                                                    :value="row.withdrawl"
-                                                                    v-model="tags[index].amount">
-                                                                </b-form-input>
-                                                            </div> -->
                                                             <b-button variant="outline-success"
                                                                 size="sm"
-                                                                @click.once="createTag(row.id)">Tag
+                                                                @click="createTag(row.id)">Tag
                                                             </b-button>
                                                         </td>
                                                     </tr>
@@ -110,108 +90,6 @@
             </b-col>
             </b-row>
         </b-container>
-        <!-- Original -->
-        <!-- <h1>This is the Transactions page</h1> -->
-        <!-- <div class="container">
-            <div class="container">
-                <table class="table table-hover table-sm" style="table-layout:fixed">
-                    <thead>
-                        <tr class="d-flex">
-                            <th scope="col" class="col-10">Description</th>
-                            <th scope="col" class="col-1">#</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(line, index) in info" :key="index" class="d-flex">
-                            <th scope="row" class="col-10">
-                                <b-btn block href="#" v-b-toggle=line.id variant="light">{{line.name}}</b-btn>
-                                <b-collapse :id="line.id" accordion="transactions" role="tabpanel"> -->
-                                    <!-- <b-table outlined hover small :items="line.transactions" :fields="fields"></b-table> -->
-
-                                    <!-- <table class="table table-bordered table-hover table-sm">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">Date</th>
-                                                <th scope="col">Description</th>
-                                                <th scope="col">Withdrawn</th>
-                                                <th scope="col">Deposited</th>
-                                                <th scope="col">Balance</th>
-                                                <th scope="col"></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr v-for="(row, index) in line.transactions" :key="index + '-table'">
-                                                <th scope="row">{{row.date}}</th>
-                                                <td>{{ row.description }}</td>
-
-                                                <td v-if="row.withdrawl > 0" class="table-danger">{{ row.withdrawl }}</td>
-                                                <td v-else>{{ row.withdrawl }}</td>
-
-                                                <td v-if="row.deposit > 0" class="table-success">{{ row.deposit }}</td>
-                                                <td v-else>{{ row.deposit }}</td>
-
-                                                <td>{{ row.balance }}</td>
-                                                <td> -->
-                                                    <!-- <div v-for="(tag, index) in tags" :key="index+'tags'">
-                                                        <b-form-input type="text"
-                                                            placeholder="Expense category"
-                                                            v-model="tags[index].category">
-                                                        </b-form-input>
-                                                        <b-form-input type="text"
-                                                            placeholder="Description"
-                                                            :value="row.description"
-                                                            v-model="tags[index].description">
-                                                        </b-form-input>
-                                                        <b-form-input v-if="row.deposit > 0"
-                                                            type="text"
-                                                            placeholder="Deposit Amt."
-                                                            :value="row.deposit"
-                                                            v-model="tags[index].amount">
-                                                        </b-form-input>
-                                                        <b-form-input v-else type="text"
-                                                            placeholder="Withdrawl Amt."
-                                                            :value="row.withdrawl"
-                                                            v-model="tags[index].amount">
-                                                        </b-form-input>
-                                                    </div> -->
-                                                    <!-- <b-button variant="outline-success"
-                                                        size="sm"
-                                                        @click.once="addTag">Tag
-                                                    </b-button>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-
-                                </b-collapse>
-                            </th>
-                            <td class="col-1">{{ line.count }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div> -->
-        <!-- </div> -->
-        <!-- test -->
-        <!-- <div v-for="(tag, index) in tags" :key="index+'tags'">
-            <b-form-input type="text"
-                placeholder="Expense category"
-                v-model="tags[index].category">
-            </b-form-input>
-            <b-form-input type="text"
-                placeholder="Description"
-                v-model="tags[index].description">
-            </b-form-input>
-            <b-form-input type="text"
-                placeholder="Amount"
-                v-model="tags[index].amount">
-            </b-form-input>
-        </div>
-        <ul>
-            <li v-for="(item, index) in tags" :key="index + '-tagsd'">
-                {{item}}
-            </li>
-        </ul> -->
-
     </div>
 </template>
 
@@ -221,8 +99,9 @@ import axios from 'axios';
 export default{
     data () {
         return {
-            tags: Array(),
             all_tags: Array(),
+            tags: Array(),
+            posted_tags: Array(),
             info: ''
         }
     },
@@ -236,8 +115,14 @@ export default{
             })
         },
         postTag: function(){
+            this.tags.map(tag => {
+                this.posted_tags.push({category: tag.category, description: tag.description, amount: tag.amount, user: tag.user })
+                // this.posted_tags.push([tag.category, tag.description,tag.amount, tag.user])
+            });
+            this.tags = Array()
             axios
-            .post('http://localhost:5000/transactions', {tags: this.tags})
+            .post('http://localhost:5000/transactions', {tags: this.posted_tags})
+            this.posted_tags = Array()
         }
     },
 
@@ -267,9 +152,9 @@ export default{
                     if (trans_obj.name === res_obj.description){
                         trans_obj.transactions.push(res_obj);
                         if (!res_obj.deposit){
-                                this.all_tags.push({id: res_obj.id, category: '', description: res_obj.description, amount: res_obj.withdrawl});
+                                this.all_tags.push({id: res_obj.id, category: '', description: res_obj.description, amount: res_obj.withdrawl, user: 'warren'});
                         }else{
-                            this.all_tags.push({id: res_obj.id, category: '', description: res_obj.description, amount: res_obj.deposit});
+                            this.all_tags.push({id: res_obj.id, category: '', description: res_obj.description, amount: res_obj.deposit, user: 'warren'});
                         }
                         trans_obj.id = res_obj.description;
                     }

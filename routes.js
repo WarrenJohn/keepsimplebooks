@@ -14,7 +14,6 @@ If you are serving many assets from a directory, use the express.static() middle
 // Upload page function
 // u.handleCSV('accountactivity.csv');
 
-// Transactions & History page function
 
 module.exports = app => {
     // Need to build api for Vue
@@ -55,6 +54,7 @@ module.exports = app => {
     app.post('/transactions', (req, res) =>{
         console.log('POST: Transactions', req.body);
         // need to verify that no repeat info is added i.e. if 2 csvs are uploaded and they have transactions that overlap
+        u.handleTags(req.body);
         res.send('Transactions');
         // res.sendFile(path.join(views, '/index.html'));
         }

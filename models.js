@@ -116,8 +116,9 @@ module.exports.userTransactions = query => {
         });
     };
 
+// BANK TABLE
 // {fields: ['transaction_date', 'description', 'withdrawl', 'deposit', 'balance']}
-module.exports.insertBulkRows = object_array => {
+module.exports.insertBulkRowsBank = object_array => {
     Bank.sync() // .sync() is called to make sure the table exists prior to inserting data
         .then(() => {
             return Bank.bulkCreate(object_array);
@@ -127,7 +128,7 @@ module.exports.insertBulkRows = object_array => {
         });
     };
 
-module.exports.insertRow = object =>{
+module.exports.insertRowBank = object =>{
     Bank.sync()
         .then(() => {
             return Bank.create(object);
@@ -137,6 +138,25 @@ module.exports.insertRow = object =>{
         });
     };
 
+// TAGS TABLE
+module.exports.insertRowTags = object =>{
+    Tags.sync()
+        .then(() => {
+            return Tags.findOrCreate({
+                where: {
+                    category: object.category,
+                    description: object.description,
+                    amount: object.amount,
+                    user: object.user}
+                }
+            );
+        })
+        .catch(err => {
+            console.log(err);
+        });
+    };
+
 module.exports.Sequelize = Sequelize;
 module.exports.keepsimple_db = keepsimple_db;
-module.exports.Bank = Bank;
+module.exports.Bank = Bank; // These aren't working for now
+module.exports.Bank = Tags; // These aren't working for now

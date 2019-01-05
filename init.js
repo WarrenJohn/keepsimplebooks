@@ -14,8 +14,6 @@ app.use(cors());
 // app.set('views', path.join(__dirname + 'views'));
 require('./routes')(app);
 // Vue docs: https://cli.vuejs.org/guide/
-// current vue tut
-// https://www.youtube.com/watch?v=xZMwg5z5VGk
 
 // May not need body-parser:
 // https://expressjs.com/en/4x/api.html - express.json([options])
