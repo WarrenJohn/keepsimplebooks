@@ -1,5 +1,5 @@
 <template>
-  <div class="about">
+  <div>
     <h1>This is the Register page</h1>
     <input type="email" name="email" placeholder="Email" />
     <br />

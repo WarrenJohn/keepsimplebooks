@@ -65,6 +65,17 @@ const Users = keepsimple_db.define('users', {
 );
 
 // Holds the user defined tags on their transactions
+const Categories = keepsimple_db.define('categories', {
+    name: {type: Sequelize.TEXT},
+    user: {type: Sequelize.TEXT}
+    },
+    {
+        tableName: 'categories',
+        timestamps: true
+    }
+);
+
+// Holds the user defined tags on their transactions
 const Tags = keepsimple_db.define('tags', {
     category: {type: Sequelize.TEXT},
     description: {type: Sequelize.TEXT},
@@ -91,6 +102,35 @@ const Bank = keepsimple_db.define('transactions',{
         timestamps: true
     });
 
+// EXPENSE CATEGORIES TABLE METHODS
+module.exports.getUserCategories = query => {
+    return Categories.findAll({
+        where: {user: query}
+        })
+        .then(data => {
+            return data;
+        })
+        .catch(err => {
+            console.log("Get User Category Error: ", err);
+            });
+    };
+
+module.exports.createUserCategory = object => {
+    Categories.sync()
+        .then(() => {
+            return Categories.findOrCreate({
+                where: {
+                    name: object.categories,
+                    user: object.user
+                }
+            })
+        .catch(err => {
+            console.log("Create User Category Error: ", err);
+            });
+        });
+    };
+
+// BANK TABLE METHODS
 // columns: [ 'id', 'transaction_date', 'description', 'withdrawl', 'deposit', 'balance', 'user', 'createdAt', 'updatedAt' ]
 module.exports.userTransactions = query => {
     return Bank.findAll({
@@ -105,18 +145,17 @@ module.exports.userTransactions = query => {
                     description: obj.description,
                     withdrawl: obj.withdrawl,
                     deposit: obj.deposit,
-                    balance: obj.balance}
-                    );
+                    balance: obj.balance
+                });
                 descriptions.push(obj.description);
                 });
             return transactions;
         })
         .catch(err => {
-            console.log("USER TRANSACTION ERROR: ", err);
+            console.log("Insert Single Row(Transactions) Error: ", err);
         });
     };
 
-// BANK TABLE
 // {fields: ['transaction_date', 'description', 'withdrawl', 'deposit', 'balance']}
 module.exports.insertBulkRowsBank = object_array => {
     Bank.sync() // .sync() is called to make sure the table exists prior to inserting data
@@ -124,7 +163,7 @@ module.exports.insertBulkRowsBank = object_array => {
             return Bank.bulkCreate(object_array);
         })
         .catch(err => {
-            console.log(err);
+            console.log("Insert Bulk Rows(Transactions) Error: ", err);
         });
     };
 
@@ -138,7 +177,7 @@ module.exports.insertRowBank = object =>{
         });
     };
 
-// TAGS TABLE
+// TAGS TABLE METHODS
 module.exports.insertRowTags = object =>{
     Tags.sync()
         .then(() => {
@@ -152,7 +191,7 @@ module.exports.insertRowTags = object =>{
             );
         })
         .catch(err => {
-            console.log(err);
+            console.log("Insert Row Tags Error: ", err);
         });
     };
 

@@ -3,7 +3,7 @@
         <b-container fluid>
             <b-row>
                 <b-col sm="4">
-                    <b-button @click="postTag">Post</b-button>
+                    <b-button @click="addTag">Post</b-button>
                     <div v-for="(tag, index) in tags" :key="index+'tags'">
                         <b-form-input type="text"
                             placeholder="Expense category"
@@ -116,7 +116,7 @@ export default{
                 }
             })
         },
-        postTag: function(){
+        addTag: function(){
             this.tags.map(tag => {
                 this.posted_tags.push({category: tag.category, description: tag.description, amount: tag.amount, user: tag.user })
                 // this.posted_tags.push([tag.category, tag.description,tag.amount, tag.user])
@@ -124,7 +124,7 @@ export default{
             this.tags = Array()
             axios
             .post('http://localhost:5000/transactions', {tags: this.posted_tags})
-            this.posted_tags = Array()
+            .then(() => {this.posted_tags = Array()})
         }
     },
 

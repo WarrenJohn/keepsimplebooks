@@ -16,11 +16,9 @@ If you are serving many assets from a directory, use the express.static() middle
 
 
 module.exports = app => {
-    // Need to build api for Vue
     app.get('/', (req, res) =>{
         console.log('GET: index');
         res.send('Index');
-        // res.sendFile(path.join(views, '/index.html'));
         }
     );
 
@@ -28,19 +26,16 @@ module.exports = app => {
     app.get('/users', (req, res) =>{
         console.log('GET: Users');
         res.send('Users');
-        // res.sendFile(path.join(views, '/index.html'));
         }
     );
     app.post('/users', (req, res) =>{
         console.log('Post: Users');
         res.send('Users');
-        // res.sendFile(path.join(views, '/index.html'));
         }
     );
     app.patch('/users', (req, res) =>{
         console.log('Post: Users');
         res.send('Users');
-        // res.sendFile(path.join(views, '/index.html'));
         }
     );
 
@@ -53,22 +48,37 @@ module.exports = app => {
     );
     app.post('/transactions', (req, res) =>{
         console.log('POST: Transactions', req.body);
-        // need to verify that no repeat info is added i.e. if 2 csvs are uploaded and they have transactions that overlap
         u.handleTags(req.body);
         res.send('Transactions');
-        // res.sendFile(path.join(views, '/index.html'));
         }
     );
     app.patch('/transactions', (req, res) =>{
         console.log('PATCH: Transactions');
         res.send('Transactions');
-        // res.sendFile(path.join(views, '/index.html'));
         }
     );
     app.delete('/transactions', (req, res) =>{
         console.log('DELETE: Transactions');
         res.send('Transactions');
-        // res.sendFile(path.join(views, '/index.html'));
+        }
+    );
+
+    // Expense categories: Adding, retrieving, removing
+    app.get('/categories', (req, res) =>{
+        console.log('GET: Categories');
+        // reversed to get newest transactions at the top
+        m.getUserCategories('warren').then(data => {res.send(data);});
+    }
+    );
+    app.post('/categories', (req, res) =>{
+        console.log('POST: Categories', req.body);
+        m.createUserCategory(req.body); // Need to use req.body.whatEverNameIendUpChoosing
+        res.send('Categories');
+        }
+    );
+    app.delete('/categories', (req, res) =>{
+        console.log('DELETE: Categories');
+        res.send('Categories');
         }
     );
 };
