@@ -14,7 +14,7 @@
 
 <script>
 import axios from 'axios';
-
+// https://youtu.be/X-JZ-QPApUs?list=PLillGF-RfqbYSx-Ab1xWVanGKtowTsnNm&t=465 For how to update reactively
 export default {
     name: 'Categories',
         props: {
