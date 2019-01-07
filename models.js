@@ -116,8 +116,8 @@ module.exports.getUserCategories = query => {
             });
     };
 
-async function createUserCategory(object) {
-    await Categories.sync()
+module.exports.createUserCategory = object => {
+    return Categories.sync()
         .then(() => {
             console.log("\n\n\n\n\n\n\n\n\n CREATING \n\n\n\n\n\n\n\n\n\n");
             return Categories.findOrCreate({
@@ -126,17 +126,14 @@ async function createUserCategory(object) {
                     user: object.user
                 }
             })
-            .spread((user, created) => {
-        console.log(user.get({
-          plain: true
-      }));
-        return created;
+        .spread((user, created) => {
+        return {user, created};
         })
         .catch(err => {
             console.log("Create User Category Error: ", err);
             });
         });
-    }
+    };
 
 // BANK TABLE METHODS
 // columns: [ 'id', 'transaction_date', 'description', 'withdrawl', 'deposit', 'balance', 'user', 'createdAt', 'updatedAt' ]
@@ -205,6 +202,5 @@ module.exports.insertRowTags = object =>{
 
 module.exports.Sequelize = Sequelize;
 module.exports.keepsimple_db = keepsimple_db;
-module.exports.createUserCategory = createUserCategory;
 module.exports.Bank = Bank; // These aren't working for now
 module.exports.Bank = Tags; // These aren't working for now
