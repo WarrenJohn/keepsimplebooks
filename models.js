@@ -66,8 +66,8 @@ const Users = keepsimple_db.define('users', {
 
 // Holds the user defined tags on their transactions
 const Categories = keepsimple_db.define('categories', {
-    name: {type: Sequelize.TEXT},
-    user: {type: Sequelize.TEXT}
+    name: {type: Sequelize.TEXT, allowNull: false},
+    user: {type: Sequelize.TEXT, allowNull: false}
     },
     {
         tableName: 'categories',
@@ -80,7 +80,7 @@ const Tags = keepsimple_db.define('tags', {
     category: {type: Sequelize.TEXT},
     description: {type: Sequelize.TEXT},
     amount: {type: Sequelize.TEXT},
-    user: {type: Sequelize.TEXT}
+    user: {type: Sequelize.TEXT, allowNull: false}
     },
     {
         tableName: 'tags',
@@ -95,7 +95,7 @@ const Bank = keepsimple_db.define('transactions',{
       withdrawl: {type: Sequelize.TEXT},
       deposit: {type: Sequelize.TEXT},
       balance: {type: Sequelize.TEXT},
-      user: {type: Sequelize.TEXT}
+      user: {type: Sequelize.TEXT, allowNull: false}
     },
     {
         tableName: 'transactions',
@@ -108,6 +108,7 @@ module.exports.getUserCategories = query => {
         where: {user: query}
         })
         .then(data => {
+            console.log("\n\n\n\n\n\n\n\n\n GETTING \n\n\n\n\n\n\n\n\n\n");
             return data;
         })
         .catch(err => {
@@ -115,20 +116,27 @@ module.exports.getUserCategories = query => {
             });
     };
 
-module.exports.createUserCategory = object => {
-    Categories.sync()
+async function createUserCategory(object) {
+    await Categories.sync()
         .then(() => {
+            console.log("\n\n\n\n\n\n\n\n\n CREATING \n\n\n\n\n\n\n\n\n\n");
             return Categories.findOrCreate({
                 where: {
                     name: object.categories,
                     user: object.user
                 }
             })
+            .spread((user, created) => {
+        console.log(user.get({
+          plain: true
+      }));
+        return created;
+        })
         .catch(err => {
             console.log("Create User Category Error: ", err);
             });
         });
-    };
+    }
 
 // BANK TABLE METHODS
 // columns: [ 'id', 'transaction_date', 'description', 'withdrawl', 'deposit', 'balance', 'user', 'createdAt', 'updatedAt' ]
@@ -197,5 +205,6 @@ module.exports.insertRowTags = object =>{
 
 module.exports.Sequelize = Sequelize;
 module.exports.keepsimple_db = keepsimple_db;
+module.exports.createUserCategory = createUserCategory;
 module.exports.Bank = Bank; // These aren't working for now
 module.exports.Bank = Tags; // These aren't working for now

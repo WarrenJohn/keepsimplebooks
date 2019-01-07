@@ -65,15 +65,18 @@ module.exports = app => {
 
     // Expense categories: Adding, retrieving, removing
     app.get('/categories', (req, res) =>{
-        console.log('GET: Categories');
+        console.log('GET: Categories', req.header);
         // reversed to get newest transactions at the top
-        m.getUserCategories('warren').then(data => {res.send(data);});
+        m.getUserCategories('warren').then(data => {
+            // console.log(data)
+            res.send(data);
+        });
     }
     );
-    app.post('/categories', (req, res) =>{
+    app.post('/categories', async (req, res) =>{
         console.log('POST: Categories', req.body);
-        m.createUserCategory(req.body); // Need to use req.body.whatEverNameIendUpChoosing
-        res.send('Categories');
+        // m.createUserCategory(req.body); // Need to use req.body.whatEverNameIendUpChoosing
+        res.send(await m.createUserCategory(req.body));
         }
     );
     app.delete('/categories', (req, res) =>{
