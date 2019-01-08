@@ -5,10 +5,12 @@
                 <b-col sm="4">
                     <b-button @click="addTag">Post</b-button>
                     <div v-for="(tag, index) in tags" :key="index+'tags'">
-                        <b-form-input type="text"
+                        <Categories></Categories>
+                        <!-- {{test}} -->
+                        <!-- <b-form-input type="text"
                             placeholder="Expense category"
                             v-model="tags[index].category">
-                        </b-form-input>
+                        </b-form-input> -->
                         <b-form-input type="text"
                             placeholder="Description"
                             v-model="tags[index].description">
@@ -97,14 +99,20 @@
 
 <script>
 import axios from 'axios';
-
+import Categories from '@/components/Categories.vue'
 export default{
+
+    name: 'category',
+    components: {
+      Categories
+  },
     data () {
         return {
             all_tags: Array(),
             tags: Array(),
             posted_tags: Array(),
-            info: ''
+            info: '',
+            test: ''
         }
     },
     methods:{
