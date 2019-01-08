@@ -4,13 +4,13 @@
             {{clientResponse}}
         </p>
         <div class="input-group">
-            <b-form-input v-model="categories" type="text" placeholder="Add new expense category"></b-form-input>
+            <b-form-input v-model="category" type="text" placeholder="Add new expense category"></b-form-input>
             <b-button variant="outline-success"
                 size="sm"
                 @click="addCategory()">+
             </b-button>
         </div>
-        <b-form-select :options="options" class="mb-3" size="sm" />
+        <b-form-select v-model="selected" :options="options" class="mb-3" size="sm" />
     </div>
 </template>
 
@@ -25,7 +25,7 @@ export default {
     data () {
         return {
             selected: null,
-            categories: null,
+            category: null,
             options: Array(),
             clientResponse: null,
             clientResponseClass: null
@@ -34,15 +34,16 @@ export default {
     methods:{
         addCategory: function(){
             axios
-                .post('http://localhost:5000/categories', {categories: this.categories, user: 'warren'})
+                .post('http://localhost:5000/categories', {category: this.category, user: 'warren'})
                 .then(response => {
                     if(response.data.created){
-                        this.clientResponseClass = "text-success text-center"
-                        this.clientResponse = "Category successfully added!"
+                        this.clientResponseClass = "text-success text-center";
+                        this.clientResponse = "Category successfully added!";
                     }else{
-                        this.clientResponseClass = "text-danger text-center"
-                        this.clientResponse = "Category already exists!"
+                        this.clientResponseClass = "text-danger text-center";
+                        this.clientResponse = "Category already exists!";
                     }
+                    this.selected = this.category;
                 })
                 .then(() => {
                     axios

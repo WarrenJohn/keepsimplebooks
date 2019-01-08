@@ -108,7 +108,6 @@ module.exports.getUserCategories = query => {
         where: {user: query}
         })
         .then(data => {
-            console.log("\n\n\n\n\n\n\n\n\n GETTING \n\n\n\n\n\n\n\n\n\n");
             return data;
         })
         .catch(err => {
@@ -119,10 +118,9 @@ module.exports.getUserCategories = query => {
 module.exports.createUserCategory = object => {
     return Categories.sync()
         .then(() => {
-            console.log("\n\n\n\n\n\n\n\n\n CREATING \n\n\n\n\n\n\n\n\n\n");
             return Categories.findOrCreate({
                 where: {
-                    name: object.categories,
+                    name: object.category,
                     user: object.user
                 }
             })
