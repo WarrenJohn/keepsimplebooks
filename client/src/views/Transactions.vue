@@ -5,8 +5,7 @@
                 <b-col sm="4">
                     <b-button @click="addTag">Post</b-button>
                     <div v-for="(tag, index) in tags" :key="index+'tags'">
-                        <Categories></Categories>
-                        <!-- {{test}} -->
+                        <categories v-model="tags[index].category"></categories>
                         <!-- <b-form-input type="text"
                             placeholder="Expense category"
                             v-model="tags[index].category">
@@ -22,11 +21,13 @@
                         <b-dropdown-divider></b-dropdown-divider>
                     </div>
                 <!-- TESTING ONLY -->
+                <h3>Tags</h3>
                 <ul>
                     <li v-for="(item, index) in tags" :key="index + '-tagsd'">
                         {{item}}
                     </li>
                 </ul>
+                <h3>Posted Tags</h3>
                 <ul>
                     <li v-for="(item, index) in posted_tags" :key="index + '-tagsd'">
                         {{item}}

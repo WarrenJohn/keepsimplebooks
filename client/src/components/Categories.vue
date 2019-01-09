@@ -1,16 +1,37 @@
 <template>
     <div>
-        <p :class="clientResponseClass">
-            {{clientResponse}}
-        </p>
+        <div v-if="clientResponseClass">
+            <b-alert show :variant="clientResponseClass">
+                {{clientResponse}}
+            </b-alert>
+        </div>
+        <div v-else>
+        </div>
         <div class="input-group">
-            <b-form-input v-model="category" type="text" placeholder="Add new expense category"></b-form-input>
+            <input
+            :value="selected"
+            @input="$emit('input', $event.target.value)"
+            class="form-control" type="text" placeholder="Add new expense category" ref="categoryinput" />
             <b-button variant="outline-success"
                 size="sm"
                 @click="addCategory()">+
             </b-button>
         </div>
-        <b-form-select v-model="selected" :options="options" class="mb-3" size="sm" />
+
+        <select
+        :value="selected"
+        @input="$emit('input', $event.target.value)"
+        class="form-control" name="categories" ref="categoryoptions">
+            <option disabled selected value>Please select an option</option>
+
+            <option
+            v-for="(option, index) in options"
+            :value="option.text"
+            :selected="option.selected"
+            :key="index+'-category'">
+                {{option.text}}
+            </option>
+        </select>
     </div>
 </template>
 
@@ -20,12 +41,10 @@ import axios from 'axios';
 export default {
     name: 'Categories',
         props: {
-            msg: String
+            selected: String
         },
     data () {
         return {
-            selected: null,
-            category: null,
             options: Array(),
             clientResponse: null,
             clientResponseClass: null
@@ -33,23 +52,31 @@ export default {
     },
     methods:{
         addCategory: function(){
+            let category = this.$refs.categoryinput.value
             axios
-                .post('http://localhost:5000/categories', {category: this.category, user: 'warren'})
+                .post('http://localhost:5000/categories', {category, user: 'warren'})
                 .then(response => {
                     if(response.data.created){
-                        this.clientResponseClass = "text-success text-center";
+                        // referencing the response from findOrCreate method of sequelize
+                        this.clientResponseClass = "success text-center";
                         this.clientResponse = "Category successfully added!";
                     }else{
-                        this.clientResponseClass = "text-danger text-center";
+                        this.clientResponseClass = "danger text-center";
                         this.clientResponse = "Category already exists!";
                     }
-                    this.selected = this.category;
                 })
                 .then(() => {
                     axios
                         .get('http://localhost:5000/categories')
                         .then(response => {
-                            this.options = response.data.map(object => ({value: object.name, text: object.name.toUpperCase()}))
+                            this.options = response.data.map(object => {
+                                if (object.name === category){
+                                    return {value: object.name, text: object.name.toUpperCase(), selected: true}
+                                }else{
+                                    return {value: object.name, text: object.name.toUpperCase(), selected: false}
+                                }
+                            }
+                            );
                         });
                 })
                 .catch(err => {

@@ -65,7 +65,7 @@ module.exports = app => {
 
     // Expense categories: Adding, retrieving, removing
     app.get('/categories', (req, res) =>{
-        console.log('GET: Categories', req.header);
+        console.log('GET: Categories');
         // reversed to get newest transactions at the top
         m.getUserCategories('warren').then(data => {
             // console.log(data)
@@ -74,7 +74,7 @@ module.exports = app => {
     }
     );
     app.post('/categories', async (req, res) =>{
-        console.log('POST: Categories', req.body);
+        console.log('POST: Categories');
         // m.createUserCategory(req.body); // Need to use req.body.whatEverNameIendUpChoosing
         res.send(await m.createUserCategory(req.body));
         }
