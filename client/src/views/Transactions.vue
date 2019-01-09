@@ -4,12 +4,9 @@
             <b-row>
                 <b-col sm="4">
                     <b-button @click="addTag">Post</b-button>
+
                     <div v-for="(tag, index) in tags" :key="index+'tags'">
-                        <categories v-model="tags[index].category"></categories>
-                        <!-- <b-form-input type="text"
-                            placeholder="Expense category"
-                            v-model="tags[index].category">
-                        </b-form-input> -->
+                        <categories v-model="tags[index].category" />
                         <b-form-input type="text"
                             placeholder="Description"
                             v-model="tags[index].description">
@@ -20,6 +17,7 @@
                         </b-form-input>
                         <b-dropdown-divider></b-dropdown-divider>
                     </div>
+
                 <!-- TESTING ONLY -->
                 <h3>Tags</h3>
                 <ul>

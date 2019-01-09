@@ -7,16 +7,19 @@
         </div>
         <div v-else>
         </div>
-        <div class="input-group">
-            <input
-            :value="selected"
-            @input="$emit('input', $event.target.value)"
-            class="form-control" type="text" placeholder="Add new expense category" ref="categoryinput" />
-            <b-button variant="outline-success"
-                size="sm"
-                @click="addCategory()">+
-            </b-button>
-        </div>
+            <b-btn v-b-toggle.collapse1 size="sm" variant="link sm">Add expense category</b-btn>
+            <b-collapse id=collapse1 class="mt-2">
+                <div class="input-group">
+                <input
+                    :value="selected"
+                    @input="$emit('input', $event.target.value)"
+                    class="form-control" type="text" placeholder="New expense category" ref="categoryinput" />
+                <b-button variant="success"
+                    size="sm"
+                    @click="addCategory()">+
+                </b-button>
+                </div>
+            </b-collapse>
 
         <select
         :value="selected"
