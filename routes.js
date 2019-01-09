@@ -46,10 +46,11 @@ module.exports = app => {
         m.userTransactions('warren').then(data => {res.send(data.reverse());});
     }
     );
-    app.post('/transactions', (req, res) =>{
+    app.post('/transactions', async (req, res) =>{
         console.log('POST: Transactions', req.body);
-        u.handleTags(req.body);
-        res.send('Transactions');
+        // res.send(await u.handleTags(req.body));
+        // parse req.body priot to inserting to db
+        res.send(await m.insertRowTags(req.body.tag))
         }
     );
     app.patch('/transactions', (req, res) =>{

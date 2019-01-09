@@ -77,7 +77,7 @@ const Categories = keepsimple_db.define('categories', {
 
 // Holds the user defined tags on their transactions
 const Tags = keepsimple_db.define('tags', {
-    category: {type: Sequelize.TEXT},
+    category: {type: Sequelize.TEXT, allowNull: false},
     description: {type: Sequelize.TEXT},
     amount: {type: Sequelize.TEXT},
     user: {type: Sequelize.TEXT, allowNull: false}
@@ -182,7 +182,7 @@ module.exports.insertRowBank = object =>{
 
 // TAGS TABLE METHODS
 module.exports.insertRowTags = object =>{
-    Tags.sync()
+    return Tags.sync()
         .then(() => {
             return Tags.findOrCreate({
                 where: {
@@ -192,6 +192,9 @@ module.exports.insertRowTags = object =>{
                     user: object.user}
                 }
             );
+        })
+        .spread((tag, created) => {
+            return {tag, created};
         })
         .catch(err => {
             console.log("Insert Row Tags Error: ", err);

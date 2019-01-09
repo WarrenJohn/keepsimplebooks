@@ -29,11 +29,9 @@ module.exports.parseTransactions = transactions => {
 };
 
 module.exports.handleTags = data => {
-    let parsed_data = data.tags; // Temporary until parsing actually implemented
-    console.log("Parsed Data", parsed_data);
-    parsed_data.map(tag => {
-        m.insertRowTags(tag);
-    });
+    let parsedTag = data.tag; // Temporary until parsing actually implemented
+    console.log("Parsed Data", parsedTag);
+    return m.insertRowTags(parsedTag);
 };
 
 module.exports.handleCSV = file => {

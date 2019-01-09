@@ -3,39 +3,41 @@
         <b-container fluid>
             <b-row>
                 <b-col sm="4">
-                    <b-button @click="addTag">Post</b-button>
-
-                    <div v-for="(tag, index) in tags" :key="index+'tags'">
-                        <categories v-model="tags[index].category" />
+                    <div>
+                        <categories v-model="tag.category" ref="categories"/>
                         <b-form-input type="text"
                             placeholder="Description"
-                            v-model="tags[index].description">
+                            ref="description"
+                            v-model="tag.description">
                         </b-form-input>
                         <b-form-input type="text"
                             placeholder="Amount"
-                            v-model="tags[index].amount">
+                            ref="amount"
+                            v-model="tag.amount">
                         </b-form-input>
                         <b-dropdown-divider></b-dropdown-divider>
                     </div>
-
-                <!-- TESTING ONLY -->
-                <h3>Tags</h3>
-                <ul>
-                    <li v-for="(item, index) in tags" :key="index + '-tagsd'">
-                        {{item}}
-                    </li>
-                </ul>
-                <h3>Posted Tags</h3>
+            <div class="text-center">
+                <p v-if="tag.description && tag.amount && tag.category">We'll label all transactions that contain the text <b>'{{ tag.description }}'</b> and the exact amount of <b>'{{ tag.amount }}'</b> as <b>'{{ tag.category }}'</b>.</p>
+                <p v-else></p>
+                <b-button block variant="success" @click="validateTag">Add this tag</b-button>
+                <div v-if="clientResponseClass">
+                    <b-alert show :variant="clientResponseClass">
+                        {{clientResponse}}
+                    </b-alert>
+                </div>
+                {{test}}<br><br>
+                tag{{tag}}
+                <h3>Current Tags</h3>
                 <ul>
                     <li v-for="(item, index) in posted_tags" :key="index + '-tagsd'">
                         {{item}}
                     </li>
                 </ul>
-                <!-- TESTING ONLY -->
+            </div>
                 </b-col>
                 <b-col sm="8">
                     <h1>This is the Transactions page</h1>
-                    <div class="container">
                     <div class="container">
                         <table class="table table-hover table-sm" style="table-layout:fixed">
                             <thead>
@@ -88,7 +90,6 @@
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
                 </div>
             </b-col>
             </b-row>
@@ -108,30 +109,50 @@ export default{
     data () {
         return {
             all_tags: Array(),
-            tags: Array(),
+            tag: { 'category': '', 'description': '', 'amount': '', 'user': '' },
             posted_tags: Array(),
             info: '',
+            clientResponse: '',
+            clientResponseClass: '',
             test: ''
         }
     },
     methods:{
+        validateTag: function(){
+                if (!this.tag.category){
+                    this.clientResponseClass = 'warning text-center';
+                    this.clientResponse = 'Category is required!';
+                }else if (!this.tag.description || !this.tag.amount) {
+                    this.clientResponseClass = 'warning text-center';
+                    this.clientResponse = 'Description or Amount are required!';
+                }else{
+                    this.addTag();
+                }
+        },
+        addTag: function(){
+            // TODO: Parse the transactions out that already have matching tags
+            axios
+                .post('http://localhost:5000/transactions', {tag: this.tag})
+                .then(response => {
+                    this.test = response
+                    if(response.data.created){
+                        // referencing the response from findOrCreate method of sequelize
+                        this.clientResponseClass = 'success text-center';
+                        this.clientResponse = 'Tag successfully created!';
+                    }else{
+                        this.clientResponseClass = 'warning text-center';
+                        this.clientResponse = 'Tag already exists!';
+                    }
+                })
+        },
         createTag: function(id){
             this.all_tags.forEach(item => {
                 if (item.id === id){
-                this.tags.push(item);
-
+                    this.tag.description = item.description;
+                    this.tag.amount = item.amount;
+                    this.tag.user = 'warren';
                 }
             })
-        },
-        addTag: function(){
-            this.tags.map(tag => {
-                this.posted_tags.push({category: tag.category, description: tag.description, amount: tag.amount, user: tag.user })
-                // this.posted_tags.push([tag.category, tag.description,tag.amount, tag.user])
-            });
-            this.tags = Array()
-            axios
-            .post('http://localhost:5000/transactions', {tags: this.posted_tags})
-            .then(() => {this.posted_tags = Array()})
         }
     },
 

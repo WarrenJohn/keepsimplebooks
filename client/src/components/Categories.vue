@@ -64,7 +64,7 @@ export default {
                         this.clientResponseClass = "success text-center";
                         this.clientResponse = "Category successfully added!";
                     }else{
-                        this.clientResponseClass = "danger text-center";
+                        this.clientResponseClass = "warning text-center";
                         this.clientResponse = "Category already exists!";
                     }
                 })
