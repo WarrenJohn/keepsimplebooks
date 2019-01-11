@@ -48,9 +48,10 @@ module.exports = app => {
     );
     app.post('/transactions', async (req, res) =>{
         console.log('POST: Transactions', req.body);
-        // res.send(await u.handleTags(req.body));
-        // parse req.body priot to inserting to db
-        res.send(await m.insertRowTags(req.body.tag))
+        let tag = req.body.tag;
+        tag.description = tag.description.replace(/ +(?= )/g, '');
+        tag.amount = tag.amount.replace(/ /g, '');
+        res.send(await m.insertRowTag(req.body.tag));
         }
     );
     app.patch('/transactions', (req, res) =>{
@@ -75,9 +76,10 @@ module.exports = app => {
     }
     );
     app.post('/categories', async (req, res) =>{
-        console.log('POST: Categories');
-        // m.createUserCategory(req.body); // Need to use req.body.whatEverNameIendUpChoosing
-        res.send(await m.createUserCategory(req.body));
+        console.log('POST: Categories', req.body);
+        let categoryObj = req.body;
+        categoryObj.category = categoryObj.category.replace(/ +(?= )/g, '');
+        res.send(await m.createUserCategory(categoryObj));
         }
     );
     app.delete('/categories', (req, res) =>{

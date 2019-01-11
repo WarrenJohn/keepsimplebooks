@@ -181,7 +181,7 @@ module.exports.insertRowBank = object =>{
     };
 
 // TAGS TABLE METHODS
-module.exports.insertRowTags = object =>{
+module.exports.insertRowTag = object =>{
     return Tags.sync()
         .then(() => {
             return Tags.findOrCreate({

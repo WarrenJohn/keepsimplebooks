@@ -19,6 +19,7 @@ const createObjArray = data => {
     return array;
 };
 
+
 module.exports.parseTransactions = transactions => {
     // Normalize data:
     // remove spaces in descriptions and re add them to make sure there are no double spaces
@@ -35,9 +36,13 @@ module.exports.handleTags = data => {
 };
 
 module.exports.handleCSV = file => {
-    fs.readFile(file, function (err, fileData) {
-        parse(fileData, {columns: false, trim: true}, function(err, data) {
+    fs.readFile(file, (err, fileData) => {
+        parse(fileData, {columns: false, trim: true}, (err, data) => {
             // data is converted in an array of objects prior to db insertion
+            data.map(element => (
+                // remove spaces in descriptions and re add them to make sure there are no double spaces
+                element[1] = element[1].replace(/ +(?= )/g, '')
+            ));
             m.insertBulkRowsBank(createObjArray(data));
         });
     });
