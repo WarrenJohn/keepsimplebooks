@@ -68,9 +68,7 @@ module.exports = app => {
     // Expense categories: Adding, retrieving, removing
     app.get('/categories', (req, res) =>{
         console.log('GET: Categories');
-        // reversed to get newest transactions at the top
         m.getUserCategories('warren').then(data => {
-            // console.log(data)
             res.send(data);
         });
     }
