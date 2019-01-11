@@ -201,6 +201,18 @@ module.exports.insertRowTag = object =>{
         });
     };
 
+module.exports.getUserTags = query => {
+    return Tags.findAll({
+        where: {user: query}
+        })
+        .then(data => {
+            return data;
+        })
+        .catch(err => {
+            console.log("Insert Single Row(Transactions) Error: ", err);
+        });
+    };
+
 module.exports.Sequelize = Sequelize;
 module.exports.keepsimple_db = keepsimple_db;
 module.exports.Bank = Bank; // These aren't working for now
