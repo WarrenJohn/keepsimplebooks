@@ -40,6 +40,7 @@ const operatorsAliases = {
   $col: Op.col
 };
 // ^re: http://docs.sequelizejs.com/manual/tutorial/querying.html#operators-aliases
+//  It's here if needed
 
 // Connecting to the database
 const keepsimple_db = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PW, {
@@ -49,22 +50,90 @@ const keepsimple_db = new Sequelize(process.env.DB_NAME, process.env.DB_USER, pr
     operatorsAliases: operatorsAliases
 });
 
-// Init DB table model.
+// Init DB table models.
 // sequelize.define('name', {attributes}, {options});
-const Bank = keepsimple_db.define('transactions',
+const Users = keepsimple_db.define('users', {
+    username: {type: Sequelize.TEXT, unique: true},
+    email: {type: Sequelize.TEXT, unique: true},
+    password: {type: Sequelize.TEXT},
+    other: {type: Sequelize.TEXT}
+    },
     {
+        tableName: 'users',
+        timestamps: true
+    }
+);
+
+// Holds the user defined tags on their transactions
+const Categories = keepsimple_db.define('categories', {
+    name: {type: Sequelize.TEXT, allowNull: false},
+    user: {type: Sequelize.TEXT, allowNull: false}
+    },
+    {
+        tableName: 'categories',
+        timestamps: true
+    }
+);
+
+// Holds the user defined tags on their transactions
+const Tags = keepsimple_db.define('tags', {
+    category: {type: Sequelize.TEXT, allowNull: false},
+    description: {type: Sequelize.TEXT},
+    amount: {type: Sequelize.TEXT},
+    user: {type: Sequelize.TEXT, allowNull: false}
+    },
+    {
+        tableName: 'tags',
+        timestamps: true
+    }
+);
+
+// Holds all the financial info uploaded
+const Bank = keepsimple_db.define('transactions',{
       transaction_date: {type: Sequelize.TEXT},
       description: {type: Sequelize.TEXT},
       withdrawl: {type: Sequelize.TEXT},
       deposit: {type: Sequelize.TEXT},
       balance: {type: Sequelize.TEXT},
-      user: {type: Sequelize.TEXT}
+      user: {type: Sequelize.TEXT, allowNull: false}
     },
     {
         tableName: 'transactions',
         timestamps: true
     });
 
+// EXPENSE CATEGORIES TABLE METHODS
+module.exports.getUserCategories = query => {
+    return Categories.findAll({
+        where: {user: query}
+        })
+        .then(data => {
+            return data;
+        })
+        .catch(err => {
+            console.log("Get User Category Error: ", err);
+            });
+    };
+
+module.exports.createUserCategory = object => {
+    return Categories.sync()
+        .then(() => {
+            return Categories.findOrCreate({
+                where: {
+                    name: object.category,
+                    user: object.user
+                }
+            })
+        .spread((user, created) => {
+        return {user, created};
+        })
+        .catch(err => {
+            console.log("Create User Category Error: ", err);
+            });
+        });
+    };
+
+// BANK TABLE METHODS
 // columns: [ 'id', 'transaction_date', 'description', 'withdrawl', 'deposit', 'balance', 'user', 'createdAt', 'updatedAt' ]
 module.exports.userTransactions = query => {
     return Bank.findAll({
@@ -79,29 +148,29 @@ module.exports.userTransactions = query => {
                     description: obj.description,
                     withdrawl: obj.withdrawl,
                     deposit: obj.deposit,
-                    balance: obj.balance}
-                    );
+                    balance: obj.balance
+                });
                 descriptions.push(obj.description);
                 });
             return transactions;
         })
         .catch(err => {
-            console.log("USER TRANSACTION ERROR: ", err);
+            console.log("Insert Single Row(Transactions) Error: ", err);
         });
     };
 
 // {fields: ['transaction_date', 'description', 'withdrawl', 'deposit', 'balance']}
-module.exports.insertBulkRows = object_array => {
+module.exports.insertBulkRowsBank = object_array => {
     Bank.sync() // .sync() is called to make sure the table exists prior to inserting data
         .then(() => {
             return Bank.bulkCreate(object_array);
         })
         .catch(err => {
-            console.log(err);
+            console.log("Insert Bulk Rows(Transactions) Error: ", err);
         });
     };
 
-module.exports.insertRow = object =>{
+module.exports.insertRowBank = object =>{
     Bank.sync()
         .then(() => {
             return Bank.create(object);
@@ -111,6 +180,40 @@ module.exports.insertRow = object =>{
         });
     };
 
+// TAGS TABLE METHODS
+module.exports.insertRowTag = object =>{
+    return Tags.sync()
+        .then(() => {
+            return Tags.findOrCreate({
+                where: {
+                    category: object.category,
+                    description: object.description,
+                    amount: object.amount,
+                    user: object.user}
+                }
+            );
+        })
+        .spread((tag, created) => {
+            return {tag, created};
+        })
+        .catch(err => {
+            console.log("Insert Row Tags Error: ", err);
+        });
+    };
+
+module.exports.getUserTags = query => {
+    return Tags.findAll({
+        where: {user: query}
+        })
+        .then(data => {
+            return data;
+        })
+        .catch(err => {
+            console.log("Insert Single Row(Transactions) Error: ", err);
+        });
+    };
+
 module.exports.Sequelize = Sequelize;
 module.exports.keepsimple_db = keepsimple_db;
-module.exports.Bank = Bank;
+module.exports.Bank = Bank; // These aren't working for now
+module.exports.Bank = Tags; // These aren't working for now
