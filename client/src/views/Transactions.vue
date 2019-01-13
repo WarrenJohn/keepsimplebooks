@@ -34,11 +34,6 @@
                         {{clientResponse}}
                     </b-alert>
                 </div>
-                {{test}}
-                <br><br>
-                {{info}}
-                <br><br>
-                {{allTags}}
                 <h3>Current Tags</h3>
                 <ul>
                     <li v-for="(item, index) in userTags" :key="index + '-tagsd'">
@@ -120,13 +115,14 @@ export default{
     data () {
         return {
             test: '',
+            bulkData: null,
             allTags: Array(),
             userTags: Array(),
             tag: { 'category': '', 'description': '', 'amount': '', 'user': '' },
             postedTags: Array(),
-            info: '',
-            clientResponse: '',
-            clientResponseClass: ''
+            info: null,
+            clientResponse: null,
+            clientResponseClass: null
         }
     },
     methods:{
@@ -156,6 +152,13 @@ export default{
                         this.clientResponseClass = 'warning text-center';
                         this.clientResponse = 'Tag already exists!';
                     }
+                    return axios.get('http://localhost:5000/transactions')
+                })
+                .then(response => {
+                    this.userTags = response.data.tags;
+                    response.data.transactions = this.parseTransactions(response.data.transactions, response.data.tags);
+                    this.info = this.sortTransactions(response.data.transactions);
+
                 })
         },
         createTag: function(id){
@@ -166,57 +169,55 @@ export default{
                     this.tag.user = 'warren';
                 }
             })
-        }
-    },
-
-    created () {
-        axios
-        .get('http://localhost:5000/transactions')
-        .then(response => {
-            let descriptions = Array();
-            let transactions = Array();
-            this.userTags = response.data.tags
-            this.test = response.data.transactions
-            // not working correctly
-            response.data.transactions.forEach(object => {
-                response.data.tags.forEach(tag => {
+        },
+        parseTransactions: function(transactions, tags){
+            tags.forEach(tag => {
+                transactions.forEach(transaction => {
                     // Parsing out all previously tagged transactions
                     if (tag.description && tag.amount){
-                        if(tag.amount === object.withdrawl && tag.description === object.description){
-                            response.data.transactions.splice(response.data.transactions.indexOf(object), 1);
-                            console.log(object.description, object.amount, "(tag.amount === object.withdrawl || tag.amount === object.deposit)");
-                        }else if(tag.amount === object.deposit && tag.description === object.description){
-                            response.data.transactions.splice(response.data.transactions.indexOf(object), 1);
+                        if (!transaction.deposit){
+                            if (transaction.description.includes(tag.description) && transaction.withdrawl === tag.amount){
+                                transactions.splice(transactions.indexOf(transaction), 1);
+                            }
+                        }else{
+                            if (transaction.description.includes(tag.description) && transaction.deposit === tag.amount){
+                                transactions.splice(transactions.indexOf(transaction), 1);
+                            }
                         }
                     }
                     else if (!tag.amount){
-                        if (tag.description === object.description){
-                            response.data.transactions.splice(response.data.transactions.indexOf(object), 1);
-                            console.log(object.description, object.amount, '(tag.description === object.description)');
+                        if(transaction.description.includes(tag.description)){
+                            transactions.splice(transactions.indexOf(transaction), 1);
                         }
+
                     }
                     else if (!tag.description){
-                        if(tag.amount === object.withdrawl){
-                            console.log(tag, object.description, object.amount, '(!tag.description)');
-                            response.data.transactions.splice(response.data.transactions.indexOf(object), 1);
-                        }else if(tag.amount === object.deposit){
-                            response.data.transactions.splice(response.data.transactions.indexOf(object), 1);
+                        if(!transaction.deposit){
+                            if(transaction.withdrawl === tag.amount){
+                                transactions.splice(transactions.indexOf(transaction), 1);
+                            }
+                        }else{
+                            if(transaction.deposit === tag.amount){
+                                transactions.splice(transactions.indexOf(transaction), 1);
+                            }
                         }
-                    }else{
-                        console.log(object.description, tag.description, tag.amount)
                     }
                 })
             })
-
-            response.data.transactions.forEach(row => {
+            return transactions;
+        },
+        sortTransactions: function(transactions){
+            let unsortedTransactions = transactions;
+            let sortedDescriptions = Array();
+            let sortedTransactions = Array();
+            transactions.forEach(row => {
                 // Pushing each unique occurance of a description name to the description array
-                if (descriptions.indexOf(row.description) === -1){
-                    descriptions.push(row.description);
+                if (sortedDescriptions.indexOf(row.description) === -1){
+                    sortedDescriptions.push(row.description);
                 }
             });
-
-            descriptions.forEach(item => {
-                transactions.push({
+            sortedDescriptions.forEach(item => {
+                sortedTransactions.push({
                     // This is the main 'transaction' that is used for the table accordion
                     // all other transactions with the same description (but potentially different amounts)
                     // are stored in the transactions array in this object
@@ -226,22 +227,33 @@ export default{
                     count: 0
                     });
                 });
-            transactions.forEach(trans_obj => {
-                response.data.transactions.forEach(res_obj => {
+            sortedTransactions.forEach(trans_obj => {
+                unsortedTransactions.forEach(unsortedTrans_obj => {
                     // Parsing and organizing all similar transactions into their corresponding transaction array
-                    if (trans_obj.name === res_obj.description){
-                        trans_obj.transactions.push(res_obj);
-                        if (!res_obj.deposit){
-                                this.allTags.push({id: res_obj.id, category: '', description: res_obj.description, amount: res_obj.withdrawl, user: 'warren'});
+                    if (trans_obj.name === unsortedTrans_obj.description){
+                        trans_obj.transactions.push(unsortedTrans_obj);
+                        if (!unsortedTrans_obj.deposit){
+                                this.allTags.push({id: unsortedTrans_obj.id, category: '', description: unsortedTrans_obj.description, amount: unsortedTrans_obj.withdrawl, user: 'warren'});
                         }else{
-                            this.allTags.push({id: res_obj.id, category: '', description: res_obj.description, amount: res_obj.deposit, user: 'warren'});
+                            this.allTags.push({id: unsortedTrans_obj.id, category: '', description: unsortedTrans_obj.description, amount: unsortedTrans_obj.deposit, user: 'warren'});
                         }
-                        trans_obj.id = res_obj.description;
+                        trans_obj.id = unsortedTrans_obj.description;
                     }
                 });
                 trans_obj.count = trans_obj.transactions.length;
             });
-        this.info = transactions;
+            return sortedTransactions;
+        }
+    },
+
+    created () {
+        axios
+        .get('http://localhost:5000/transactions')
+        .then(response => {
+            this.userTags = response.data.tags;
+            response.data.transactions = this.parseTransactions(response.data.transactions, response.data.tags);
+            this.info = this.sortTransactions(response.data.transactions);
+
         })
     }
 }
