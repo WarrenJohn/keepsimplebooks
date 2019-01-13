@@ -139,8 +139,7 @@ export default{
                     this.clientResponse = 'Description or Amount are required!';
                 }
         },
-        addTag: function(){
-            // TODO: Parse the transactions out that already have matching tags
+        addTag: function(){            
             axios
                 .post('http://localhost:5000/transactions', {tag: this.tag})
                 .then(response => {
