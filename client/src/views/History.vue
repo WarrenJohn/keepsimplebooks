@@ -13,6 +13,7 @@ import axios from 'axios';
 export default{
     data () {
         return {
+            info: Array(),
             fields: [
                 {
                     key: 'date',
@@ -34,13 +35,12 @@ export default{
                     key: 'balance',
                     sortable: true
                 }
-            ],
-            info: ''
+            ]
         }
     },
     methods:{},
 
-    mounted () {
+    created () {
         axios
         .get('http://localhost:5000/transactions')
         .then(response => (this.info = response.data.transactions))
