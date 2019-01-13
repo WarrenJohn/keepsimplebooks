@@ -11,13 +11,23 @@ const views = path.join(__dirname, 'views');
 app.use(express.static('./static'));
 app.use(bodyParser.json());
 app.use(cors());
-// app.set('views', path.join(__dirname + 'views'));
 require('./routes')(app);
-// Vue docs: https://cli.vuejs.org/guide/
+let todo = `
+\x1b[47m\x1b[30m\x1b[4m
 
-// May not need body-parser:
-// https://expressjs.com/en/4x/api.html - express.json([options])
-// https://www.reddit.com/r/javascript/comments/78jjna/express_now_includes_bodyparser_middleware_by/
+    FEATURES TO DO:\x1b[0m\x1b[47m
+\x1b[30m
+- Unit tests
+- Add date range selection functionality to Dashboard.vue, Transactions.vue & History.vue
+- Dashboard charts, money flow in and out
+- View categories & tags
+- Remove categories & tag
+- Upload data functionality
+- User authentication & login
+-- Don't forget to remove all instances of 'warren' from user field
+- Index/about/register/login pages styling and text, better nav bar, etc..
+\x1b[0m`;
+
 m.keepsimple_db.authenticate()
     .then(() => {
         // Test connection
@@ -33,6 +43,7 @@ m.keepsimple_db.authenticate()
     .then(() => {
         // Start the server
         app.listen(port, () => console.log(`\nListening on port ${port}!\n`));
+        console.log(todo);
     })
     .catch((err) => {
         console.log(err);
