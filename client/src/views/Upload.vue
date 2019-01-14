@@ -4,12 +4,27 @@
     <ul>
         <li>Select the file</li>
         <li>Tag the columns</li>
+        <ul>
+            <li>Show 5 most recent transactions</li>
+            <li>Auto detect dates</li>
+            <li>Make suggestion of the following order and have user confirm/reject it</li>
+            <ul>
+                <li>Date</li>
+                <li>Description</li>
+                <li>Withdrawn</li>
+                <li>Deposited</li>
+                <li>Balance</li>
+            </ul>
+        </ul>
         <li>Confirm the upload</li>
+        <li>Validate file type</li>
     </ul>
-        <form method="post" enctype="multipart/form-data">
-            <input type="file" accept=".csv" name="uploads" @change="onFileSelected" multiple>
-            <input type="submit" value="Upload">
-        </form>
+        <label class="btn btn-xs btn-primary">
+        <input type="file" name="attachment[]" id="fileId" accept=".csv" @change="onFileSelected" multiple/>
+        Upload file
+        </label>
+        <br>
+        {{selectedFile}}
 
   </div>
 </template>
@@ -23,12 +38,14 @@ export default{
         },
     data () {
         return {
-            selectedFiles: null,
+            fileName: null,
+            selectedFile: null
         }
     },
     methods: {
-        onFileSelected: function(event){
-            this.selectedFiles = event.target.files
+        onFileSelected(event){
+            const fileData =  event.target.files[0];
+            this.selectedFile = fileData.name
         },
         sendFile: function(){
 
