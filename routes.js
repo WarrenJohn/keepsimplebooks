@@ -11,9 +11,6 @@ use the res.sendFile() function.
 If you are serving many assets from a directory, use the express.static() middleware function.
 */
 
-// Upload page function
-// u.handleCSV('accountactivity.csv');
-
 
 module.exports = app => {
     app.get('/', (req, res) =>{
@@ -39,7 +36,7 @@ module.exports = app => {
         }
     );
 
-    // Transactions uploading, viewing, tagging, modifying and deleting transactions
+    // Transactions uploading, viewing, tagging and deleting transactions
     app.get('/transactions', (req, res) =>{
         console.log('GET: Transactions');
         let userData = {};
@@ -62,6 +59,15 @@ module.exports = app => {
             });
     }
     );
+
+    app.post('/transactions/upload', (res, req) => {
+        console.log('POST: transactions/upload');
+        console.log(req.data);
+        // res.send('POST: transactions/upload');
+        // Upload page function
+        // u.handleCSV('accountactivity.csv');
+    })
+
     app.post('/transactions', async (req, res) =>{
         console.log('POST: Transactions', req.body);
         let tag = req.body.tag;
@@ -70,11 +76,7 @@ module.exports = app => {
         res.send(await m.insertRowTag(req.body.tag));
         }
     );
-    app.patch('/transactions', (req, res) =>{
-        console.log('PATCH: Transactions');
-        res.send('Transactions');
-        }
-    );
+
     app.delete('/transactions', (req, res) =>{
         console.log('DELETE: Transactions');
         res.send('Transactions');

@@ -139,16 +139,18 @@ export default{
                     this.clientResponse = 'Description or Amount are required!';
                 }
         },
-        addTag: function(){            
+        addTag: function(){
             axios
                 .post('http://localhost:5000/transactions', {tag: this.tag})
                 .then(response => {
                     if(response.data.created){
                         // referencing the response from findOrCreate method of sequelize
                         this.clientResponseClass = 'success text-center';
+                        setTimeout(() => {this.clientResponseClass = null}, 3000);
                         this.clientResponse = 'Tag successfully created!';
                     }else{
                         this.clientResponseClass = 'warning text-center';
+                        setTimeout(() => {this.clientResponseClass = null}, 3000);
                         this.clientResponse = 'Tag already exists!';
                     }
                     return axios.get('http://localhost:5000/transactions')
@@ -175,17 +177,17 @@ export default{
                     // Parsing out all previously tagged transactions
                     if (tag.description && tag.amount){
                         if (!transaction.deposit){
-                            if (transaction.description.includes(tag.description) && transaction.withdrawl === tag.amount){
+                            if (transaction.description.toLowerCase().includes(tag.description.toLowerCase()) && transaction.withdrawl === tag.amount){
                                 transactions.splice(transactions.indexOf(transaction), 1);
                             }
                         }else{
-                            if (transaction.description.includes(tag.description) && transaction.deposit === tag.amount){
+                            if (transaction.description.toLowerCase().includes(tag.description.toLowerCase()) && transaction.deposit === tag.amount){
                                 transactions.splice(transactions.indexOf(transaction), 1);
                             }
                         }
                     }
                     else if (!tag.amount){
-                        if(transaction.description.includes(tag.description)){
+                        if(transaction.description.toLowerCase().includes(tag.description.toLowerCase())){
                             transactions.splice(transactions.indexOf(transaction), 1);
                         }
 

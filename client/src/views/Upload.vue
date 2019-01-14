@@ -19,6 +19,7 @@
         <li>Confirm the upload</li>
         <li>Validate file type</li>
     </ul>
+    <!-- <form method="post" enctype="multipart/form-data"> -->
         <label class="btn btn-xs">
             <input class="form-control" type="file"
             @change="onFileChanged">
@@ -26,8 +27,11 @@
             @click="onUpload">
                 Upload</button>
         </label>
-        <br>
-        {{selectedFile}}
+    <!-- </form> -->
+    <br>
+    {{uploadProgress}}
+    <br>
+    {{selectedFile}}
 
   </div>
 </template>
@@ -37,7 +41,8 @@ import axios from 'axios'
 export default{
     data () {
         return {
-            selectedFile: null
+            selectedFile: null,
+            uploadProgress: null
         }
     },
     methods: {
@@ -47,9 +52,9 @@ export default{
         onUpload() {
             const formData = new FormData()
             formData.append('myFile', this.selectedFile, this.selectedFile.name)
-            axios.post('my-domain.com/file-upload', formData, {
+            axios.post('http://localhost:5000/transactions/upload', formData, {
                 onUploadProgress: progressEvent => {
-                    console.log(progressEvent.loaded / progressEvent.total);
+                    this.uploadProgress = (progressEvent.loaded / progressEvent.total);
                 }
             })
         }
