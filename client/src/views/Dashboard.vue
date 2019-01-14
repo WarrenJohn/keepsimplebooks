@@ -1,19 +1,15 @@
 <template>
   <div class="dashboard">
     <h1>This is the Dashboard</h1>
-    <Categories></Categories>
+    <ul>
+        <li>Overview of account activity</li>
+        <li>View moneyflow in and out</li>
+        <li>Add/remove categories and tags</li>
+        <li>View money spent/made by category</li>
+    </ul>
   </div>
 </template>
 
 <script>
-import Categories from '@/components/Categories.vue'
 
-// import axios from 'axios';
-
-export default {
-    name: 'category',
-    components: {
-      Categories
-  }
-}
 </script>
