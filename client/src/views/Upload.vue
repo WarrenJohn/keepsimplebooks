@@ -19,9 +19,12 @@
         <li>Confirm the upload</li>
         <li>Validate file type</li>
     </ul>
-        <label class="btn btn-xs btn-primary">
-        <input type="file" name="attachment[]" id="fileId" accept=".csv" @change="onFileSelected" multiple/>
-        Upload file
+        <label class="btn btn-xs">
+            <input class="form-control" type="file"
+            @change="onFileChanged">
+            <button class="btn btn-primary"
+            @click="onUpload">
+                Upload</button>
         </label>
         <br>
         {{selectedFile}}
@@ -32,23 +35,23 @@
 import axios from 'axios'
 
 export default{
-    name: 'Uploads',
-        props: {
-            selected: String
-        },
     data () {
         return {
-            fileName: null,
             selectedFile: null
         }
     },
     methods: {
-        onFileSelected(event){
-            const fileData =  event.target.files[0];
-            this.selectedFile = fileData.name
+        onFileChanged (event) {
+            this.selectedFile = event.target.files[0]
         },
-        sendFile: function(){
-
+        onUpload() {
+            const formData = new FormData()
+            formData.append('myFile', this.selectedFile, this.selectedFile.name)
+            axios.post('my-domain.com/file-upload', formData, {
+                onUploadProgress: progressEvent => {
+                    console.log(progressEvent.loaded / progressEvent.total);
+                }
+            })
         }
     }
 }
