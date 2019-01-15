@@ -12,7 +12,8 @@ app.use(express.static('./static'));
 app.use(bodyParser.json());
 app.use(cors());
 require('./routes')(app);
-let todo = `
+
+const todo = `
 \x1b[47m\x1b[30m\x1b[4m
 
     FEATURES TO DO:\x1b[0m\x1b[47m
