@@ -61,15 +61,10 @@ module.exports = app => {
     }
     );
 
-    app.post('/transactions/upload', upload.single('bank'), (req, res) => {
+    app.post('/transactions/upload', upload.single('bank'), async (req, res) => {
         console.log('POST: transactions/upload');
-        console.log(req.file);
-        console.log(req.file.path);
-        console.log(req.file.originalname);
-        console.log(req.file.filename);
-        // res.send
-        res.send('POST: transactions/upload');
-        // u.handleCSV(req.file.originalname);
+        // await u.handleCSV(req.file.path);
+        res.status(201).send();
     })
 
     app.post('/transactions', async (req, res) =>{
