@@ -51,7 +51,7 @@ export default{
         },
         onUpload() {
             const formData = new FormData()
-            formData.append('myFile', this.selectedFile, this.selectedFile.name)
+            formData.append('bank', this.selectedFile, this.selectedFile.name)
             axios.post('http://localhost:5000/transactions/upload', formData, {
                 onUploadProgress: progressEvent => {
                     this.uploadProgress = (progressEvent.loaded / progressEvent.total);
