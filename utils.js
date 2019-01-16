@@ -9,14 +9,13 @@ const parse = require('csv-parse');
 const createObjArray = data => {
     // data must be array of arrays
     let array = Array();
-    data.map(row => array.push({
+    return data.map(row => ({
         transaction_date: row[0],
         description: row[1],
         withdrawl: row[2],
         deposit: row[3],
         balance: row[4],
         user: 'warren'}));
-    return array;
 };
 
 
