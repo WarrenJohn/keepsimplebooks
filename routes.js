@@ -1,11 +1,12 @@
 const path = require('path');
 const views = path.join(__dirname, 'views');
-
+const fs = require('fs');
 const u = require('./utils');
 const m = require('./models');
 const multer = require('multer');
+const parse = require('csv-parse');
 
-const upload = multer({ dest: './uploads' })
+const upload = multer()
 
 /* How do I render plain HTML?
 You don’t! There’s no need to “render” HTML with the res.render() function. If you have a specific file,
@@ -64,9 +65,8 @@ module.exports = app => {
 
     app.post('/transactions/upload', upload.single('bank'), async (req, res) => {
         console.log('POST: transactions/upload');
-        console.log(req.file.size);
         if (req.file.originalname.split('.').pop() === 'csv' && req.file.mimetype === 'application/vnd.ms-excel'){
-            // await u.handleCSV(req.file.path);
+            await u.handleCSV(req.file.buffer);
             res.status(201).send();
 
         }else if (req.file.originalname.split('.').pop() !== 'csv' && req.file.mimetype !== 'application/vnd.ms-excel'){

@@ -5,7 +5,7 @@
         <p class="lead">Make sure your columns are in the following order from left to right:</p>
         <p>Date, Description, Withdrawn, Deposited, Balance</p>
         <label class="btn btn-xs">
-            <input class="form-control" type="file" accept=""
+            <input class="form-control" type="file" accept=".csv"
             @change="onFileChanged">
             <br>
             <button class="btn btn-primary"
