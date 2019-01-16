@@ -36,16 +36,15 @@ module.exports.handleTags = data => {
 };
 
 module.exports.handleCSV = fileData => {
-        parse(fileData, {columns: false, trim: true}, (err, data) => {
-            // data is converted in an array of objects prior to db insertion
-            data.map(element => (
-                // remove spaces in descriptions and re add them to make sure there are no double spaces
-                element[1] = element[1].replace(/ +(?= )/g, '')
-            ));
-            // console.log(data);
-            m.insertBulkRowsBank(createObjArray(data));
-        });
-    return true;
+    parse(fileData, {columns: false, trim: true}, (err, data) => {
+        // data is converted in an array of objects prior to db insertion
+        data.map(element => (
+            // remove spaces in descriptions and re add them to make sure there are no double spaces
+            element[1] = element[1].replace(/ +(?= )/g, '')
+        ));
+        // console.log(data);
+        m.insertBulkRowsBank(createObjArray(data));
+    });
 };
 
 module.exports.handleCSV_row = file => {

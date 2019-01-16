@@ -66,7 +66,7 @@ module.exports = app => {
     app.post('/transactions/upload', upload.single('bank'), async (req, res) => {
         console.log('POST: transactions/upload');
         if (req.file.originalname.split('.').pop() === 'csv' && req.file.mimetype === 'application/vnd.ms-excel'){
-            await u.handleCSV(req.file.buffer);
+            await u.handleCSV(req.file.buffer)
             res.status(201).send();
 
         }else if (req.file.originalname.split('.').pop() !== 'csv' && req.file.mimetype !== 'application/vnd.ms-excel'){
