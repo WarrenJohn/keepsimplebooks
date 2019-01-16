@@ -34,12 +34,6 @@
                         {{clientResponse}}
                     </b-alert>
                 </div>
-                <h3>Current Tags</h3>
-                <ul>
-                    <li v-for="(item, index) in userTags" :key="index + '-tagsd'">
-                        {{item}}
-                    </li>
-                </ul>
             </div>
                 </b-col>
                 <b-col sm="8">
@@ -146,12 +140,12 @@ export default{
                     if(response.data.created){
                         // referencing the response from findOrCreate method of sequelize
                         this.clientResponseClass = 'success text-center';
-                        setTimeout(() => {this.clientResponseClass = null}, 3000);
                         this.clientResponse = 'Tag successfully created!';
+                        setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
                     }else{
                         this.clientResponseClass = 'warning text-center';
-                        setTimeout(() => {this.clientResponseClass = null}, 3000);
                         this.clientResponse = 'Tag already exists!';
+                        setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
                     }
                     return axios.get('http://localhost:5000/transactions')
                 })

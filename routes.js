@@ -4,6 +4,7 @@ const views = path.join(__dirname, 'views');
 const u = require('./utils');
 const m = require('./models');
 const multer = require('multer');
+
 const upload = multer({ dest: './uploads' })
 
 /* How do I render plain HTML?
@@ -63,8 +64,17 @@ module.exports = app => {
 
     app.post('/transactions/upload', upload.single('bank'), async (req, res) => {
         console.log('POST: transactions/upload');
-        // await u.handleCSV(req.file.path);
-        res.status(201).send();
+        console.log(req.file.size);
+        if (req.file.originalname.split('.').pop() === 'csv' && req.file.mimetype === 'application/vnd.ms-excel'){
+            // await u.handleCSV(req.file.path);
+            res.status(201).send();
+
+        }else if (req.file.originalname.split('.').pop() !== 'csv' && req.file.mimetype !== 'application/vnd.ms-excel'){
+            res.status(415).send();
+        }else if (req.file.size > 1000000){
+            res.status(413).send();
+        }
+
     })
 
     app.post('/transactions', async (req, res) =>{

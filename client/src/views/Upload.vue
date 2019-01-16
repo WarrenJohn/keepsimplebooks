@@ -1,7 +1,23 @@
 <template>
   <div class="upload">
     <h1>This is the Upload page</h1>
-    <p>Confirm the column headings:</p>
+    <div class="text-center">
+        <p class="lead">Make sure your columns are in the following order from left to right:</p>
+        <p>Date, Description, Withdrawn, Deposited, Balance</p>
+        <label class="btn btn-xs">
+            <input class="form-control" type="file" accept=""
+            @change="onFileChanged">
+            <br>
+            <button class="btn btn-primary"
+            @click="onUpload">
+            Upload</button>
+        </label>
+        <div v-if="clientResponseClass">
+            <b-alert show :variant="clientResponseClass">
+                {{clientResponse}}
+            </b-alert>
+        </div>
+    </div>
     <ul>
         <li>Select the file</li>
         <li>Tag the columns</li>
@@ -20,21 +36,6 @@
         <li>Confirm the upload</li>
         <li>Validate file type</li>
     </ul>
-    <!-- <form method="post" enctype="multipart/form-data"> -->
-        <label class="btn btn-xs">
-            <input class="form-control" type="file" accept=".csv"
-            @change="onFileChanged">
-            <br>
-            <button class="btn btn-primary"
-            @click="onUpload">
-                Upload</button>
-        </label>
-        <div v-if="clientResponseClass">
-            <b-alert show :variant="clientResponseClass">
-                {{clientResponse}}
-            </b-alert>
-        </div>
-    <!-- </form> -->
     <br>
     {{uploadProgress}}
     <br>
@@ -57,27 +58,44 @@ export default{
     },
     methods: {
         onFileChanged (event) {
-            this.selectedFile = event.target.files[0];
+            const selectedFile = event.target.files[0];
+            const correctSize = selectedFile.size < 1000000;
+            if (selectedFile.name.split('.').pop() === 'csv' && selectedFile.type === 'application/vnd.ms-excel' && correctSize){
+                this.selectedFile = selectedFile;
+            }
+            else{
+                this.clientResponseClass = 'danger text-center';
+                this.clientResponse = 'Wrong file type(.csv only) or file too large (1 mb limit)';
+                setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 10000);
+            }
         },
         onUpload() {
             if (!this.selectedFile){
                 this.clientResponseClass = 'warning text-center';
-                setTimeout(() => {this.clientResponseClass = null}, 3000);
                 this.clientResponse = 'Please select a file';
+                setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
             }else{
                 const formData = new FormData()
                 formData.append('bank', this.selectedFile)
+                console.log(formData);
                 axios.post('http://localhost:5000/transactions/upload', formData)
-                    .then(() => {
+                    .then(response => {
+                        if (response.status === 201){
                         this.clientResponseClass = 'success text-center';
-                        setTimeout(() => {this.clientResponseClass = null}, 3000);
                         this.clientResponse = 'Files Uploaded!';
+                        setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
+                        }
                     })
                     .catch(error => {
-                        console.log(error);
-                        this.clientResponseClass = 'danger text-center';
-                        setTimeout(() => {this.clientResponseClass = null}, 3000);
-                        this.clientResponse = 'Something went wrong';
+                        if (error.response.status === 415){
+                            this.clientResponseClass = 'danger text-center';
+                            this.clientResponse = 'Invalid file type';
+                            setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 10000);
+                        }else if (error.response.status === 413){
+                            this.clientResponseClass = 'danger text-center';
+                            this.clientResponse = 'File too large (1 mb limit)';
+                            setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 10000);
+                        }
                     })
             }
         }

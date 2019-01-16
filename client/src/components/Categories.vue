@@ -62,12 +62,12 @@ export default {
                     if(response.data.created){
                         // referencing the response from findOrCreate method of sequelize
                         this.clientResponseClass = "success text-center";
-                        setTimeout(() => {this.clientResponseClass = null}, 3000);
                         this.clientResponse = "Category successfully added!";
+                        setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
                     }else{
                         this.clientResponseClass = "warning text-center";
-                        setTimeout(() => {this.clientResponseClass = null}, 3000);
                         this.clientResponse = "Category already exists!";
+                        setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
                     }
                 })
                 .then(() => {
