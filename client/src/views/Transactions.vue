@@ -38,6 +38,8 @@
                 </b-col>
                 <b-col sm="8">
                     <h1>This is the Transactions page</h1>
+                    <h3>table screwed up on bns mtge dept line</h3>
+                    <p>probably from adding tags, the remval of elements is getting everything out of order</p>
                     <div class="container">
                         <table class="table table-hover table-sm" style="table-layout:fixed">
                             <thead>
@@ -108,8 +110,6 @@ export default{
   },
     data () {
         return {
-            test: '',
-            bulkData: null,
             allTags: Array(),
             userTags: Array(),
             tag: { 'category': '', 'description': '', 'amount': '', 'user': '' },

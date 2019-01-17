@@ -18,24 +18,24 @@ If you are serving many assets from a directory, use the express.static() middle
 module.exports = app => {
     app.get('/', (req, res) =>{
         console.log('GET: index');
-        res.send('Index');
+        res.status(200).send('Index');
         }
     );
 
     // Users: registering, logging in and modifying users
     app.get('/users', (req, res) =>{
         console.log('GET: Users');
-        res.send('Users');
+        res.status(200).send('Users');
         }
     );
     app.post('/users', (req, res) =>{
         console.log('Post: Users');
-        res.send('Users');
+        res.status(200).send('Users');
         }
     );
     app.patch('/users', (req, res) =>{
         console.log('Post: Users');
-        res.send('Users');
+        res.status(200).send('Users');
         }
     );
 
@@ -55,7 +55,7 @@ module.exports = app => {
                 userData.tags = data;
             })
             .then(() => {
-                res.send(userData)
+                res.status(200).send(userData)
             })
             .catch(err => {
                 console.log(err)
@@ -82,13 +82,13 @@ module.exports = app => {
         let tag = req.body.tag;
         tag.description = tag.description.replace(/ +(?= )/g, '');
         tag.amount = tag.amount.replace(/ /g, '');
-        res.send(await m.insertRowTag(req.body.tag));
+        res.status(201).send(await m.insertRowTag(req.body.tag));
         }
     );
 
     app.delete('/transactions', (req, res) =>{
         console.log('DELETE: Transactions');
-        res.send('Transactions');
+        res.status(200).send('Transactions');
         }
     );
 
@@ -96,7 +96,7 @@ module.exports = app => {
     app.get('/categories', (req, res) =>{
         console.log('GET: Categories');
         m.getUserCategories('warren').then(data => {
-            res.send(data);
+            res.status(200).send(data);
         });
     }
     );
@@ -104,12 +104,12 @@ module.exports = app => {
         console.log('POST: Categories', req.body);
         let categoryObj = req.body;
         categoryObj.category = categoryObj.category.replace(/ +(?= )/g, '');
-        res.send(await m.createUserCategory(categoryObj));
+        res.status(201).send(await m.createUserCategory(categoryObj));
         }
     );
     app.delete('/categories', (req, res) =>{
         console.log('DELETE: Categories');
-        res.send('Categories');
+        res.status(200).send('Categories');
         }
     );
 };
