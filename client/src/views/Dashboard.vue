@@ -4,21 +4,36 @@
         <b-container class="bv-example-row">
             <b-row>
                 <b-col>
-                    <h3 class="text-center">Transactions</h3>
-                    <p>{{transactions}}</p>
-
+                    <h3 class="text-center">Tags</h3>
+                    <p>{{tags}}</p>
                 </b-col>
             </b-row>
             <b-row>
                 <b-col>
                     <h3 class="text-center">Categories</h3>
                     <p>{{categories}}</p>
+                    <b-row>
+                        <b-col v-for="(category, index) in categories" :key="index+'_category'">
+                            <h5>{{category.name}}</h5>
+                        </b-col>
+                    </b-row>
                 </b-col>
             </b-row>
             <b-row>
                 <b-col>
-                    <h3 class="text-center">Tags</h3>
-                    <p>{{tags}}</p>
+                    <h3 class="text-center">Sorted Categories</h3>
+                    <p>{{sortedCategories}}</p>
+                    <b-row>
+                        <b-col v-for="(category, index) in sortedCategories" :key="index+'_scategory'">
+                            <h5>{{category}}</h5>
+                        </b-col>
+                    </b-row>
+                </b-col>
+            </b-row>
+            <b-row>
+                <b-col>
+                    <h3 class="text-center">Transactions</h3>
+                    <p>{{transactions}}</p>
                 </b-col>
             </b-row>
             <b-row>
@@ -48,6 +63,7 @@ export default{
         return {
             transactions: null,
             categories: null,
+            sortedCategories: Array(),
             tags: null,
             info: null,
             allTags: Array(),
@@ -56,42 +72,42 @@ export default{
         }
     },
     methods:{
-        // parseTransactions: function(transactions, tags){
-        //     tags.forEach(tag => {
-        //         transactions.forEach(transaction => {
-        //             // Parsing out all previously tagged transactions
-        //             if (tag.description && tag.amount){
-        //                 if (!transaction.deposit){
-        //                     if (transaction.description.toLowerCase().includes(tag.description.toLowerCase()) && transaction.withdrawl === tag.amount){
-        //                         transactions.splice(transactions.indexOf(transaction), 1);
-        //                     }
-        //                 }else{
-        //                     if (transaction.description.toLowerCase().includes(tag.description.toLowerCase()) && transaction.deposit === tag.amount){
-        //                         transactions.splice(transactions.indexOf(transaction), 1);
-        //                     }
-        //                 }
-        //             }
-        //             else if (!tag.amount){
-        //                 if(transaction.description.toLowerCase().includes(tag.description.toLowerCase())){
-        //                     transactions.splice(transactions.indexOf(transaction), 1);
-        //                 }
-        //
-        //             }
-        //             else if (!tag.description){
-        //                 if(!transaction.deposit){
-        //                     if(transaction.withdrawl === tag.amount){
-        //                         transactions.splice(transactions.indexOf(transaction), 1);
-        //                     }
-        //                 }else{
-        //                     if(transaction.deposit === tag.amount){
-        //                         transactions.splice(transactions.indexOf(transaction), 1);
-        //                     }
-        //                 }
-        //             }
-        //         })
-        //     })
-        //     return transactions;
-        // },
+        parseTransactions: function(transactions, tags){
+            tags.forEach(tag => {
+                transactions.forEach(transaction => {
+                    // Parsing out all previously tagged transactions
+                    if (tag.description && tag.amount){
+                        if (!transaction.deposit){
+                            if (transaction.description.toLowerCase().includes(tag.description.toLowerCase()) && transaction.withdrawl === tag.amount){
+                                this.sortedCategories.push(transactions.indexOf(transaction), 1);
+                            }
+                        }else{
+                            if (transaction.description.toLowerCase().includes(tag.description.toLowerCase()) && transaction.deposit === tag.amount){
+                                this.sortedCategories.push(transactions.indexOf(transaction), 1);
+                            }
+                        }
+                    }
+                    else if (!tag.amount){
+                        if(transaction.description.toLowerCase().includes(tag.description.toLowerCase())){
+                            this.sortedCategories.push(transactions.indexOf(transaction), 1);
+                        }
+
+                    }
+                    else if (!tag.description){
+                        if(!transaction.deposit){
+                            if(transaction.withdrawl === tag.amount){
+                                this.sortedCategories.push(transactions.indexOf(transaction), 1);
+                            }
+                        }else{
+                            if(transaction.deposit === tag.amount){
+                                this.sortedCategories.push(transactions.indexOf(transaction), 1);
+                            }
+                        }
+                    }
+                })
+            })
+            // return transactions;
+        },
         // sortTransactions: function(transactions){
         //     let unsortedTransactions = transactions;
         //     let sortedDescriptions = Array();
@@ -130,6 +146,14 @@ export default{
         //     });
         //     return sortedTransactions;
         // }
+
+        // sortCategories: functions(){
+        //     this.transactions.map(row => {
+        //         this.tags.map(tag => {
+        //
+        //         })
+        //     })
+        // }
         getTransactions: function(){
             return axios.get('http://localhost:5000/transactions')
         },
@@ -145,6 +169,7 @@ export default{
                 this.tags = transactions.data.tags
                 this.categories = categories.data;
             }))
+            .then(this.parseTransactions(this.transactions, this.tags))
     }
 }
 </script>
