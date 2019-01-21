@@ -125,13 +125,25 @@ module.exports.createUserCategory = object => {
                 }
             })
         .spread((user, created) => {
-        return {user, created};
+            return {user, created};
         })
         .catch(err => {
             console.log("Create User Category Error: ", err);
             });
         });
     };
+
+module.exports.deleteUserCategory = id => {
+    return Categories.destroy({
+        where:
+            {
+                id: id
+            }
+    })
+        .then(response => {
+            return response;
+        })
+}
 
 // BANK TABLE METHODS
 // columns: [ 'id', 'transaction_date', 'description', 'withdrawl', 'deposit', 'balance', 'user', 'createdAt', 'updatedAt' ]

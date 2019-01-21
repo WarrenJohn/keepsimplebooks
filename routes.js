@@ -58,7 +58,7 @@ module.exports = app => {
                 res.status(200).send(userData)
             })
             .catch(err => {
-                console.log(err)
+                res.status(500).send()
             });
     }
     );
@@ -77,7 +77,7 @@ module.exports = app => {
 
     })
 
-    app.post('/transactions', async (req, res) =>{
+    app.post('/transactions/tags', async (req, res) =>{
         console.log('POST: Transactions', req.body);
         let tag = req.body.tag;
         tag.description = tag.description.replace(/ +(?= )/g, '');
@@ -86,7 +86,7 @@ module.exports = app => {
         }
     );
 
-    app.delete('/transactions', (req, res) =>{
+    app.delete('/transactions/tags', (req, res) =>{
         console.log('DELETE: Transactions');
         res.status(200).send('Transactions');
         }
@@ -107,9 +107,16 @@ module.exports = app => {
         res.status(201).send(await m.createUserCategory(categoryObj));
         }
     );
-    app.delete('/categories', (req, res) =>{
-        console.log('DELETE: Categories');
-        res.status(200).send('Categories');
+    app.delete('/categories/:id', (req, res) =>{
+        console.log('DELETE: Categories', req.params);
+        m.deleteUserCategory(req.params.id)
+            .then(response => {
+                if (response === 1){
+                    res.status(200).send();
+                }else{
+                    res.status(404).send();
+                }
+            });
         }
     );
 };

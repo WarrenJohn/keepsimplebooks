@@ -5,6 +5,11 @@
             <b-row>
                 <b-col>
                     <h3 class="text-center">Totals</h3>
+                    <div v-if="clientResponseClass">
+                        <b-alert show :variant="clientResponseClass">
+                            {{clientResponse}}
+                        </b-alert>
+                    </div>
                     <b-row>
                         <table>
                             <thead>
@@ -19,11 +24,6 @@
                                 </tr>
                             </thead>
                         </table>
-                        <!-- <b-col v-for="(category, index) in categories" :key="index+'_category'">
-                            <h5>{{category.name}}</h5>
-                            <p class="lead text-danger" v-if="category.sum < 0">$({{Math.abs(category.sum).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}})</p>
-                            <p v-else class="lead">${{category.sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}}</p>
-                        </b-col> -->
                     </b-row>
                 </b-col>
             </b-row>
@@ -37,7 +37,7 @@
             <b-row class="text-center">
                 <b-col>
                     <h3>Your Tags</h3>
-                    <table class="table">
+                    <table class="table table-sm">
                         <thead>
                             <tr>
                                 <th scope="col">Transaction Category</th>
@@ -60,18 +60,19 @@
                             </td>
                             <td v-else>None</td>
                             <td><b-button class="btn-warning btn-sm">edit</b-button></td>
-                            <td><b-button class="btn-danger btn-sm">remove</b-button></td>
+                            <td><b-button class="btn-danger btn-sm"
+                                @click="removeTag(id)">remove</b-button></td>
                         </tr>
                     </table>
                 </b-col>
-            </b-row>
-            <b-row class="text-center">
+            <!-- </b-row>
+            <b-row class="text-center"> -->
                 <b-col>
                     <h3>Categories</h3>
-                    <table class="table">
+                    <table class="table table-sm">
                         <thead>
                             <tr>
-                                <th>Name</th>
+                                <th scope="col">Name</th>
                                 <th></th>
                                 <th></th>
                             </tr>
@@ -79,7 +80,8 @@
                         <tr v-for="(category, index) in clientCategories" :key="index+'_clientCategories'">
                             <td>{{category.name.toUpperCase()}}</td>
                             <td><b-button class="btn-warning btn-sm">edit</b-button></td>
-                            <td><b-button class="btn-danger btn-sm">remove</b-button></td>
+                            <td><b-button class="btn-danger btn-sm"
+                                @click="removeCategory(category.id)">{{category.id}}remove</b-button></td>
                         </tr>
                     </table>
                 </b-col>
@@ -109,12 +111,49 @@ export default{
             clientCategories: null,
             tags: null,
             info: null,
-            total: null,
+            total: 0,
             clientResponse: null,
             clientResponseClass: null
         }
     },
     methods:{
+        removeTag: function(id){
+            axios.delete(`http://localhost:5000/categories/${id}`)
+                .then(response => {
+                    if (response.status === 200){
+                        this.clientResponseClass = 'success text-center';
+                        this.clientResponse = 'Category successfully deleted!';
+                        setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
+                        this.setupDashboard();
+                    }
+
+                })
+                .catch(() => {
+                    this.clientResponseClass = 'danger text-center';
+                    this.clientResponse = 'There was an issue!';
+                    setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
+                    this.setupDashboard();
+                })
+        },
+        removeCategory: function(id){
+            axios.delete(`http://localhost:5000/categories${id}`)
+                .then(response => {
+                    if (response.status === 200){
+                        this.clientResponseClass = 'success text-center';
+                        this.clientResponse = 'Category successfully deleted!';
+                        setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
+                        this.setupDashboard();
+                    }
+
+                })
+                .catch(() => {
+                    // referencing the response from findOrCreate method of sequelize
+                    this.clientResponseClass = 'danger text-center';
+                    this.clientResponse = 'There was an issue!';
+                    setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
+                    this.setupDashboard();
+                })
+        },
         parseTransactions: function(categories, transactions, tags){
             let sortedCategories = Array();
             tags.forEach(tag => {
@@ -185,24 +224,41 @@ export default{
         },
         getCategories: function(){
             return axios.get('http://localhost:5000/categories')
+        },
+        setupDashboard: function(){
+            axios.all([this.getTransactions(), this.getCategories()])
+                .then(axios.spread((transactions, categories) => {
+                    this.clientCategories = categories.data;
+                    this.transactions = transactions.data.transactions;
+                    this.tags = transactions.data.tags;
+                    this.categories = this.parseTransactions(
+                        categories.data.map(category => (
+                            {name: category.name, sum: null, type: null}
+                        )),
+                        transactions.data.transactions, transactions.data.tags);
+                    this.categories.forEach(item => {
+                        this.total += item.sum;
+                    })
+                }))
         }
     },
 
     created () {
-        axios.all([this.getTransactions(), this.getCategories()])
-            .then(axios.spread((transactions, categories) => {
-                this.clientCategories = categories.data;
-                this.transactions = transactions.data.transactions;
-                this.tags = transactions.data.tags;
-                this.categories = this.parseTransactions(
-                    categories.data.map(category => (
-                        {name: category.name, sum: null, type: null}
-                    )),
-                    transactions.data.transactions, transactions.data.tags);
-                this.categories.forEach(item => {
-                    this.total += item.sum;
-                })
-            }))
+        this.setupDashboard()
+        // axios.all([this.getTransactions(), this.getCategories()])
+        //     .then(axios.spread((transactions, categories) => {
+        //         this.clientCategories = categories.data;
+        //         this.transactions = transactions.data.transactions;
+        //         this.tags = transactions.data.tags;
+        //         this.categories = this.parseTransactions(
+        //             categories.data.map(category => (
+        //                 {name: category.name, sum: null, type: null}
+        //             )),
+        //             transactions.data.transactions, transactions.data.tags);
+        //         this.categories.forEach(item => {
+        //             this.total += item.sum;
+        //         })
+        //     }))
     }
 }
 </script>

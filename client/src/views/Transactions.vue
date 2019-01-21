@@ -135,7 +135,7 @@ export default{
         },
         addTag: function(){
             axios
-                .post('http://localhost:5000/transactions', {tag: this.tag})
+                .post('http://localhost:5000/transactions/tags', {tag: this.tag})
                 .then(response => {
                     if(response.data.created){
                         // referencing the response from findOrCreate method of sequelize
