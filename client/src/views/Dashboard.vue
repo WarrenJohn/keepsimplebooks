@@ -1,34 +1,87 @@
 <template>
   <div class="dashboard">
-    <h1>This is the Dashboard</h1>
+    <h1>Dashboard</h1>
         <b-container class="bv-example-row">
             <b-row>
                 <b-col>
-                    <h3 class="text-center">Tags</h3>
-                    <p>{{tags}}</p>
-                </b-col>
-            </b-row>
-            <b-row>
-                <b-col>
-                    <h3 class="text-center">Categories</h3>
-                    <p>{{categories}}</p>
+                    <h3 class="text-center">Totals</h3>
                     <b-row>
-                        <b-col v-for="(category, index) in categories" :key="index+'_category'">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Amount</th>
+                                </tr>
+                                <tr v-for="(category, index) in categories" :key="index+'_category'">
+                                    <td>{{category.name.toUpperCase()}}</td>
+                                    <td  v-if="category.sum < 0" class="lead text-danger">$({{Math.abs(category.sum).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}})</td>
+                                    <td v-else class="lead">${{category.sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}}</td>
+                                </tr>
+                            </thead>
+                        </table>
+                        <!-- <b-col v-for="(category, index) in categories" :key="index+'_category'">
                             <h5>{{category.name}}</h5>
-                            <p class="lead">{{category.sum}}</p>
-                        </b-col>
+                            <p class="lead text-danger" v-if="category.sum < 0">$({{Math.abs(category.sum).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}})</p>
+                            <p v-else class="lead">${{category.sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}}</p>
+                        </b-col> -->
                     </b-row>
                 </b-col>
             </b-row>
             <b-row>
-                <b-col>
-                    <h3 class="text-center">Transactions</h3>
-                    <p>{{transactions}}</p>
+                <b-col class="text-center">
+                    <h3>Net Total</h3>
+                    <p class="lead text-danger" v-if="total < 0">$({{total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}})</p>
+                    <p class="lead" v-else>${{total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}}</p>
                 </b-col>
             </b-row>
-            <b-row>
+            <b-row class="text-center">
                 <b-col>
-                    <h3 class="text-center">Categories</h3>
+                    <h3>Your Tags</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Transaction Category</th>
+                                <th scope="col">Transaction Description</th>
+                                <th scope="col">Transaction Amount</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tr v-for="(tag, index) in tags" :key="index+'_clienttag'">
+                            <td>
+                                {{tag.category.toUpperCase()}}
+                            </td>
+                            <td v-if="tag.description">
+                                {{tag.description.toUpperCase()}}
+                            </td>
+                            <td v-else>None</td>
+                            <td v-if="tag.amount">
+                                {{tag.amount}}
+                            </td>
+                            <td v-else>None</td>
+                            <td><b-button class="btn-warning btn-sm">edit</b-button></td>
+                            <td><b-button class="btn-danger btn-sm">remove</b-button></td>
+                        </tr>
+                    </table>
+                </b-col>
+            </b-row>
+            <b-row class="text-center">
+                <b-col>
+                    <h3>Categories</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tr v-for="(category, index) in clientCategories" :key="index+'_clientCategories'">
+                            <td>{{category.name.toUpperCase()}}</td>
+                            <td><b-button class="btn-warning btn-sm">edit</b-button></td>
+                            <td><b-button class="btn-danger btn-sm">remove</b-button></td>
+                        </tr>
+                    </table>
                 </b-col>
             </b-row>
         </b-container>
@@ -53,10 +106,10 @@ export default{
         return {
             transactions: null,
             categories: null,
-            sortedCategories: Array(),
+            clientCategories: null,
             tags: null,
             info: null,
-            allTags: Array(),
+            total: null,
             clientResponse: null,
             clientResponseClass: null
         }
@@ -138,17 +191,17 @@ export default{
     created () {
         axios.all([this.getTransactions(), this.getCategories()])
             .then(axios.spread((transactions, categories) => {
+                this.clientCategories = categories.data;
                 this.transactions = transactions.data.transactions;
-                this.tags = transactions.data.tags
-                // this.categories = categories.data.map(category => (
-                //     {name: category.name, sum: null, type: null}
-                // ));
+                this.tags = transactions.data.tags;
                 this.categories = this.parseTransactions(
                     categories.data.map(category => (
                         {name: category.name, sum: null, type: null}
                     )),
-                    transactions.data.transactions, transactions.data.tags)
-
+                    transactions.data.transactions, transactions.data.tags);
+                this.categories.forEach(item => {
+                    this.total += item.sum;
+                })
             }))
     }
 }
