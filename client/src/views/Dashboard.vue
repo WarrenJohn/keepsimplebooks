@@ -19,8 +19,8 @@
                                 </tr>
                                 <tr v-for="(category, index) in categories" :key="index+'_category'">
                                     <td>{{category.name.toUpperCase()}}</td>
-                                    <td  v-if="category.sum < 0" class="lead text-danger">$({{Math.abs(category.sum).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}})</td>
-                                    <td v-else class="lead">${{category.sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}}</td>
+                                    <td  v-if="category.sum < 0" class="lead text-danger">$({{Math.abs(category.sum).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}})</td>
+                                    <td v-else class="lead">${{category.sum.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}}</td>
                                 </tr>
                             </thead>
                         </table>
@@ -28,8 +28,8 @@
                 </b-col>
                 <b-col class="text-center">
                     <h3>Net Total</h3>
-                    <p class="lead text-danger" v-if="total < 0">$({{total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}})</p>
-                    <p class="lead" v-else>${{total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}}</p>
+                    <p class="lead text-danger" v-if="total < 0">$({{total.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}})</p>
+                    <p class="lead" v-else>${{total.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}}</p>
                 </b-col>
             </b-row>
             <b-row class="text-center">
