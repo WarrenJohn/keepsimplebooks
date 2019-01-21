@@ -16,9 +16,12 @@ require('./routes')(app);
 const todo = `
 \x1b[47m\x1b[30m\x1b[4m
 
-    FEATURES TO DO:\x1b[0m\x1b[47m
+    FEATURES / TO DO:\x1b[0m\x1b[47m
 \x1b[30m
 - Unit tests
+- Make status codes in routes smarter
+- Fix API to return the correct data per call
+- Fix weird bug in transactions page that doesn't input the category sometimes, and also gets the table all messed up
 - Add date range selection functionality to Dashboard.vue, Transactions.vue & History.vue
 - Dashboard charts, money flow in and out
 - View categories & tags

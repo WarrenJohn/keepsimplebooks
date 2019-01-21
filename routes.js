@@ -68,7 +68,6 @@ module.exports = app => {
         if (req.file.originalname.split('.').pop() === 'csv' && req.file.mimetype === 'application/vnd.ms-excel'){
             await u.handleCSV(req.file.buffer)
             res.status(201).send();
-
         }else if (req.file.originalname.split('.').pop() !== 'csv' && req.file.mimetype !== 'application/vnd.ms-excel'){
             res.status(415).send();
         }else if (req.file.size > 1000000){
@@ -86,9 +85,18 @@ module.exports = app => {
         }
     );
 
-    app.delete('/tags', (req, res) =>{
+    app.delete('/tags/:id', (req, res) =>{
         console.log('DELETE: Transactions');
-        res.status(200).send('Transactions');
+        m.deleteUserTag(req.params.id)
+            .then(response => {
+                if (response === 1){
+                    res.status(200).send();
+                }else if (response === 0){
+                    res.status(404).send();
+                }else{
+                    res.status(500).send();
+                }
+            })
         }
     );
 
@@ -113,8 +121,10 @@ module.exports = app => {
             .then(response => {
                 if (response === 1){
                     res.status(200).send();
-                }else{
+                }else if (response === 0){
                     res.status(404).send();
+                }else{
+                    res.status(500).send();
                 }
             });
         }

@@ -11,7 +11,7 @@
                         </b-alert>
                     </div>
                     <b-row>
-                        <table>
+                        <table v-if="categories.length > 0">
                             <thead>
                                 <tr>
                                     <th scope="col">Name</th>
@@ -26,8 +26,6 @@
                         </table>
                     </b-row>
                 </b-col>
-            </b-row>
-            <b-row>
                 <b-col class="text-center">
                     <h3>Net Total</h3>
                     <p class="lead text-danger" v-if="total < 0">$({{total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}})</p>
@@ -44,7 +42,6 @@
                                 <th scope="col">Transaction Description</th>
                                 <th scope="col">Transaction Amount</th>
                                 <th></th>
-                                <th></th>
                             </tr>
                         </thead>
                         <tr v-for="(tag, index) in tags" :key="index+'_clienttag'">
@@ -59,9 +56,8 @@
                                 {{tag.amount}}
                             </td>
                             <td v-else>None</td>
-                            <td><b-button class="btn-warning btn-sm">edit</b-button></td>
                             <td><b-button class="btn-danger btn-sm"
-                                @click="removeTag(id)">remove</b-button></td>
+                                @click="removeTag(tag.id)">remove</b-button></td>
                         </tr>
                     </table>
                 </b-col>
@@ -74,24 +70,18 @@
                             <tr>
                                 <th scope="col">Name</th>
                                 <th></th>
-                                <th></th>
                             </tr>
                         </thead>
                         <tr v-for="(category, index) in clientCategories" :key="index+'_clientCategories'">
                             <td>{{category.name.toUpperCase()}}</td>
-                            <td><b-button class="btn-warning btn-sm">edit</b-button></td>
                             <td><b-button class="btn-danger btn-sm"
-                                @click="removeCategory(category.id)">{{category.id}}remove</b-button></td>
+                                @click="removeCategory(category.id)">remove</b-button></td>
                         </tr>
                     </table>
                 </b-col>
             </b-row>
         </b-container>
     <ul>
-        <li>Overview of account activity</li>
-        <li>View moneyflow in and out</li>
-        <li>Add/remove categories and tags</li>
-        <li>View money spent/made by category</li>
         <li>Send to accountant function</li>
         <ul>
             <li>Send summary with option to include full breakdown</li>
@@ -107,7 +97,7 @@ export default{
     data () {
         return {
             transactions: null,
-            categories: null,
+            categories: Array(),
             clientCategories: null,
             tags: null,
             info: null,
@@ -118,7 +108,7 @@ export default{
     },
     methods:{
         removeTag: function(id){
-            axios.delete(`http://localhost:5000/transactions/tags/${id}`)
+            axios.delete(`http://localhost:5000/tags/${id}`)
                 .then(response => {
                     if (response.status === 200){
                         this.clientResponseClass = 'success text-center';
@@ -245,20 +235,6 @@ export default{
 
     created () {
         this.setupDashboard()
-        // axios.all([this.getTransactions(), this.getCategories()])
-        //     .then(axios.spread((transactions, categories) => {
-        //         this.clientCategories = categories.data;
-        //         this.transactions = transactions.data.transactions;
-        //         this.tags = transactions.data.tags;
-        //         this.categories = this.parseTransactions(
-        //             categories.data.map(category => (
-        //                 {name: category.name, sum: null, type: null}
-        //             )),
-        //             transactions.data.transactions, transactions.data.tags);
-        //         this.categories.forEach(item => {
-        //             this.total += item.sum;
-        //         })
-        //     }))
     }
 }
 </script>

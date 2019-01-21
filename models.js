@@ -135,10 +135,7 @@ module.exports.createUserCategory = object => {
 
 module.exports.deleteUserCategory = id => {
     return Categories.destroy({
-        where:
-            {
-                id: id
-            }
+        where: {id: id}
     })
         .then(response => {
             return response;
@@ -224,6 +221,15 @@ module.exports.getUserTags = query => {
             console.log("Insert Single Row(Transactions) Error: ", err);
         });
     };
+
+module.exports.deleteUserTag = id => {
+    return Tags.destroy({
+        where: {id: id}
+    })
+        .then(response => {
+            return response;
+        })
+}
 
 module.exports.Sequelize = Sequelize;
 module.exports.keepsimple_db = keepsimple_db;
