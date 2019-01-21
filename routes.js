@@ -77,7 +77,7 @@ module.exports = app => {
 
     })
 
-    app.post('/transactions/tags', async (req, res) =>{
+    app.post('/tags', async (req, res) =>{
         console.log('POST: Transactions', req.body);
         let tag = req.body.tag;
         tag.description = tag.description.replace(/ +(?= )/g, '');
@@ -86,7 +86,7 @@ module.exports = app => {
         }
     );
 
-    app.delete('/transactions/tags', (req, res) =>{
+    app.delete('/tags', (req, res) =>{
         console.log('DELETE: Transactions');
         res.status(200).send('Transactions');
         }

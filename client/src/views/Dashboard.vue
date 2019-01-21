@@ -118,11 +118,11 @@ export default{
     },
     methods:{
         removeTag: function(id){
-            axios.delete(`http://localhost:5000/categories/${id}`)
+            axios.delete(`http://localhost:5000/transactions/tags/${id}`)
                 .then(response => {
                     if (response.status === 200){
                         this.clientResponseClass = 'success text-center';
-                        this.clientResponse = 'Category successfully deleted!';
+                        this.clientResponse = 'Tag successfully deleted!';
                         setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
                         this.setupDashboard();
                     }
