@@ -22,6 +22,7 @@ const todo = `
 - Make status codes in routes smarter
 - Convert complicated template variables to computed properties
 - Add taxable option and tax rate to tags
+- Add feature to allow user to just use transaction descriptions instead of making their own tags
 - Fix weird bug in transactions page that doesn't input the category sometimes, and also gets the table all messed up
 - Add date range selection functionality to Dashboard.vue, Transactions.vue & History.vue
 - Dashboard charts, money flow in and out
