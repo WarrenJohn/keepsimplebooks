@@ -122,7 +122,7 @@ module.exports = app => {
         res.status(201).send(await m.createUserCategory(categoryObj));
         }
     );
-    app.delete('/categories/:id', (req, res) =>{
+    app.delete('/categories:id', (req, res) =>{
         console.log('DELETE: Categories', req.params);
         m.deleteUserCategory(req.params.id)
             .then(response => {

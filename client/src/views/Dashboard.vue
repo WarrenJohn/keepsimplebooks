@@ -137,7 +137,6 @@ export default{
 
                 })
                 .catch(() => {
-                    // referencing the response from findOrCreate method of sequelize
                     this.clientResponseClass = 'danger text-center';
                     this.clientResponse = 'There was an issue!';
                     setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
