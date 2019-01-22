@@ -28,8 +28,14 @@
                 </b-col>
                 <b-col class="text-center">
                     <h3>Net Total</h3>
-                    <p class="lead text-danger" v-if="total < 0">$({{total.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}})</p>
-                    <p class="lead" v-else>${{total.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}}</p>
+                    <p class="lead text-danger"
+                    v-if="total < 0">
+                        $({{total.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}})
+                    </p>
+                    <p class="lead"
+                    v-else>
+                        ${{total.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}}
+                    </p>
                 </b-col>
             </b-row>
             <br>

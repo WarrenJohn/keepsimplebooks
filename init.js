@@ -20,7 +20,7 @@ const todo = `
 \x1b[30m
 - Unit tests
 - Make status codes in routes smarter
-- Fix API to return the correct data per call
+- Convert complicated template variables to computed properties
 - Add taxable option and tax rate to tags
 - Fix weird bug in transactions page that doesn't input the category sometimes, and also gets the table all messed up
 - Add date range selection functionality to Dashboard.vue, Transactions.vue & History.vue

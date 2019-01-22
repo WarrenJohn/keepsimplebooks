@@ -49,9 +49,9 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(line, index) in info" :key="index" class="d-flex">
+                                <tr v-for="(line, index) in info" :key="index+'_transactions'" class="d-flex">
                                     <th scope="row" class="col-10">
-                                        <b-btn block href="#" v-b-toggle=line.id variant="light">{{line.name}}</b-btn>
+                                        <b-btn block href="#" v-b-toggle="line.id" variant="light">{{line.name}}</b-btn>
                                         <b-collapse :id="line.id" accordion="transactions" role="tabpanel">
                                             <table class="table table-bordered table-hover table-sm">
                                                 <thead>
@@ -138,7 +138,7 @@ export default{
                 .post('http://localhost:5000/tags', {tag: this.tag})
                 .then(response => {
                     if(response.data.created){
-                        // referencing the response from findOrCreate method of sequelize
+                        // 'created' is referencing the response from findOrCreate method of sequelize
                         this.clientResponseClass = 'success text-center';
                         this.clientResponse = 'Tag successfully created!';
                         setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
@@ -147,13 +147,19 @@ export default{
                         this.clientResponse = 'Tag already exists!';
                         setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
                     }
-                    return axios.get('http://localhost:5000/transactions')
+                    // return axios.get('http://localhost:5000/transactions')
                 })
-                .then(response => {
-                    this.userTags = response.data.tags;
-                    response.data.transactions = this.parseTransactions(response.data.transactions, response.data.tags);
-                    this.info = this.sortTransactions(response.data.transactions);
-
+                .then(() => {
+                    // this.userTags = response.data.tags;
+                    // response.data.transactions = this.parseTransactions(response.data.transactions, response.data.tags);
+                    // this.info = this.sortTransactions(response.data.transactions);
+                    // this.vm.$forceUpdate();
+                    this.setupTransactionsPage();
+                })
+                .catch(() => {
+                    this.clientResponseClass = 'warning text-center';
+                    this.clientResponse = 'An error occured!';
+                    setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
                 })
         },
         createTag: function(id){
@@ -244,22 +250,19 @@ export default{
         },
         getTags: function(){
             return axios.get('http://localhost:5000/tags')
+        },
+        setupTransactionsPage: function(){
+            axios.all([this.getTransactions(), this.getTags()])
+                .then(axios.spread((transactions, tags) => {
+                    this.userTags = tags.data;
+                    transactions.data = this.parseTransactions(transactions.data, tags.data);
+                    this.info = this.sortTransactions(transactions.data);
+                }))
         }
     },
 
     created () {
-        axios.all([this.getTransactions(), this.getTags()])
-            .then(axios.spread((transactions, tags) => {
-                this.userTags = tags.data;
-                transactions.data = this.parseTransactions(transactions.data, tags.data);
-                this.info = this.sortTransactions(transactions.data);
-
-            }))
-
-        // .get('http://localhost:5000/transactions')
-        // .then(response => {
-        //
-        // })
+        this.setupTransactionsPage();
     }
 }
 </script>
