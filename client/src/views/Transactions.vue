@@ -38,8 +38,7 @@
                 </b-col>
                 <b-col sm="8">
                     <h1>This is the Transactions page</h1>
-                    <h3>table screwed up on bns mtge dept line</h3>
-                    <p>probably from adding tags, the remval of elements is getting everything out of order</p>
+                    <p>accordion collapse function is screwed up when tags are added - the id's are not changing correctly</p>
                     <div class="container">
                         <table class="table table-hover table-sm" style="table-layout:fixed">
                             <thead>
@@ -51,7 +50,7 @@
                             <tbody>
                                 <tr v-for="(line, index) in info" :key="index+'_transactions'" class="d-flex">
                                     <th scope="row" class="col-10">
-                                        <b-btn block href="#" v-b-toggle="line.id" variant="light">{{line.name}}</b-btn>
+                                        <b-btn block href="#" v-b-toggle="line.id" variant="link">{{line.name}}</b-btn>
                                         <b-collapse :id="line.id" accordion="transactions" role="tabpanel">
                                             <table class="table table-bordered table-hover table-sm">
                                                 <thead>
