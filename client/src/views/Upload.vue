@@ -77,7 +77,6 @@ export default{
             }else{
                 const formData = new FormData()
                 formData.append('bank', this.selectedFile)
-                console.log(formData);
                 axios.post('http://localhost:5000/transactions/upload', formData)
                     .then(response => {
                         if (response.status === 201){

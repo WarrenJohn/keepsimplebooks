@@ -56,8 +56,28 @@ module.exports = app => {
     app.post('/transactions/upload', upload.single('bank'), async (req, res) => {
         console.log('POST: transactions/upload');
         if (req.file.originalname.split('.').pop() === 'csv' && req.file.mimetype === 'application/vnd.ms-excel'){
-            await u.handleCSV(req.file.buffer)
-            res.status(201).send();
+            parse(req.file.buffer, {columns: false, trim: true}, (err, data) => {
+                data.map(description => (
+                    // remove spaces in descriptions and re add them to make sure there are no double spaces
+                    description[1] = description[1].replace(/ +(?= )/g, '')
+                ));
+                // data is converted in an array of objects prior to db insertion
+                m.insertBulkRowsBank(data.map(row => ({
+                                        transaction_date: row[0],
+                                        description: row[1],
+                                        withdrawl: row[2],
+                                        deposit: row[3],
+                                        balance: row[4],
+                                        user: 'warren'}))
+                                    )
+                    .then(() => {
+                        res.status(201).send();
+                    })
+                    .catch(() => {
+                        res.status(500).send();
+                    })
+            });
+            // m.insertBulkRowsBank(u.createObjArray(u.handleCSV(req.file.buffer)));
         }else if (req.file.originalname.split('.').pop() !== 'csv' && req.file.mimetype !== 'application/vnd.ms-excel'){
             res.status(415).send();
         }else if (req.file.size > 1000000){
@@ -83,12 +103,16 @@ module.exports = app => {
             });
     })
 
-    app.post('/tags', async (req, res) =>{
+    app.post('/tags', (req, res) =>{
         console.log('POST: Transactions', req.body);
         let tag = req.body.tag;
         tag.description = tag.description.replace(/ +(?= )/g, '');
         tag.amount = tag.amount.replace(/ /g, '');
-        res.status(201).send(await m.insertRowTag(req.body.tag));
+        m.insertRowTag(tag)
+            .then(response => {
+                res.status(201).send(response);
+                console.log('done');
+            })
         }
     );
 
@@ -110,16 +134,20 @@ module.exports = app => {
     // Expense categories: Adding, retrieving, removing
     app.get('/categories', (req, res) =>{
         console.log('GET: Categories');
-        m.getUserCategories('warren').then(data => {
-            res.status(200).send(data);
-        });
+        m.getUserCategories('warren')
+            .then(data => {
+                res.status(200).send(data);
+            });
     }
     );
-    app.post('/categories', async (req, res) =>{
+    app.post('/categories', (req, res) =>{
         console.log('POST: Categories', req.body);
         let categoryObj = req.body;
         categoryObj.category = categoryObj.category.replace(/ +(?= )/g, '');
-        res.status(201).send(await m.createUserCategory(categoryObj));
+        m.createUserCategory(categoryObj)
+            .then(response => {
+                res.status(201).send(response);
+            })
         }
     );
     app.delete('/categories:id', (req, res) =>{

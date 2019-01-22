@@ -170,8 +170,9 @@ module.exports.userTransactions = query => {
 
 // {fields: ['transaction_date', 'description', 'withdrawl', 'deposit', 'balance']}
 module.exports.insertBulkRowsBank = object_array => {
-    Bank.sync() // .sync() is called to make sure the table exists prior to inserting data
+    return Bank.sync() // .sync() is called to make sure the table exists prior to inserting data
         .then(() => {
+            console.log(object_array);
             return Bank.bulkCreate(object_array);
         })
         .catch(err => {
