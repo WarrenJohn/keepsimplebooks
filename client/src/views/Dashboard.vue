@@ -32,52 +32,55 @@
                     <p class="lead" v-else>${{total.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}}</p>
                 </b-col>
             </b-row>
+            <br>
             <b-row class="text-center">
                 <b-col>
-                    <h3>Your Tags</h3>
-                    <table class="table table-sm">
-                        <thead>
-                            <tr>
-                                <th scope="col">Transaction Category</th>
-                                <th scope="col">Transaction Description</th>
-                                <th scope="col">Transaction Amount</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tr v-for="(tag, index) in tags" :key="index+'_clienttag'">
-                            <td>
-                                {{tag.category.toUpperCase()}}
-                            </td>
-                            <td v-if="tag.description">
-                                {{tag.description.toUpperCase()}}
-                            </td>
-                            <td v-else>None</td>
-                            <td v-if="tag.amount">
-                                {{tag.amount}}
-                            </td>
-                            <td v-else>None</td>
-                            <td><b-button class="btn-danger btn-sm"
-                                @click="removeTag(tag.id)">remove</b-button></td>
-                        </tr>
-                    </table>
+                    <b-btn block href="#" v-b-toggle.tagsaccordion variant="info"><h3>Tags</h3></b-btn>
+                        <b-collapse id="tagsaccordion" accordion="tags-accordion" role="tabpanel">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Transaction Category</th>
+                                        <th scope="col">Transaction Description</th>
+                                        <th scope="col">Transaction Amount</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tr v-for="(tag, index) in tags" :key="index+'_clienttag'">
+                                    <td>
+                                        {{tag.category.toUpperCase()}}
+                                    </td>
+                                    <td v-if="tag.description">
+                                        {{tag.description.toUpperCase()}}
+                                    </td>
+                                    <td v-else>None</td>
+                                    <td v-if="tag.amount">
+                                        {{tag.amount}}
+                                    </td>
+                                    <td v-else>None</td>
+                                    <td><b-button class="btn-danger btn-sm"
+                                        @click="removeTag(tag.id)">remove</b-button></td>
+                                    </tr>
+                                </table>
+                        </b-collapse>
                 </b-col>
-            <!-- </b-row>
-            <b-row class="text-center"> -->
                 <b-col>
-                    <h3>Categories</h3>
-                    <table class="table table-sm">
-                        <thead>
-                            <tr>
-                                <th scope="col">Name</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tr v-for="(category, index) in clientCategories" :key="index+'_clientCategories'">
-                            <td>{{category.name.toUpperCase()}}</td>
-                            <td><b-button class="btn-danger btn-sm"
-                                @click="removeCategory(category.id)">remove</b-button></td>
-                        </tr>
-                    </table>
+                    <b-btn block href="#" v-b-toggle.catsaccordion variant="info"><h3>Categories</h3></b-btn>
+                        <b-collapse id="catsaccordion" accordion="cats-accordion" role="tabpanel">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Name</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tr v-for="(category, index) in clientCategories" :key="index+'_clientCategories'">
+                                    <td>{{category.name.toUpperCase()}}</td>
+                                    <td><b-button class="btn-danger btn-sm"
+                                        @click="removeCategory(category.id)">remove</b-button></td>
+                                    </tr>
+                                </table>
+                        </b-collapse>
                 </b-col>
             </b-row>
         </b-container>
