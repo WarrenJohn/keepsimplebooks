@@ -238,18 +238,28 @@ export default{
                 trans_obj.count = trans_obj.transactions.length;
             });
             return sortedTransactions;
+        },
+        getTransactions: function(){
+            return axios.get('http://localhost:5000/transactions')
+        },
+        getTags: function(){
+            return axios.get('http://localhost:5000/tags')
         }
     },
 
     created () {
-        axios
-        .get('http://localhost:5000/transactions')
-        .then(response => {
-            this.userTags = response.data.tags;
-            response.data.transactions = this.parseTransactions(response.data.transactions, response.data.tags);
-            this.info = this.sortTransactions(response.data.transactions);
+        axios.all([this.getTransactions(), this.getTags()])
+            .then(axios.spread((transactions, tags) => {
+                this.userTags = tags.data;
+                transactions.data = this.parseTransactions(transactions.data, tags.data);
+                this.info = this.sortTransactions(transactions.data);
 
-        })
+            }))
+
+        // .get('http://localhost:5000/transactions')
+        // .then(response => {
+        //
+        // })
     }
 }
 </script>

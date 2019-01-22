@@ -42,20 +42,10 @@ module.exports = app => {
     // Transactions uploading, viewing, tagging and deleting transactions
     app.get('/transactions', (req, res) =>{
         console.log('GET: Transactions');
-        let userData = {};
         // reversed to get newest transactions at the top
         m.userTransactions('warren')
             .then(data => {
-                return userData.transactions = data.reverse();
-            })
-            .then(() => {
-                return m.getUserTags('warren');
-            })
-            .then(data => {
-                userData.tags = data;
-            })
-            .then(() => {
-                res.status(200).send(userData)
+                res.status(200).send(data.reverse())
             })
             .catch(err => {
                 res.status(500).send()
@@ -73,7 +63,24 @@ module.exports = app => {
         }else if (req.file.size > 1000000){
             res.status(413).send();
         }
+    })
 
+    app.delete('/transactions:id', (req, res) => {
+        console.log('DELETE: transactions:id');
+    })
+
+    app.delete('/transactions/all', (req, res) => {
+        console.log('DELETE: transactions/all');
+    })
+
+    app.get('/tags', (req, res) => {
+        m.getUserTags('warren')
+            .then(response => {
+                res.status(200).send(response);
+            })
+            .catch(() => {
+                res.status(500).send();
+            });
     })
 
     app.post('/tags', async (req, res) =>{

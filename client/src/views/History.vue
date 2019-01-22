@@ -43,7 +43,7 @@ export default{
     created () {
         axios
         .get('http://localhost:5000/transactions')
-        .then(response => (this.info = response.data.transactions))
+        .then(response => (this.info = response.data))
     }
 }
 </script>

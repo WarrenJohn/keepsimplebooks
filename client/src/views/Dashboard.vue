@@ -212,20 +212,23 @@ export default{
         getTransactions: function(){
             return axios.get('http://localhost:5000/transactions')
         },
+        getTags: function(){
+            return axios.get('http://localhost:5000/tags')
+        },
         getCategories: function(){
             return axios.get('http://localhost:5000/categories')
         },
         setupDashboard: function(){
-            axios.all([this.getTransactions(), this.getCategories()])
-                .then(axios.spread((transactions, categories) => {
+            axios.all([this.getTransactions(), this.getTags(), this.getCategories()])
+                .then(axios.spread((transactions, tags, categories) => {
                     this.clientCategories = categories.data;
-                    this.transactions = transactions.data.transactions;
-                    this.tags = transactions.data.tags;
+                    this.transactions = transactions.data;
+                    this.tags = tags.data;
                     this.categories = this.parseTransactions(
                         categories.data.map(category => (
-                            {name: category.name, sum: null, type: null}
+                            {name: category.name, sum: 0, type: ''}
                         )),
-                        transactions.data.transactions, transactions.data.tags);
+                        transactions.data, tags.data);
                     this.categories.forEach(item => {
                         this.total += item.sum;
                     })
