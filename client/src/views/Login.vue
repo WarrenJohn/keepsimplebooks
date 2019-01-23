@@ -1,13 +1,17 @@
 <template>
   <div class="text-center">
-    <h1>This is the Login page</h1>
-    <input type="email" name="email" placeholder="Email"
-        v-model="email"/>
-    <br />
-    <input type="password" name="password" placeholder="Password"
-        v-model="password"/>
-    <br />
-    <button>Login</button>
+    <h1>Logo here</h1>
+    <b-row>
+        <b-col></b-col>
+        <b-col>
+            <input class="form-control" type="email" name="email" placeholder="Email"
+            v-model="email"/>
+            <input class="form-control" type="password" name="password" placeholder="Password"
+            v-model="password"/>
+            <button class="btn btn-success" type="button">Register</button>
+        </b-col>
+        <b-col></b-col>
+    </b-row>
   </div>
 </template>
 <script>

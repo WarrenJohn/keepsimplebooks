@@ -1,25 +1,112 @@
 <template>
   <div class="text-center">
-    <h1>This is the Register page</h1>
-    <input type="email" name="email" placeholder="Email"
-        v-model="email"/>
-    <br />
-    <input type="password" name="password" placeholder="Password"
-        v-model="password"/>
-    <br />
-    <input type="password" name="confirmpassword" placeholder="Confirm password"
-        v-model="confirmPassword"/>
-    <button>Register</button>
+    <h1 class="p-4">Logo here</h1>
+    <b-container fluid class="text-center p-4">
+        <b-row class="mb-3">
+            <b-col></b-col>
+            <b-col class=" mx-auto p-3">
+                <form>
+                    <input class="form-control" type="email" name="email" placeholder="Email" required
+                    v-model="email"/>
+                    <br />
+                    <input class="form-control" type="password" name="password" placeholder="Password" required
+                    v-model="password"/>
+                    <br />
+                    <input class="form-control" type="password" name="confirmpassword" placeholder="Confirm password" required
+                    v-model="confirmPassword"
+                    @change="pwMatch()"/>
+
+                    <div v-if="clientResponseClass" class="mt-3">
+                        <b-alert show :variant="clientResponseClass">
+                            {{clientResponse}}
+                        </b-alert>
+                    </div>
+
+                    <button class="btn btn-success" type="button"
+                    @click="registerUser">Register</button>
+                </form>
+                </b-col>
+                <b-col></b-col>
+            </b-row>
+    </b-container>
   </div>
 </template>
 <script>
+import axios from 'axios'
+
 export default{
     data(){
         return {
             email: '',
             password: '',
-            confirmPassword: ''
+            confirmPassword: '',
+            pwResponse: '',
+            clientResponse: '',
+            clientResponseClass: 'info text-center'
+        }
+    },
+    methods: {
+        pwMatch: function(){
+            if (this.password === this.confirmPassword && this.password.length >= 5) {
+                return true;
+            }
+
+        },
+        registerUser: function(){
+            if (this.pwMatch() && this.email.length > 3){
+                axios.post('http://localhost:5000/users')
+                    .then(response => {
+                        this.clientResponseClass = 'success text-center';
+                        this.clientResponse = 'Your account has been registered!';
+                        setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
+                    })
+
+            }else if(!this.pwMatch()){
+                this.clientResponseClass = 'danger text-center';
+                this.clientResponse = 'Passwords don\'t match!';
+                setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
+            }else{
+                this.clientResponseClass = 'danger text-center';
+                this.clientResponse = 'Must be a valid email!';
+                setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
+            }
+        },
+    },
+    watch: {
+        email: function(){
+            setTimeout(() => {
+                if (this.email.length < 4){
+                    // prevent the user from using a@a
+                    this.clientResponseClass = 'info text-center';
+                    this.clientResponse = 'Must be a valid email!';
+                }else if (!this.email.includes('@')) {
+                    this.clientResponse = 'Must be a valid email!';
+                }else{
+                    this.clientResponse = '';
+                }
+            }, 500);
+        },
+        password: function(){
+            setTimeout(() => {
+                if (this.password.length < 5){
+                    this.clientResponse = 'Password must be at least 5 characters';
+                }else if (this.password === this.confirmPassword && this.password.length >= 5 && this.confirmPassword.length >= 5) {
+                    this.clientResponse = 'Passwords match';
+                }else{
+                    this.clientResponse = 'Passwords do not match!';
+                }
+            }, 500);
+        },
+        confirmPassword: function(){
+            setTimeout(() => {
+                if (this.confirmPassword === this.password && this.password.length >= 5 && this.confirmPassword.length >= 5) {
+                    this.clientResponse = 'Passwords match';
+                }else{
+                    this.clientResponse = 'Passwords do not match!';
+                }
+            }, 500);
         }
     }
+
 }
 </script>
