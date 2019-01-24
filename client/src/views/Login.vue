@@ -16,7 +16,7 @@
                     </b-alert>
                 </div>
                 <button class="btn btn-success mt-2" type="button"
-                @click="submitLogin()">Register</button>
+                @click="submitLogin()">Login</button>
             </b-col>
             <b-col></b-col>
         </b-row>
@@ -41,10 +41,7 @@ export default{
                 axios.post('http://localhost:5000/users', {email: this.email, password: this.password})
                     .then(response => {
                         if (response.data){
-                            this.clientResponseClass = 'success text-center';
-                            this.clientResponse = 'Logged in!';
                             this.$router.push('dashboard');
-                            setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
                         }else{
                             this.clientResponseClass = 'danger text-center';
                             this.clientResponse = 'Invalid credentials!';
