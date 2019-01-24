@@ -121,7 +121,7 @@ return Users.sync()
 }
 
 module.exports.fetchUser = query => {
-        return Users.findAll({where: query})
+        return Users.findOne({where: {email: query}})
             .then(data => {
                 return data;
             })

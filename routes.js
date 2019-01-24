@@ -31,7 +31,22 @@ module.exports = app => {
     );
 
     app.post('/users', (req, res) => {
-        console.log('POST: /users');
+        m.fetchUser(req.body.email)
+            .then(response => {
+                if(response){
+                    bcrypt.compare(req.body.password, response.dataValues.password, (err, bcryptResponse) => {
+                        if (bcryptResponse){
+                            res.status(200).send(true);
+                        }else{
+                            res.status(200).send(false);
+                        }
+                    })
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                // res.status(500).send()
+            })
 
     })
 
