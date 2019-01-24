@@ -43,6 +43,7 @@ export default{
                         if (response.data){
                             this.clientResponseClass = 'success text-center';
                             this.clientResponse = 'Logged in!';
+                            this.$router.push('dashboard');
                             setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
                         }else{
                             this.clientResponseClass = 'danger text-center';
@@ -50,7 +51,7 @@ export default{
                             setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
                         }
                     })
-                    .catch(() => {
+                    .catch((err) => {
                         this.clientResponseClass = 'danger text-center';
                         this.clientResponse = 'Something went wrong!';
                         setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
