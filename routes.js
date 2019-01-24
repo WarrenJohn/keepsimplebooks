@@ -30,8 +30,13 @@ module.exports = app => {
         }
     );
 
-    app.post('/users', (req, res) =>{
-        console.log('Post: Users', req.body);
+    app.post('/users', (req, res) => {
+        console.log('POST: /users');
+
+    })
+
+    app.post('/users/register', (req, res) =>{
+        console.log('Post: Users/register', req.body);
         const user = req.body;
         let errors = u.registerUser(user);
 
@@ -48,6 +53,7 @@ module.exports = app => {
                         .then(response => {
                             if (response.created){
                                 // xxx.created (sequelize response) sends a 1 or 0 which can be evaluated
+                                // done 'synchronously' to give the user feedback
                                 res.status(201).send(response);
                             }else{
                                 errors.push('Email is already registered!');

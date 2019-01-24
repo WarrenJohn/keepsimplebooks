@@ -64,9 +64,8 @@ export default{
         },
         registerUser: function(){
             if (this.pwMatch() && this.email.length > 3){
-                axios.post('http://localhost:5000/users', {email: this.email, password: this.password, confirmPassword: this.confirmPassword})
+                axios.post('http://localhost:5000/users/register', {email: this.email, password: this.password, confirmPassword: this.confirmPassword})
                     .then(response => {
-                        console.log(response);
                         if (response.status === 201){
                             this.clientResponseClass = 'success text-center';
                             this.clientResponse = 'Your account has been registered!';
