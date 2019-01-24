@@ -44,8 +44,7 @@ module.exports = app => {
                 }
             })
             .catch(err => {
-                console.log(err);
-                // res.status(500).send()
+                res.status(500).send()
             })
 
     })
