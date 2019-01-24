@@ -19,6 +19,7 @@ const todo = `
     FEATURES / TO DO:\x1b[0m\x1b[47m
 \x1b[30m
 - Unit tests
+- Limit user requests to prevent spamming (express-rate-limit or something similar)
 - Make status codes in routes smarter
 - Convert complicated template variables to computed properties
 - Add taxable option and tax rate to tags

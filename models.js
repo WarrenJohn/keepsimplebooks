@@ -53,7 +53,6 @@ const keepsimple_db = new Sequelize(process.env.DB_NAME, process.env.DB_USER, pr
 // Init DB table models.
 // sequelize.define('name', {attributes}, {options});
 const Users = keepsimple_db.define('users', {
-    username: {type: Sequelize.TEXT, unique: true},
     email: {type: Sequelize.TEXT, unique: true},
     password: {type: Sequelize.TEXT},
     other: {type: Sequelize.TEXT}
@@ -101,6 +100,35 @@ const Bank = keepsimple_db.define('transactions',{
         tableName: 'transactions',
         timestamps: true
     });
+
+// USER REGISTER AND LOG IN
+module.exports.registerUser = userObj => {
+return Users.sync()
+    .then(() => {
+        return Users.findOrCreate({
+            where: {
+                email: userObj.email,
+                password: userObj.password
+            }
+        })
+    .spread((user, created) => {
+        return {user, created};
+    })
+    .catch(err => {
+        console.log("Create User Category Error: ", err);
+        });
+    })
+}
+
+module.exports.fetchUser = query => {
+        return Users.findAll({where: query})
+            .then(data => {
+                return data;
+            })
+            .catch(err => {
+                console.log('Get User Error: ', err);
+            })
+}
 
 // EXPENSE CATEGORIES TABLE METHODS
 module.exports.getUserCategories = query => {

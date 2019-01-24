@@ -5,6 +5,7 @@ const u = require('./utils');
 const m = require('./models');
 const multer = require('multer');
 const parse = require('csv-parse');
+const bcrypt = require('bcryptjs');
 
 const upload = multer()
 
@@ -28,9 +29,40 @@ module.exports = app => {
         res.status(200).send('Users');
         }
     );
+
     app.post('/users', (req, res) =>{
-        console.log('Post: Users');
-        res.status(200).send('Users');
+        console.log('Post: Users', req.body);
+        const user = req.body;
+        let errors = u.registerUser(user);
+
+        if(errors.length === 0){
+            if(errors.length > 0){
+                res.status(200).send({errors});
+            }else{
+                bcrypt.genSalt(12, (err, salt) => {
+                    bcrypt.hash(user.password, salt, (err, hash) => {
+                        m.registerUser({
+                            email: user.email,
+                            password: hash
+                        })
+                        .then(response => {
+                            if (response.created){
+                                // xxx.created (sequelize response) sends a 1 or 0 which can be evaluated
+                                res.status(201).send(response);
+                            }else{
+                                errors.push('Email is already registered!');
+                                res.status(200).send({response, errors})
+                            }
+                        })
+                        .catch(() => {
+                            res.status(500).send();
+                        });
+                    });
+                });
+            }
+        }else{
+            res.status(200).send({errors});
+        }
         }
     );
     app.patch('/users', (req, res) =>{
