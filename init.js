@@ -20,7 +20,6 @@ const todo = `
 \x1b[30m
 - Unit tests
 - Limit user requests to prevent spamming (express-rate-limit or something similar)
-- Make status codes in routes smarter
 - Put logged in / logged out feedback and registration feedback on the nav component so it persists with page redirect
 - Convert complicated template variables to computed properties
 - Add taxable option and tax rate to tags
