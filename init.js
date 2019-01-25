@@ -1,16 +1,21 @@
 require('dotenv').config({path:'../.env'});
 const express = require('express');
-var cors = require('cors');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path');
+
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+
 const m = require('./models');
 
 const app = express();
 const port = process.env.PORT;
-const views = path.join(__dirname, 'views');
+
 app.use(express.static('./static'));
 app.use(bodyParser.json());
 app.use(cors());
+
 require('./routes')(app);
 
 const todo = `

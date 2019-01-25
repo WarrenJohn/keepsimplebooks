@@ -30,7 +30,7 @@ module.exports = app => {
         }
     );
 
-    app.post('/users', (req, res) => {
+    app.post('/users/login', (req, res) => {
         m.fetchUser(req.body.email)
             .then(response => {
                 if(response){
@@ -46,8 +46,7 @@ module.exports = app => {
             .catch(err => {
                 res.status(500).send()
             })
-
-    })
+    });
 
     app.post('/users/register', (req, res) =>{
         console.log('Post: Users/register', req.body);
