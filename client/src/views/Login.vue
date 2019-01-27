@@ -40,7 +40,8 @@ export default{
             if (this.email && this.password){
                 axios.post('http://localhost:5000/users/login', {email: this.email, password: this.password})
                     .then(response => {
-                        if (response.data){
+                        if (response.data.result){
+                            console.log(response.data);
                             this.$router.push('dashboard');
                         }else{
                             this.clientResponseClass = 'danger text-center';

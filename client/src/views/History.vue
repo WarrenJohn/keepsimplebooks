@@ -43,7 +43,10 @@ export default{
     created () {
         axios
         .get('http://localhost:5000/transactions')
-        .then(response => (this.info = response.data))
+        .then((err, response) => (this.info = response.data))
+        .catch(() => {
+            this.$router.push('/')
+        });
     }
 }
 </script>

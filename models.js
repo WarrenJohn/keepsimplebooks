@@ -117,7 +117,7 @@ return Users.sync()
     .catch(err => {
         console.log("Create User Category Error: ", err);
         });
-    })
+    });
 }
 
 module.exports.fetchUser = query => {
@@ -127,7 +127,7 @@ module.exports.fetchUser = query => {
             })
             .catch(err => {
                 console.log('Get User Error: ', err);
-            })
+            });
 }
 
 // EXPENSE CATEGORIES TABLE METHODS

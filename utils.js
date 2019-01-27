@@ -1,6 +1,30 @@
 const m = require('./models.js');
 const fs = require('fs');
 const parse = require('csv-parse');
+const jwt = require('jsonwebtoken');
+
+const jwtCert = process.env.JWT_SECRET_KEY;
+
+// module.exports.hasToken = (req, res, next) => {
+//     console.log('verifyToken ',req.headers);
+//     const bearerHeader = req.headers['authorization']
+//     if (typeof bearerHeader !== 'undefined'){
+//         next();
+//     }else{
+//         res.status(403).send()
+//     }
+// }
+
+// try{
+//     jwt.verify(token, jwtCert, (err, result) => {
+//         // returns token if verified
+//         // returns undefined if incorrect
+//     });
+// }catch(err){
+//     return err;
+//     // return false;
+// }
+
 
 module.exports.registerUser = user => {
     let errors = Array();

@@ -1,5 +1,5 @@
 const path = require('path');
-const views = path.join(__dirname, 'views');
+// const views = path.join(__dirname, 'views');
 const fs = require('fs');
 const u = require('./utils');
 const m = require('./models');
@@ -7,14 +7,10 @@ const multer = require('multer');
 const parse = require('csv-parse');
 const bcrypt = require('bcryptjs');
 
-const upload = multer()
+const jwt = require('jsonwebtoken');
+const upload = multer();
 
-/* How do I render plain HTML?
-You don’t! There’s no need to “render” HTML with the res.render() function. If you have a specific file,
-use the res.sendFile() function.
-If you are serving many assets from a directory, use the express.static() middleware function.
-*/
-
+const jwtCert = process.env.JWT_SECRET_KEY;
 
 module.exports = app => {
     app.get('/', (req, res) =>{
@@ -33,11 +29,21 @@ module.exports = app => {
     app.post('/users/login', (req, res) => {
         m.fetchUser(req.body.email)
             .then(response => {
+                const user = response.dataValues;
                 if(response){
-                    bcrypt.compare(req.body.password, response.dataValues.password, (err, bcryptResponse) => {
+                    bcrypt.compare(req.body.password, user.password, (err, bcryptResponse) => {
                         if (bcryptResponse){
-                            res.status(200).send(true);
+                            // password is correct
+                            try{
+                                // 86400 seconds is 1 day
+                                jwt.sign(user, jwtCert, {expiresIn: 86400}, (err, token) => {
+                                    res.status(200).send({result: true, token, user});
+                                });
+                            }catch(err){
+                                res.status(500).send();
+                            }
                         }else{
+                            // password is incorrect
                             res.status(200).send(false);
                         }
                     })
@@ -91,8 +97,15 @@ module.exports = app => {
     );
 
     // Transactions uploading, viewing, tagging and deleting transactions
+    // ,u.hasToken
     app.get('/transactions', (req, res) =>{
         console.log('GET: Transactions');
+        const bearerHeader = req.headers['authorization']
+        if (typeof bearerHeader !== 'undefined'){
+            // next();
+        }else{
+            return res.status(403).send()
+        }
         // reversed to get newest transactions at the top
         m.userTransactions('warren')
             .then(data => {
