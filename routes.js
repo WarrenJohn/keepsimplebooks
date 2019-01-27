@@ -36,7 +36,8 @@ module.exports = app => {
                             // password is correct
                             try{
                                 // 86400 seconds is 1 day
-                                jwt.sign(user, jwtCert, {expiresIn: 86400}, (err, token) => {
+                                // {expiresIn: 86400}
+                                jwt.sign(user, jwtCert, {expiresIn: 30}, (err, token) => {
                                     res.status(200).send({result: true, token, user});
                                 });
                             }catch(err){

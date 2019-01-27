@@ -41,7 +41,8 @@ export default{
                 axios.post('http://localhost:5000/users/login', {email: this.email, password: this.password})
                     .then(response => {
                         if (response.data.result){
-                            console.log(response.data);
+                            this.$store.dispatch('setToken', response.data.token)
+                            this.$store.dispatch('setUser', response.data.user)
                             this.$router.push('dashboard');
                         }else{
                             this.clientResponseClass = 'danger text-center';
