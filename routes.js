@@ -100,11 +100,12 @@ module.exports = app => {
     // ,u.hasToken
     app.get('/transactions', (req, res) =>{
         console.log('GET: Transactions');
+        // verify token exists, and verify the actual token
         const bearerHeader = req.headers['authorization']
         if (typeof bearerHeader !== 'undefined'){
             // next();
         }else{
-            return res.status(403).send()
+            return res.status(403).send({as:'as'})
         }
         // reversed to get newest transactions at the top
         m.userTransactions('warren')

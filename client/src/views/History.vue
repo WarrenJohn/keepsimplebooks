@@ -43,9 +43,9 @@ export default{
     created () {
         axios
         .get('http://localhost:5000/transactions')
-        .then((err, response) => (this.info = response.data))
+        .then(response => (this.info = response.data))
         .catch(() => {
-            this.$router.push('/')
+            // this.$router.push('/')
         });
     }
 }
