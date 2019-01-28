@@ -245,10 +245,10 @@ export default{
             return sortedTransactions;
         },
         getTransactions: function(){
-            return axios.get('http://localhost:5000/transactions')
+            return axios.get('http://localhost:5000/transactions', {headers: {authorization:`Bearer ${this.$store.token}`}})
         },
         getTags: function(){
-            return axios.get('http://localhost:5000/tags')
+            return axios.get('http://localhost:5000/tags', {headers: {authorization:`Bearer ${this.$store.token}`}})
         },
         setupTransactionsPage: function(){
             axios.all([this.getTransactions(), this.getTags()])
@@ -257,6 +257,9 @@ export default{
                     transactions.data = this.parseTransactions(transactions.data, tags.data);
                     this.info = this.sortTransactions(transactions.data);
                 }))
+                .catch(() => {
+                    this.$router.push('login');
+                });
         }
     },
 

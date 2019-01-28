@@ -91,7 +91,7 @@ module.exports = app => {
         }
         }
     );
-    app.patch('/users', (req, res) =>{
+    app.patch('/users',  u.hasToken, u.verifyToken, (req, res) =>{
         console.log('Post: Users');
         res.status(200).send('Users');
         }
@@ -99,8 +99,8 @@ module.exports = app => {
 
     // Transactions uploading, viewing, tagging and deleting transactions
     // ,u.hasToken
-    app.get('/transactions', (req, res) =>{
-        console.log('GET: Transactions');
+    app.get('/transactions', u.hasToken, u.verifyToken, (req, res) =>{
+        console.log('GET: Transactions', req.headers);
         // verify token exists, and verify the actual token
         // const bearerHeader = req.headers['authorization']
         // if (typeof bearerHeader !== 'undefined'){
@@ -119,7 +119,7 @@ module.exports = app => {
     }
     );
 
-    app.post('/transactions/upload', upload.single('bank'), async (req, res) => {
+    app.post('/transactions/upload', u.hasToken, u.verifyToken, upload.single('bank'), async (req, res) => {
         console.log('POST: transactions/upload');
         if (req.file.originalname.split('.').pop() === 'csv' && req.file.mimetype === 'application/vnd.ms-excel'){
             parse(req.file.buffer, {columns: false, trim: true}, (err, data) => {
@@ -151,15 +151,15 @@ module.exports = app => {
         }
     })
 
-    app.delete('/transactions:id', (req, res) => {
+    app.delete('/transactions:id', u.hasToken, u.verifyToken, (req, res) => {
         console.log('DELETE: transactions:id');
     })
 
-    app.delete('/transactions/all', (req, res) => {
+    app.delete('/transactions/all', u.hasToken, u.verifyToken, (req, res) => {
         console.log('DELETE: transactions/all');
     })
 
-    app.get('/tags', (req, res) => {
+    app.get('/tags', u.hasToken, u.verifyToken, (req, res) => {
         m.getUserTags('warren')
             .then(response => {
                 res.status(200).send(response);
@@ -169,7 +169,7 @@ module.exports = app => {
             });
     })
 
-    app.post('/tags', (req, res) =>{
+    app.post('/tags', u.hasToken, u.verifyToken, (req, res) =>{
         console.log('POST: Transactions', req.body);
         let tag = req.body.tag;
         tag.description = tag.description.replace(/ +(?= )/g, '');
@@ -182,7 +182,7 @@ module.exports = app => {
         }
     );
 
-    app.delete('/tags/:id', (req, res) =>{
+    app.delete('/tags/:id', u.hasToken, u.verifyToken, (req, res) =>{
         console.log('DELETE: Transactions');
         m.deleteUserTag(req.params.id)
             .then(response => {
@@ -198,7 +198,7 @@ module.exports = app => {
     );
 
     // Expense categories: Adding, retrieving, removing
-    app.get('/categories', (req, res) =>{
+    app.get('/categories', u.hasToken, u.verifyToken, (req, res) =>{
         console.log('GET: Categories');
         m.getUserCategories('warren')
             .then(data => {
@@ -206,7 +206,7 @@ module.exports = app => {
             });
     }
     );
-    app.post('/categories', (req, res) =>{
+    app.post('/categories', u.hasToken, u.verifyToken, (req, res) =>{
         console.log('POST: Categories', req.body);
         let categoryObj = req.body;
         categoryObj.category = categoryObj.category.replace(/ +(?= )/g, '');
@@ -216,7 +216,7 @@ module.exports = app => {
             })
         }
     );
-    app.delete('/categories:id', (req, res) =>{
+    app.delete('/categories:id', u.hasToken, u.verifyToken, (req, res) =>{
         console.log('DELETE: Categories', req.params);
         m.deleteUserCategory(req.params.id)
             .then(response => {

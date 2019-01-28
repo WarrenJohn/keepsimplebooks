@@ -5,25 +5,27 @@ const jwt = require('jsonwebtoken');
 
 const jwtCert = process.env.JWT_SECRET_KEY;
 
-// module.exports.hasToken = (req, res, next) => {
-//     console.log('verifyToken ',req.headers);
-//     const bearerHeader = req.headers['authorization']
-//     if (typeof bearerHeader !== 'undefined'){
-//         next();
-//     }else{
-//         res.status(403).send()
-//     }
-// }
+module.exports.hasToken = (req, res, next) => {
+    const authToken = req.headers.authorization.split(' ')[1];
+    if (authToken !== 'undefined'){
+        next();
+    }else{
+        next(403)
+    }
+}
 
-// try{
-//     jwt.verify(token, jwtCert, (err, result) => {
-//         // returns token if verified
-//         // returns undefined if incorrect
-//     });
-// }catch(err){
-//     return err;
-//     // return false;
-// }
+module.exports.verifyToken = (req, res, next) => {
+    const token = req.headers.authorization.split(' ')[1];
+    jwt.verify(token, jwtCert, (err, result) => {
+        if(err || result === 'undefined'){
+            next(403);
+        }else{
+            next();
+        }
+            // returns token if verified
+            // returns undefined if incorrect
+        });
+}
 
 
 module.exports.registerUser = user => {
@@ -41,6 +43,7 @@ module.exports.registerUser = user => {
     return errors;
 }
 
+// possible future use
 module.exports.handleCSV_row = file => {
     // inserts csv data row by row
     fs.readFile(file, function (err, fileData) {

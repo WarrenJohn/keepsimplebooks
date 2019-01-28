@@ -218,13 +218,13 @@ export default{
             return categories;
         },
         getTransactions: function(){
-            return axios.get('http://localhost:5000/transactions')
+            return axios.get('http://localhost:5000/transactions', {headers: {authorization:`Bearer ${this.$store.token}`}})
         },
         getTags: function(){
-            return axios.get('http://localhost:5000/tags')
+            return axios.get('http://localhost:5000/tags', {headers: {authorization:`Bearer ${this.$store.token}`}})
         },
         getCategories: function(){
-            return axios.get('http://localhost:5000/categories')
+            return axios.get('http://localhost:5000/categories', {headers: {authorization:`Bearer ${this.$store.token}`}})
         },
         setupDashboard: function(){
             axios.all([this.getTransactions(), this.getTags(), this.getCategories()])
@@ -241,6 +241,9 @@ export default{
                         this.total += item.sum;
                     })
                 }))
+                .catch(() => {
+                    this.$router.push('login')
+                });
         }
     },
 
