@@ -98,16 +98,8 @@ module.exports = app => {
     );
 
     // Transactions uploading, viewing, tagging and deleting transactions
-    // ,u.hasToken
     app.get('/transactions', u.hasToken, u.verifyToken, (req, res) =>{
         console.log('GET: Transactions', req.headers);
-        // verify token exists, and verify the actual token
-        // const bearerHeader = req.headers['authorization']
-        // if (typeof bearerHeader !== 'undefined'){
-        //     // next();
-        // }else{
-        //     return res.status(403).send({as:'as'})
-        // }
         // reversed to get newest transactions at the top
         m.userTransactions('warren')
             .then(data => {

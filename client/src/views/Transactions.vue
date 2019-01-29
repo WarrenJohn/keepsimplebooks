@@ -101,8 +101,8 @@
 <script>
 import axios from 'axios';
 import Categories from '@/components/Categories.vue'
-export default{
 
+export default{
     name: 'category',
     components: {
       Categories
@@ -134,7 +134,8 @@ export default{
         },
         addTag: function(){
             axios
-                .post('http://localhost:5000/tags', {tag: this.tag})
+                .post('http://localhost:5000/tags', {tag: this.tag,
+                                                    headers: {authorization: `Bearer ${this.$store.state.token}`}})
                 .then(response => {
                     if(response.data.created){
                         // 'created' is referencing the response from findOrCreate method of sequelize
@@ -149,10 +150,6 @@ export default{
                     // return axios.get('http://localhost:5000/transactions')
                 })
                 .then(() => {
-                    // this.userTags = response.data.tags;
-                    // response.data.transactions = this.parseTransactions(response.data.transactions, response.data.tags);
-                    // this.info = this.sortTransactions(response.data.transactions);
-                    // this.vm.$forceUpdate();
                     this.setupTransactionsPage();
                 })
                 .catch(() => {
@@ -245,10 +242,10 @@ export default{
             return sortedTransactions;
         },
         getTransactions: function(){
-            return axios.get('http://localhost:5000/transactions', {headers: {authorization:`Bearer ${this.$store.token}`}})
+            return axios.get('http://localhost:5000/transactions', {headers: {authorization: `Bearer ${this.$store.state.token}`}});
         },
         getTags: function(){
-            return axios.get('http://localhost:5000/tags', {headers: {authorization:`Bearer ${this.$store.token}`}})
+            return axios.get('http://localhost:5000/tags', {headers: {authorization: `Bearer ${this.$store.state.token}`}});
         },
         setupTransactionsPage: function(){
             axios.all([this.getTransactions(), this.getTags()])

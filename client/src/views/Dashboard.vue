@@ -218,13 +218,13 @@ export default{
             return categories;
         },
         getTransactions: function(){
-            return axios.get('http://localhost:5000/transactions', {headers: {authorization:`Bearer ${this.$store.token}`}})
+            return axios.get('http://localhost:5000/transactions', {headers: {authorization:`Bearer ${this.$store.state.token}`}})
         },
         getTags: function(){
-            return axios.get('http://localhost:5000/tags', {headers: {authorization:`Bearer ${this.$store.token}`}})
+            return axios.get('http://localhost:5000/tags', {headers: {authorization:`Bearer ${this.$store.state.token}`}})
         },
         getCategories: function(){
-            return axios.get('http://localhost:5000/categories', {headers: {authorization:`Bearer ${this.$store.token}`}})
+            return axios.get('http://localhost:5000/categories', {headers: {authorization:`Bearer ${this.$store.state.token}`}})
         },
         setupDashboard: function(){
             axios.all([this.getTransactions(), this.getTags(), this.getCategories()])

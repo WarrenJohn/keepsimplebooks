@@ -20,7 +20,6 @@
                 </b-button>
                 </div>
             </b-collapse>
-
         <select
         :value="selected"
         @input="$emit('input', $event.target.value)"
@@ -57,7 +56,8 @@ export default {
         addCategory: function(){
             let category = this.$refs.categoryinput.value
             axios
-                .post('http://localhost:5000/categories', {category, user: 'warren'})
+                .post('http://localhost:5000/categories', {category, user: 'warren',
+                                                            headers: {authorization: `Bearer ${this.$store.state.token}`}})
                 .then(response => {
                     if(response.data.created){
                         // referencing the response from findOrCreate method of sequelize
@@ -72,7 +72,7 @@ export default {
                 })
                 .then(() => {
                     axios
-                        .get('http://localhost:5000/categories')
+                        .get('http://localhost:5000/categories', {headers: {authorization: `Bearer ${this.$store.state.token}`}})
                         .then(response => {
                             this.options = response.data.map(object => {
                                 if (object.name === category){
@@ -84,19 +84,26 @@ export default {
                             );
                         });
                 })
-                .catch(err => {
-                    this.test = err.message;
+                .catch(() => {
+                    this.clientResponseClass = "danger text-center";
+                    this.clientResponse = "Something went wrong!";
+                    setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
                 })
             }
         },
 
     created () {
         axios
-            .get('http://localhost:5000/categories')
+            .get('http://localhost:5000/categories', {headers: {authorization: `Bearer ${this.$store.state.token}`}})
             .then(response => {
                 response.data.forEach(object => {
                     this.options.push({value: object.name, text: object.name.toUpperCase()});
                 })
+            })
+            .catch(() => {
+                this.clientResponseClass = "danger text-center";
+                this.clientResponse = 'Something went wrong!';
+                setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
             });
     }
 }

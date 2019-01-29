@@ -42,7 +42,7 @@ export default{
 
     created () {
         axios
-        .get('http://localhost:5000/transactions', {headers: {authorization:`Bearer ${this.$store.token}`}})
+        .get('http://localhost:5000/transactions', {headers: {authorization:`Bearer ${this.$store.state.token}`}})
         .then(response => (this.info = response.data))
         .catch(() => {
             this.$router.push('login');
