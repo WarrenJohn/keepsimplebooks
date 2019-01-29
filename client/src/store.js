@@ -21,6 +21,11 @@ export default new Vuex.Store({
         },
         setUser(state, user){
             state.user = user;
+        },
+        logoutUser(state){
+            state.token = null;
+            state.user = null;
+            state.userLoggedIn = false;
         }
     },
     actions: {
@@ -29,6 +34,9 @@ export default new Vuex.Store({
         },
         setUser({commit}, user){
             commit('setUser', user);
+        },
+        logoutUser({commit}){
+            commit('logoutUser')
         }
     }
 })

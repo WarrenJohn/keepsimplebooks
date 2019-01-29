@@ -20,7 +20,7 @@ module.exports = app => {
     );
 
     // Users: registering, logging in and modifying users
-    app.get('/users', (req, res) =>{
+    app.get('/users', u.hasToken, u.verifyToken, (req, res) =>{
         console.log('GET: Users');
         res.status(200).send('Users');
         }
