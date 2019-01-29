@@ -37,7 +37,7 @@ export default new Router({
             path: '/history',
             name: 'history',
             component: () => import ('./views/History.vue'),
-            beforeRouteEnter: (to, from, next) => {
+            beforeEnter: (to, from, next) => {
                 store.state.userLoggedIn ? next() : next('login');
             }
         },
@@ -45,7 +45,7 @@ export default new Router({
             path: '/transactions',
             name: 'transactions',
             component: () => import ('./views/Transactions.vue'),
-            beforeRouteEnter: (to, from, next) => {
+            beforeEnter: (to, from, next) => {
                 store.state.userLoggedIn ? next() : next('login');
             }
         },
@@ -53,8 +53,8 @@ export default new Router({
             path: '/upload',
             name: 'upload',
             component: () => import ('./views/Upload.vue'),
-            beforeRouteEnter: (to, from, next) => {
-                store.state.userLoggedIn ? next() : next('login');                
+            beforeEnter: (to, from, next) => {
+                store.state.userLoggedIn ? next() : next('login');
             }
         }
     ]

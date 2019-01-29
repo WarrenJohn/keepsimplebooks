@@ -15,7 +15,25 @@
         <b-nav-item to="/transactions">Transactions</b-nav-item>
         <b-nav-item to="/history">History</b-nav-item>
         <b-nav-item to="/upload">Upload</b-nav-item>
+        <b-button
+            v-if="$store.state.userLoggedIn"
+            @click="logout"
+            variant="link" size="sm">log out
+        </b-button>
     </b-nav>
     <router-view/>
   </div>
 </template>
+
+<script>
+
+export default {
+    methods: {
+        logout: function(){
+            this.$store.dispatch('logoutUser');
+            this.$router.push('login');
+        }
+    }
+}
+
+</script>
