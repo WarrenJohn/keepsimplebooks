@@ -45,6 +45,7 @@ export default{
         .get('http://localhost:5000/transactions', {headers: {authorization:`Bearer ${this.$store.state.token}`}})
         .then(response => (this.info = response.data))
         .catch(() => {
+            this.$store.dispatch('logoutUser');            
             this.$router.push('login');
         });
     }

@@ -255,6 +255,7 @@ export default{
                     this.info = this.sortTransactions(transactions.data);
                 }))
                 .catch(() => {
+                    this.$store.dispatch('logoutUser');
                     this.$router.push('login');
                 });
         }

@@ -242,6 +242,7 @@ export default{
                     })
                 }))
                 .catch(() => {
+                    this.$store.dispatch('logoutUser');
                     this.$router.push('login')
                 });
         }
