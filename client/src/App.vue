@@ -6,6 +6,7 @@
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
             <b-navbar-nav tag="h6">
+
                 <b-nav-item
                     class="text-white"
                     v-if="!$store.state.userLoggedIn"
@@ -27,11 +28,12 @@
                 <b-nav-item
                     v-if="$store.state.userLoggedIn"
                     to="/upload">Upload</b-nav-item>
-                <b-button
+                <b-nav-item
                     v-if="$store.state.userLoggedIn"
                     @click="logout"
-                    variant="link" size="sm">log out
-                </b-button>
+                    variant="light" size="sm">log out
+                </b-nav-item>
+
             </b-navbar-nav>
         </b-navbar-nav>
     </b-navbar>
