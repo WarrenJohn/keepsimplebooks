@@ -1,26 +1,40 @@
 <template>
   <div id="app">
-    <b-nav fill tabs>
-        <b-nav-item to="/">Home</b-nav-item>
-        <b-nav-item to="/about">About</b-nav-item>
-        <b-nav-item
-            v-if="!$store.state.userLoggedIn"
-            to="/register">Register
-        </b-nav-item>
-        <b-nav-item
-            v-if="!$store.state.userLoggedIn"
-            to="/login">Login
-        </b-nav-item>
-        <b-nav-item to="/dashboard">Dashboard</b-nav-item>
-        <b-nav-item to="/transactions">Transactions</b-nav-item>
-        <b-nav-item to="/history">History</b-nav-item>
-        <b-nav-item to="/upload">Upload</b-nav-item>
-        <b-button
-            v-if="$store.state.userLoggedIn"
-            @click="logout"
-            variant="link" size="sm">log out
-        </b-button>
-    </b-nav>
+    <b-navbar toggleable="md" variant="success" type="dark" sticky>
+
+      <b-navbar-brand class="text-white" to="/">keepsimple</b-navbar-brand>
+        <!-- Right aligned nav items -->
+        <b-navbar-nav class="ml-auto">
+            <b-navbar-nav tag="h6">
+                <b-nav-item
+                    class="text-white"
+                    v-if="!$store.state.userLoggedIn"
+                    to="/register">Register
+                </b-nav-item>
+                <b-nav-item
+                    v-if="!$store.state.userLoggedIn"
+                    to="/login">Login
+                </b-nav-item>
+                <b-nav-item
+                    v-if="$store.state.userLoggedIn"
+                    to="/dashboard">Dashboard</b-nav-item>
+                <b-nav-item
+                    v-if="$store.state.userLoggedIn"
+                    to="/transactions">Transactions</b-nav-item>
+                <b-nav-item
+                    v-if="$store.state.userLoggedIn"
+                    to="/history">History</b-nav-item>
+                <b-nav-item
+                    v-if="$store.state.userLoggedIn"
+                    to="/upload">Upload</b-nav-item>
+                <b-button
+                    v-if="$store.state.userLoggedIn"
+                    @click="logout"
+                    variant="link" size="sm">log out
+                </b-button>
+            </b-navbar-nav>
+        </b-navbar-nav>
+    </b-navbar>
     <router-view/>
   </div>
 </template>
