@@ -133,12 +133,13 @@ export default{
                 }
         },
         addTag: function(){
+            // const tag = {tag: this.tag};
+            const authHead =  {headers: {authorization: `Bearer ${this.$store.state.token}`}}
             axios
-                .post('http://localhost:5000/tags', {
-                        tag: this.tag,
-                        headers: {
-                            authorization: `Bearer ${this.$store.state.token}`,
-                            user: this.$store.state.user}})
+                .post('http://localhost:5000/tags',
+                        {tag: this.tag},
+                        {headers: {
+                            authorization: `Bearer ${this.$store.state.token}`}})
                 .then(response => {
                     if(response.data.created){
                         // 'created' is referencing the response from findOrCreate method of sequelize

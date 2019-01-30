@@ -16,19 +16,6 @@ module.exports.hasToken = (req, res, next) => {
     }
 }
 
-module.exports.verifyToken = (req, res, next) => {
-    const token = req.headers.authorization.split(' ')[1];
-    jwt.verify(token, jwtCert, (err, result) => {
-        if(err){
-            next(403);
-        }else{
-            next();
-        }
-            // returns token if verified
-            // returns undefined if incorrect
-        });
-}
-
 
 module.exports.registerUser = user => {
     let errors = Array();

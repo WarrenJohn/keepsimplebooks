@@ -119,8 +119,7 @@ export default{
         removeTag: function(id){
             axios.delete(`http://localhost:5000/tags/${id}`, {
                 headers: {
-                    authorization: `Bearer ${this.$store.state.token}`,
-                    user: this.$store.state.user}})
+                    authorization: `Bearer ${this.$store.state.token}`}})
                 .then(response => {
                     if (response.status === 200){
                         this.clientResponseClass = 'success text-center';
@@ -140,8 +139,7 @@ export default{
         removeCategory: function(id){
             axios.delete(`http://localhost:5000/categories${id}`, {
                 headers: {
-                    authorization: `Bearer ${this.$store.state.token}`,
-                    user: this.$store.state.user}})
+                    authorization: `Bearer ${this.$store.state.token}`}})
                 .then(response => {
                     if (response.status === 200){
                         this.clientResponseClass = 'success text-center';
@@ -226,20 +224,17 @@ export default{
         getTransactions: function(){
             return axios.get('http://localhost:5000/transactions', {
                 headers: {
-                    authorization: `Bearer ${this.$store.state.token}`,
-                    user: this.$store.state.user}})
+                    authorization: `Bearer ${this.$store.state.token}`}})
         },
         getTags: function(){
             return axios.get('http://localhost:5000/tags', {
                 headers: {
-                    authorization: `Bearer ${this.$store.state.token}`,
-                    user: this.$store.state.user}})
+                    authorization: `Bearer ${this.$store.state.token}`}})
         },
         getCategories: function(){
             return axios.get('http://localhost:5000/categories', {
                 headers: {
-                    authorization: `Bearer ${this.$store.state.token}`,
-                    user: this.$store.state.user}})
+                    authorization: `Bearer ${this.$store.state.token}`}})
         },
         setupDashboard: function(){
             axios.all([this.getTransactions(), this.getTags(), this.getCategories()])

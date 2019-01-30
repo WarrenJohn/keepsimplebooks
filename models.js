@@ -143,13 +143,13 @@ module.exports.getUserCategories = query => {
             });
     };
 
-module.exports.createUserCategory = object => {
+module.exports.createUserCategory = (object, user) => {
     return Categories.sync()
         .then(() => {
             return Categories.findOrCreate({
                 where: {
                     name: object.category,
-                    user: object.user
+                    user: user
                 }
             })
         .spread((user, created) => {
@@ -161,9 +161,12 @@ module.exports.createUserCategory = object => {
         });
     };
 
-module.exports.deleteUserCategory = id => {
+module.exports.deleteUserCategory = (id, user) => {
     return Categories.destroy({
-        where: {id: id}
+        where: {
+            id: id,
+            user: user
+        }
     })
         .then(response => {
             return response;
@@ -172,9 +175,10 @@ module.exports.deleteUserCategory = id => {
 
 // BANK TABLE METHODS
 // columns: [ 'id', 'transaction_date', 'description', 'withdrawl', 'deposit', 'balance', 'user', 'createdAt', 'updatedAt' ]
-module.exports.userTransactions = query => {
+module.exports.userTransactions = user => {
+    console.log('USER TRANSCATIONS QUERY ',);
     return Bank.findAll({
-        where: {user: query}
+        where: {user}
         })
         .then((data) => {
             let transactions = Array();
@@ -192,7 +196,7 @@ module.exports.userTransactions = query => {
             return transactions;
         })
         .catch(err => {
-            console.log("Insert Single Row(Transactions) Error: ", err);
+            console.log("Get Transactions Error: ", err);
         });
     };
 
@@ -200,7 +204,6 @@ module.exports.userTransactions = query => {
 module.exports.insertBulkRowsBank = object_array => {
     return Bank.sync() // .sync() is called to make sure the table exists prior to inserting data
         .then(() => {
-            console.log(object_array);
             return Bank.bulkCreate(object_array);
         })
         .catch(err => {
@@ -251,9 +254,12 @@ module.exports.getUserTags = query => {
         });
     };
 
-module.exports.deleteUserTag = id => {
+module.exports.deleteUserTag = (id, user) => {
     return Tags.destroy({
-        where: {id: id}
+        where: {
+            id: id,
+            user: user
+        }
     })
         .then(response => {
             return response;

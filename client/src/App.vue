@@ -31,7 +31,7 @@
                 <b-nav-item
                     v-if="$store.state.userLoggedIn"
                     @click="logout"
-                    variant="light" size="sm">log out
+                    variant="light" size="sm">Log out
                 </b-nav-item>
 
             </b-navbar-nav>

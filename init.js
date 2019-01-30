@@ -21,6 +21,7 @@ const todo = `
     FEATURES / TO DO:\x1b[0m\x1b[47m
 \x1b[30m
 - Unit tests
+- Add an API service for vue to manage the api requests
 - Limit user requests to prevent spamming (express-rate-limit or something similar)
 - Put logged in / logged out feedback and registration feedback on the nav component so it persists with page redirect
 - Convert complicated template variables to computed properties

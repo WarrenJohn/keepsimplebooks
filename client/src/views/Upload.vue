@@ -77,7 +77,9 @@ export default{
             }else{
                 const formData = new FormData()
                 formData.append('bank', this.selectedFile)
-                axios.post('http://localhost:5000/transactions/upload', formData)
+                axios.post('http://localhost:5000/transactions/upload', formData, {
+                    headers: {
+                        authorization: `Bearer ${this.$store.state.token}`}})
                     .then(response => {
                         if (response.status === 201){
                         this.clientResponseClass = 'success text-center';
