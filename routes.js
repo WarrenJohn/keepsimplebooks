@@ -99,9 +99,9 @@ module.exports = app => {
 
     // Transactions uploading, viewing, tagging and deleting transactions
     app.get('/transactions', u.hasToken, u.verifyToken, (req, res) =>{
-        console.log('GET: Transactions', req.headers);
+        console.log('GET: Transactions');
         // reversed to get newest transactions at the top
-        m.userTransactions('warren')
+        m.userTransactions(req.headers.user.email)
             .then(data => {
                 res.status(200).send(data.reverse())
             })
@@ -111,7 +111,7 @@ module.exports = app => {
     }
     );
 
-    app.post('/transactions/upload', u.hasToken, u.verifyToken, upload.single('bank'), async (req, res) => {
+    app.post('/transactions/upload', u.hasToken, u.verifyToken, upload.single('bank'), (req, res) => {
         console.log('POST: transactions/upload');
         if (req.file.originalname.split('.').pop() === 'csv' && req.file.mimetype === 'application/vnd.ms-excel'){
             parse(req.file.buffer, {columns: false, trim: true}, (err, data) => {
@@ -126,7 +126,7 @@ module.exports = app => {
                                         withdrawl: row[2],
                                         deposit: row[3],
                                         balance: row[4],
-                                        user: 'warren'}))
+                                        user: req.headers.user.email}))
                                     )
                     .then(() => {
                         res.status(201).send();
@@ -152,7 +152,7 @@ module.exports = app => {
     })
 
     app.get('/tags', u.hasToken, u.verifyToken, (req, res) => {
-        m.getUserTags('warren')
+        m.getUserTags(req.headers.user.email)
             .then(response => {
                 res.status(200).send(response);
             })
@@ -192,7 +192,7 @@ module.exports = app => {
     // Expense categories: Adding, retrieving, removing
     app.get('/categories', u.hasToken, u.verifyToken, (req, res) =>{
         console.log('GET: Categories');
-        m.getUserCategories('warren')
+        m.getUserCategories(req.headers.user.email)
             .then(data => {
                 res.status(200).send(data);
             });

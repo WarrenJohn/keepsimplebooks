@@ -163,7 +163,7 @@ export default{
                 if (item.id === id){
                     this.tag.description = item.description;
                     this.tag.amount = item.amount;
-                    this.tag.user = 'warren';
+                    this.tag.user = this.$store.state.user.email;
                 }
             })
         },
@@ -230,9 +230,9 @@ export default{
                     if (trans_obj.name === unsortedTrans_obj.description){
                         trans_obj.transactions.push(unsortedTrans_obj);
                         if (!unsortedTrans_obj.deposit){
-                                this.allTags.push({id: unsortedTrans_obj.id, category: '', description: unsortedTrans_obj.description, amount: unsortedTrans_obj.withdrawl, user: 'warren'});
+                                this.allTags.push({id: unsortedTrans_obj.id, category: '', description: unsortedTrans_obj.description, amount: unsortedTrans_obj.withdrawl, user: this.$store.state.user.email});
                         }else{
-                            this.allTags.push({id: unsortedTrans_obj.id, category: '', description: unsortedTrans_obj.description, amount: unsortedTrans_obj.deposit, user: 'warren'});
+                            this.allTags.push({id: unsortedTrans_obj.id, category: '', description: unsortedTrans_obj.description, amount: unsortedTrans_obj.deposit, user: this.$store.state.user.email});
                         }
                         trans_obj.id = unsortedTrans_obj.description;
                     }
@@ -242,10 +242,16 @@ export default{
             return sortedTransactions;
         },
         getTransactions: function(){
-            return axios.get('http://localhost:5000/transactions', {headers: {authorization: `Bearer ${this.$store.state.token}`}});
+            return axios.get('http://localhost:5000/transactions',{
+                headers: {
+                    authorization: `Bearer ${this.$store.state.token}`,
+                    user: this.$store.state.user}});
         },
         getTags: function(){
-            return axios.get('http://localhost:5000/tags', {headers: {authorization: `Bearer ${this.$store.state.token}`}});
+            return axios.get('http://localhost:5000/tags',{
+                headers: {
+                    authorization: `Bearer ${this.$store.state.token}`,
+                    user: this.$store.state.user}});
         },
         setupTransactionsPage: function(){
             axios.all([this.getTransactions(), this.getTags()])
