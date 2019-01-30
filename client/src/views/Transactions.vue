@@ -134,8 +134,11 @@ export default{
         },
         addTag: function(){
             axios
-                .post('http://localhost:5000/tags', {tag: this.tag,
-                                                    headers: {authorization: `Bearer ${this.$store.state.token}`}})
+                .post('http://localhost:5000/tags', {
+                        tag: this.tag,
+                        headers: {
+                            authorization: `Bearer ${this.$store.state.token}`,
+                            user: this.$store.state.user}})
                 .then(response => {
                     if(response.data.created){
                         // 'created' is referencing the response from findOrCreate method of sequelize
@@ -147,7 +150,6 @@ export default{
                         this.clientResponse = 'Tag already exists!';
                         setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
                     }
-                    // return axios.get('http://localhost:5000/transactions')
                 })
                 .then(() => {
                     this.setupTransactionsPage();

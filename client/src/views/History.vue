@@ -42,10 +42,13 @@ export default{
 
     created () {
         axios
-        .get('http://localhost:5000/transactions', {headers: {authorization:`Bearer ${this.$store.state.token}`}})
+        .get('http://localhost:5000/transactions', {
+            headers: {
+                authorization: `Bearer ${this.$store.state.token}`,
+                user: this.$store.state.user}})
         .then(response => (this.info = response.data))
         .catch(() => {
-            this.$store.dispatch('logoutUser');            
+            this.$store.dispatch('logoutUser');
             this.$router.push('login');
         });
     }
