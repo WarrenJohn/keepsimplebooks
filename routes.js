@@ -287,7 +287,7 @@ module.exports = app => {
         }
         }
     );
-    app.delete('/categories:id', u.hasToken, (req, res) =>{
+    app.delete('/categories/:id', u.hasToken, (req, res) =>{
         console.log('DELETE: Categories');
         const tokenReceived = req.headers.authorization.split(' ')[1];
         const token = jwt.verify(tokenReceived, jwtCert);

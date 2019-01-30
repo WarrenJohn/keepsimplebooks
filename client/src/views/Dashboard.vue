@@ -137,7 +137,7 @@ export default{
                 })
         },
         removeCategory: function(id){
-            axios.delete(`http://localhost:5000/categories${id}`, {
+            axios.delete(`http://localhost:5000/categories/${id}`, {
                 headers: {
                     authorization: `Bearer ${this.$store.state.token}`}})
                 .then(response => {

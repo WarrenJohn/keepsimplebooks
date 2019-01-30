@@ -1,8 +1,8 @@
 <template>
     <div id="transactions">
         <b-container fluid>
-            <b-row>
-                <b-col sm="4">
+            <b-row class="m-3">
+                <b-col sm="4" class="p-5">
                     <div>
                         <categories v-model="tag.category" ref="categories"/>
                         <b-form-input type="text"
@@ -15,6 +15,11 @@
                             ref="amount"
                             v-model="tag.amount">
                         </b-form-input>
+                        <p class="text-center mt-2">Is this taxable?</p>
+                        <b-form-radio-group id="radios2" v-model="selected" name="radioSubComponent" class="text-center">
+                            <b-form-radio value="taxable">Taxable</b-form-radio>
+                            <b-form-radio value="nontaxable">Non-taxable</b-form-radio>
+                        </b-form-radio-group>
                         <b-dropdown-divider></b-dropdown-divider>
                     </div>
             <div class="text-center">
@@ -37,8 +42,10 @@
             </div>
                 </b-col>
                 <b-col sm="8">
-                    <h1>This is the Transactions page</h1>
-                    <p>accordion collapse function is screwed up when tags are added - the id's are not changing correctly</p>
+                    <p class="p-5 text-center">
+                        Select the transaction you'd like to tag but hitting the 'tag' button. Give it a category and specify
+                        whether you'd like to track this transaction by the description, price, or both.
+                    </p>
                     <div class="container">
                         <table class="table table-hover table-sm" style="table-layout:fixed">
                             <thead>
@@ -50,9 +57,8 @@
                             <tbody>
                                 <tr v-for="(line, index) in info" :key="index+'_transactions'" class="d-flex">
                                     <th scope="row" class="col-10">
-                                        <b-btn block href="#" v-b-toggle="line.id" variant="link">{{line.name}}</b-btn>
-                                        <b-collapse :id="line.id" accordion="transactions" role="tabpanel">
-                                            <table class="table table-bordered table-hover table-sm">
+                                        <b-btn block href="#" variant="link">{{line.name}}</b-btn>
+                                            <table class="table table-hover table-sm">
                                                 <thead>
                                                     <tr>
                                                         <th scope="col">Date</th>
@@ -65,16 +71,16 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr v-for="(row, index) in line.transactions" :key="index + '-table'">
-                                                        <th scope="row">{{row.date}}</th>
-                                                        <td>{{ row.description }}</td>
+                                                        <td scope="row" style="font-weight:normal">{{row.date}}</td>
+                                                        <td style="font-weight:normal" >{{ row.description }}</td>
 
-                                                        <td v-if="row.withdrawl > 0" class="table-danger">{{ row.withdrawl }}</td>
-                                                        <td v-else>{{ row.withdrawl }}</td>
+                                                        <td style="font-weight:normal" v-if="row.withdrawl > 0">{{ row.withdrawl }}</td>
+                                                        <td style="font-weight:normal" v-else>{{ row.withdrawl }}</td>
 
-                                                        <td v-if="row.deposit > 0" class="table-success">{{ row.deposit }}</td>
-                                                        <td v-else>{{ row.deposit }}</td>
+                                                        <td style="font-weight:normal" v-if="row.deposit > 0">{{ row.deposit }}</td>
+                                                        <td style="font-weight:normal" v-else>{{ row.deposit }}</td>
 
-                                                        <td>{{ row.balance }}</td>
+                                                        <td style="font-weight:normal" >{{ row.balance }}</td>
                                                         <td>
                                                             <b-button variant="outline-success"
                                                                 size="sm"
@@ -84,8 +90,6 @@
                                                     </tr>
                                                 </tbody>
                                             </table>
-
-                                        </b-collapse>
                                     </th>
                                     <td class="col-1">{{ line.count }}</td>
                                 </tr>
@@ -133,8 +137,6 @@ export default{
                 }
         },
         addTag: function(){
-            // const tag = {tag: this.tag};
-            const authHead =  {headers: {authorization: `Bearer ${this.$store.state.token}`}}
             axios
                 .post('http://localhost:5000/tags',
                         {tag: this.tag},
