@@ -79,6 +79,8 @@ const Tags = keepsimple_db.define('tags', {
     category: {type: Sequelize.TEXT, allowNull: false},
     description: {type: Sequelize.TEXT},
     amount: {type: Sequelize.TEXT},
+    isTaxable: {type: Sequelize.TEXT, allowNull: false},
+    taxRate: {type: Sequelize.TEXT},
     user: {type: Sequelize.TEXT, allowNull: false}
     },
     {
@@ -176,7 +178,6 @@ module.exports.deleteUserCategory = (id, user) => {
 // BANK TABLE METHODS
 // columns: [ 'id', 'transaction_date', 'description', 'withdrawl', 'deposit', 'balance', 'user', 'createdAt', 'updatedAt' ]
 module.exports.userTransactions = user => {
-    console.log('USER TRANSCATIONS QUERY ',);
     return Bank.findAll({
         where: {user}
         })
@@ -230,6 +231,8 @@ module.exports.insertRowTag = object =>{
                     category: object.category,
                     description: object.description,
                     amount: object.amount,
+                    isTaxable: object.isTaxable,
+                    taxRate: object.taxRate,
                     user: object.user}
                 }
             );

@@ -272,7 +272,6 @@ module.exports = app => {
         const token = jwt.verify(tokenReceived, jwtCert);
         if (token){
             let categoryObj = req.body;
-            console.log('CATEGORY OBJ  ',categoryObj);
             categoryObj.category = categoryObj.category.replace(/ +(?= )/g, '');
             m.createUserCategory(categoryObj, token.email)
             .then(response => {
