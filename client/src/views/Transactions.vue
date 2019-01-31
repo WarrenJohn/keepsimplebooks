@@ -81,9 +81,8 @@
                                                     <tr>
                                                         <th scope="col">Date</th>
                                                         <th scope="col">Description</th>
-                                                        <th scope="col">Withdrawn</th>
-                                                        <th scope="col">Deposited</th>
-                                                        <th scope="col">Balance</th>
+                                                        <th scope="col">Amount</th>
+                                                        <th scope="col"></th>
                                                         <th scope="col"></th>
                                                     </tr>
                                                 </thead>
@@ -92,13 +91,10 @@
                                                         <td scope="row" style="font-weight:normal">{{row.date}}</td>
                                                         <td style="font-weight:normal" >{{ row.description }}</td>
 
-                                                        <td style="font-weight:normal" v-if="row.withdrawl > 0">{{ row.withdrawl }}</td>
-                                                        <td style="font-weight:normal" v-else>{{ row.withdrawl }}</td>
+                                                        <td style="font-weight:normal" class="text-danger" v-if="row.withdrawl > 0">$({{ row.withdrawl }})</td>
 
-                                                        <td style="font-weight:normal" v-if="row.deposit > 0">{{ row.deposit }}</td>
-                                                        <td style="font-weight:normal" v-else>{{ row.deposit }}</td>
+                                                        <td style="font-weight:normal" v-else>${{ row.deposit }}</td>
 
-                                                        <td style="font-weight:normal" >{{ row.balance }}</td>
                                                         <td>
                                                             <b-button variant="outline-success"
                                                                 size="sm"
