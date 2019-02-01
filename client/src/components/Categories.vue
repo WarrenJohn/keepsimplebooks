@@ -54,9 +54,9 @@ export default {
     },
     methods:{
         addCategory: function(){
-            const category = {category: this.$refs.categoryinput.value};
+            const category = {category: this.$refs.categoryinput.value.toUpperCase()};
             axios
-                .post('http://localhost:5000/categories', {category: this.$refs.categoryinput.value}, {headers: {authorization: `Bearer ${this.$store.state.token}`}})
+                .post('http://localhost:5000/categories', {category: this.$refs.categoryinput.value.toUpperCase()}, {headers: {authorization: `Bearer ${this.$store.state.token}`}})
                 .then(response => {
                     if(response.data.created){
                         // referencing the response from findOrCreate method of sequelize
@@ -74,7 +74,7 @@ export default {
                         .get('http://localhost:5000/categories', {headers: {authorization: `Bearer ${this.$store.state.token}`}})
                         .then(response => {
                             this.options = response.data.map(object => {
-                                if (object.name === category.category){
+                                if (object.name === category.category.toUpperCase()){
                                     return {value: object.name, text: object.name.toUpperCase(), selected: true}
                                 }else{
                                     return {value: object.name, text: object.name.toUpperCase(), selected: false}

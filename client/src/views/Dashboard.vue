@@ -156,69 +156,48 @@ export default{
                     this.setupDashboard();
                 })
         },
-        parseTransactions: function(categories, transactions, tags){
-            let sortedCategories = Array();
-            tags.forEach(tag => {
-                transactions.forEach(transaction => {
-                    // Parsing out all previously tagged transactions
-                    if (tag.description && tag.amount){
-                        if (!transaction.deposit){
-                            if (transaction.description.toLowerCase().includes(tag.description.toLowerCase()) && transaction.withdrawl === tag.amount){
-                                sortedCategories.push(
-                                    {category: tag.category, type: 'withdrawl', description: tag.description, amount: Number(transaction.withdrawl)}
-                                );
-
-                            }
-                        }else{
-                            if (transaction.description.toLowerCase().includes(tag.description.toLowerCase()) && transaction.deposit === tag.amount){
-                                sortedCategories.push(
-                                    {category: tag.category, type: 'deposit', description: tag.description, amount: Number(transaction.deposit)}
-                                );
-                            }
-                        }
-                    }
-                    else if (!tag.amount){
-                        if(transaction.description.toLowerCase().includes(tag.description.toLowerCase())){
-                            if (!transaction.deposit){
-                                sortedCategories.push(
-                                    {category: tag.category, type: 'withdrawl', description: tag.description, amount: Number(transaction.withdrawl)}
-                                );
+        parseTransactions: function(tags, transactions){
+            tags.map(tag => {
+                if (tag.description && tag.amount){
+                        tag.transactions = transactions.filter(transaction =>{
+                            if (transaction.withdrawl){
+                                return (transaction.description.toUpperCase().includes(tag.description.toUpperCase()) && Number(transaction.withdrawl) === Number(tag.amount))
                             }else{
-                                sortedCategories.push(
-                                    {category: tag.category, type: 'deposit', description: tag.description, amount: Number(transaction.deposit)}
-                                );
+                                return (transaction.description.toUpperCase().includes(tag.description.toUpperCase()) && Number(transaction.deposit) === Number(tag.amount))
                             }
-                        }
+                        });
 
-                    }
-                    else if (!tag.description){
-                        if(!transaction.deposit){
-                            if(transaction.withdrawl === tag.amount){
-                                sortedCategories.push(
-                                    {category: tag.category, type: 'withdrawl', description: transaction.description, amount: Number(transaction.withdrawl)}
-                                );
+                }else if (!tag.description && tag.amount){
+                        tag.transactions = transactions.filter(transaction => {
+                            if (transaction.withdrawl){
+                                return (Number(transaction.withdrawl) === Number(tag.amount))
+                            }else{
+                                return (Number(transaction.deposit) === Number(tag.amount))
                             }
-                        }else{
-                            if(transaction.deposit === tag.amount){
-                                sortedCategories.push(
-                                    {category: tag.category, type: 'deposit', description: tag.description, amount: Number(transaction.deposit)}
-                                );
+                        });
+
+                }else if(!tag.amount && tag.description){
+                    tag.transactions = transactions.filter(transaction => transaction.description.toUpperCase().includes(tag.description.toUpperCase()))
+                }
+            }
+            );
+            return tags;
+        },
+        parseCategories: function(parsedTags, categories){
+            categories.map(category => category.sum = 0)
+            categories.map(category => {
+                parsedTags.map(tag => {
+                    tag.transactions.map(transaction => {
+                        if (category.name.toUpperCase() === tag.category.toUpperCase()){
+                            if(transaction.withdrawl){
+                                category.sum -= Number(transaction.withdrawl)
+                            }else if(transaction.deposit){
+                                category.sum += Number(transaction.deposit)
                             }
                         }
-                    }
+                    })
                 })
             })
-            categories.forEach(category => {
-                sortedCategories.forEach(transaction => {
-                    if (category.name.includes(transaction.category)){
-                        if (transaction.type === 'deposit'){
-                            category.sum += transaction.amount;
-                        }else{
-                            category.sum -= transaction.amount;
-                        }
-                    }
-                });
-            });
             return categories;
         },
         getTransactions: function(){
@@ -239,17 +218,8 @@ export default{
         setupDashboard: function(){
             axios.all([this.getTransactions(), this.getTags(), this.getCategories()])
                 .then(axios.spread((transactions, tags, categories) => {
-                    this.clientCategories = categories.data;
-                    this.transactions = transactions.data;
-                    this.tags = tags.data;
-                    this.categories = this.parseTransactions(
-                        categories.data.map(category => (
-                            {name: category.name, sum: 0, type: ''}
-                        )),
-                        transactions.data, tags.data);
-                    this.categories.forEach(item => {
-                        this.total += item.sum;
-                    })
+                    this.tags = this.parseTransactions(tags.data, transactions.data)
+                    this.categories = this.parseCategories(this.tags, categories.data);
                 }))
                 .catch(() => {
                     this.$store.dispatch('logoutUser');
@@ -259,7 +229,7 @@ export default{
     },
 
     created () {
-        this.setupDashboard()
+        this.setupDashboard();
     }
 }
 </script>

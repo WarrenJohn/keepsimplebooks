@@ -20,14 +20,14 @@
                     </div>
             <div class="text-center">
                 <p v-if="tag.description && tag.amount && tag.category">
-                    Label all transactions that contain the text <b>'{{ tag.description }}'</b> and the exact amount of <b>'{{ tag.amount }}'</b> as
-                    <b>'{{ tag.category }}'</b>.
+                    Label all transactions that contain the text <b>'{{ tag.description.toUpperCase() }}'</b> and the exact amount of <b>'{{ tag.amount }}'</b> as
+                    <b>'{{ tag.category.toUpperCase() }}'</b>.
                 </p>
                 <p v-else-if="!tag.description && tag.amount && tag.category">
-                    Label all transactions with the exact amount of <b>'{{ tag.amount }}'</b> as <b>'{{ tag.category }}'</b>.
+                    Label all transactions with the exact amount of <b>'{{ tag.amount }}'</b> as <b>'{{ tag.category.toUpperCase() }}'</b>.
                 </p>
                 <p v-else-if="!tag.amount && tag.description && tag.category">
-                    Label all transactions that contain the text <b>'{{ tag.description }}'</b> as <b>'{{ tag.category }}'</b>.
+                    Label all transactions that contain the text <b>'{{ tag.description.toUpperCase() }}'</b> as <b>'{{ tag.category.toUpperCase() }}'</b>.
                 </p>
                 <p v-else></p>
                 <b-button block variant="success" @click="validateTag">Add this tag</b-button>
@@ -146,6 +146,7 @@ export default{
                 }
         },
         addTag: function(){
+            this.tag.description = this.tag.description.toUpperCase()
             axios
                 .post('http://localhost:5000/tags',
                         {tag: this.tag},
@@ -178,17 +179,17 @@ export default{
                     // Parsing out all previously tagged transactions
                     if (tag.description && tag.amount){
                         if (!transaction.deposit){
-                            if (transaction.description.toLowerCase().includes(tag.description.toLowerCase()) && transaction.withdrawl === tag.amount){
+                            if (transaction.description.toUpperCase().includes(tag.description.toUpperCase()) && transaction.withdrawl === tag.amount){
                                 transactions.splice(transactions.indexOf(transaction), 1);
                             }
                         }else{
-                            if (transaction.description.toLowerCase().includes(tag.description.toLowerCase()) && transaction.deposit === tag.amount){
+                            if (transaction.description.toUpperCase().includes(tag.description.toUpperCase()) && transaction.deposit === tag.amount){
                                 transactions.splice(transactions.indexOf(transaction), 1);
                             }
                         }
                     }
                     else if (!tag.amount){
-                        if(transaction.description.toLowerCase().includes(tag.description.toLowerCase())){
+                        if(transaction.description.toUpperCase().includes(tag.description.toUpperCase())){
                             transactions.splice(transactions.indexOf(transaction), 1);
                         }
 
