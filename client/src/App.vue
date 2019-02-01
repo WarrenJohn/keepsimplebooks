@@ -1,7 +1,6 @@
 <template>
   <div id="app">
     <b-navbar toggleable="md" variant="primary" type="dark" sticky>
-
       <b-navbar-brand class="text-white" to="/">keepsimple</b-navbar-brand>
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
@@ -53,3 +52,10 @@ export default {
 }
 
 </script>
+
+<style>
+@import url('https://fonts.googleapis.com/css?family=Questrial');
+#app{
+    font-family: 'Questrial'
+}
+</style>
