@@ -15,14 +15,12 @@ const jwtCert = process.env.JWT_SECRET_KEY;
 
 module.exports = app => {
     app.get('/', (req, res) =>{
-        console.log('GET: index');
         res.status(200).send('Index');
         }
     );
 
     // Users: registering, logging in and modifying users
     app.get('/users', u.hasToken, (req, res) =>{
-        console.log('GET: Users');
         const tokenReceived = req.headers.authorization.split(' ')[1];
     const token = jwt.verify(tokenReceived, jwtCert);
         if (token){
@@ -63,7 +61,6 @@ module.exports = app => {
     });
 
     app.post('/users/register', (req, res) =>{
-        console.log('Post: Users/register', req.body);
         const user = req.body;
         let errors = u.registerUser(user);
 
@@ -99,7 +96,6 @@ module.exports = app => {
         }
     );
     app.patch('/users',  u.hasToken, (req, res) =>{
-        console.log('Post: Users');
         const tokenReceived = req.headers.authorization.split(' ')[1];
     const token = jwt.verify(tokenReceived, jwtCert);
         if (token){
@@ -113,7 +109,6 @@ module.exports = app => {
     // Transactions uploading, viewing, tagging and deleting transactions
     //  u.hasToken, verifyToken,
     app.get('/transactions', u.hasToken, (req, res) =>{
-        console.log('GET: Transactions');
         const tokenReceived = req.headers.authorization.split(' ')[1];
         const token = jwt.verify(tokenReceived, jwtCert);
         if (token){
@@ -132,7 +127,6 @@ module.exports = app => {
     );
 
     app.post('/transactions/upload', u.hasToken, upload.single('bank'), (req, res) => {
-        console.log('POST: transactions/upload');
         const tokenReceived = req.headers.authorization.split(' ')[1];
         const token = jwt.verify(tokenReceived, jwtCert);
         if (token){
@@ -170,7 +164,6 @@ module.exports = app => {
     })
 
     app.delete('/transactions:id', u.hasToken, (req, res) => {
-        console.log('DELETE: transactions:id');
         const tokenReceived = req.headers.authorization.split(' ')[1];
         const token = jwt.verify(tokenReceived, jwtCert);
         if (token){
@@ -181,7 +174,6 @@ module.exports = app => {
     })
 
     app.delete('/transactions/all', u.hasToken, (req, res) => {
-        console.log('DELETE: transactions/all');
         const tokenReceived = req.headers.authorization.split(' ')[1];
         const token = jwt.verify(tokenReceived, jwtCert);
         if (token){
@@ -208,7 +200,6 @@ module.exports = app => {
     })
 
     app.post('/tags', u.hasToken, (req, res) =>{
-        console.log('POST: Transactions');
         const tokenReceived = req.headers.authorization.split(' ')[1];
         const token = jwt.verify(tokenReceived, jwtCert);
         if (token){
@@ -228,7 +219,6 @@ module.exports = app => {
     );
 
     app.delete('/tags/:id', u.hasToken, (req, res) =>{
-        console.log('DELETE: Transactions');
         const tokenReceived = req.headers.authorization.split(' ')[1];
         const token = jwt.verify(tokenReceived, jwtCert);
         if (token){
@@ -250,7 +240,6 @@ module.exports = app => {
 
     // Expense categories: Adding, retrieving, removing
     app.get('/categories', u.hasToken, (req, res) =>{
-        console.log('GET: Categories');
         const tokenReceived = req.headers.authorization.split(' ')[1];
         const token = jwt.verify(tokenReceived, jwtCert);
         if (token){
@@ -267,7 +256,6 @@ module.exports = app => {
     }
     );
     app.post('/categories', u.hasToken, (req, res) =>{
-        console.log('POST: Categories', req.data);
         const tokenReceived = req.headers.authorization.split(' ')[1];
         const token = jwt.verify(tokenReceived, jwtCert);
         if (token){
@@ -287,7 +275,6 @@ module.exports = app => {
         }
     );
     app.delete('/categories/:id', u.hasToken, (req, res) =>{
-        console.log('DELETE: Categories');
         const tokenReceived = req.headers.authorization.split(' ')[1];
         const token = jwt.verify(tokenReceived, jwtCert);
         if (token){
