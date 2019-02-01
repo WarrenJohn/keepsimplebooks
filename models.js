@@ -79,8 +79,6 @@ const Tags = keepsimple_db.define('tags', {
     category: {type: Sequelize.TEXT, allowNull: false},
     description: {type: Sequelize.TEXT},
     amount: {type: Sequelize.TEXT},
-    isTaxable: {type: Sequelize.TEXT, allowNull: false},
-    taxRate: {type: Sequelize.TEXT},
     user: {type: Sequelize.TEXT, allowNull: false}
     },
     {
@@ -231,8 +229,6 @@ module.exports.insertRowTag = object =>{
                     category: object.category,
                     description: object.description,
                     amount: object.amount,
-                    isTaxable: object.isTaxable,
-                    taxRate: object.taxRate,
                     user: object.user}
                 }
             );

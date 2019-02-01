@@ -16,39 +16,18 @@
                             v-model="tag.amount">
                         </b-form-input>
 
-                        <p class="text-center mt-2">Is this taxable?</p>
-                        <b-form-radio-group
-                            v-model="tag.isTaxable"
-                            id="radios2" name="radioSubComponent" class="text-center">
-                            <b-form-radio value="taxable">Taxable</b-form-radio>
-                            <b-form-radio value="nontaxable">Non-taxable</b-form-radio>
-                        </b-form-radio-group>
-
-                        <b-form-input type="text"
-                            size="sm"
-                            ref="taxRateInput"
-                            class="text-center"
-                            style="width:75px"
-                            placeholder="%"
-                            v-if="tag.isTaxable === 'taxable'"
-                            v-model="tag.taxRate">
-                        </b-form-input>
-
                         <b-dropdown-divider></b-dropdown-divider>
-                        {{tag}}
                     </div>
             <div class="text-center">
-                <p v-if="tag.description && tag.amount && tag.category && tag.isTaxable">
+                <p v-if="tag.description && tag.amount && tag.category">
                     Label all transactions that contain the text <b>'{{ tag.description }}'</b> and the exact amount of <b>'{{ tag.amount }}'</b> as
-                    <b>'{{ tag.category }}'</b> and <b>'{{ tag.isTaxable.toUpperCase() }}'</b>.
+                    <b>'{{ tag.category }}'</b>.
                 </p>
-                <p v-else-if="!tag.description && tag.amount && tag.category && tag.isTaxable">
-                    Label all transactions with the exact amount of <b>'{{ tag.amount }}'</b> as <b>'{{ tag.category }}'</b> and
-                    <b>'{{ tag.isTaxable.toUpperCase() }}'</b>.
+                <p v-else-if="!tag.description && tag.amount && tag.category">
+                    Label all transactions with the exact amount of <b>'{{ tag.amount }}'</b> as <b>'{{ tag.category }}'</b>.
                 </p>
-                <p v-else-if="!tag.amount && tag.description && tag.category && tag.isTaxable">
-                    Label all transactions that contain the text <b>'{{ tag.description }}'</b> as <b>'{{ tag.category }}'</b> and
-                    <b>'{{ tag.isTaxable.toUpperCase() }}'</b>.
+                <p v-else-if="!tag.amount && tag.description && tag.category">
+                    Label all transactions that contain the text <b>'{{ tag.description }}'</b> as <b>'{{ tag.category }}'</b>.
                 </p>
                 <p v-else></p>
                 <b-button block variant="success" @click="validateTag">Add this tag</b-button>
@@ -129,7 +108,7 @@ export default{
         return {
             allTags: Array(),
             userTags: Array(),
-            tag: { category: '', description: '', amount: '', isTaxable:'', taxRate: this.$store.state.user.other, user: '' },
+            tag: { category: '', description: '', amount: '', user: '' },
             postedTags: Array(),
             info: null,
             clientResponse: null,
@@ -154,28 +133,15 @@ export default{
                     this.clientResponse = 'Category is required!';
                     return;
                 }
-                if (!this.tag.isTaxable){
-                    this.clientResponseClass = 'warning text-center';
-                    this.clientResponse = 'Taxable/Non-isTaxable is required!';
-                    return;
-                }
                 if (!this.tag.description && !this.tag.amount){
                     this.clientResponseClass = 'warning text-center';
                     this.clientResponse = 'Description or Amount are required!';
                     return;
                 }
                 if (this.tag.description || !this.tag.amount) {
-                    if (this.tag.isTaxable === 'nontaxable'){
-                        this.tag.taxRate = null;
-                        return this.addTag();
-                    }
                     return this.addTag();
                 }
                 if (!this.tag.description || this.tag.amount) {
-                    if (this.tag.isTaxable === 'nontaxable'){
-                        this.tag.taxRate = null;
-                        return this.addTag();
-                    }
                     return this.addTag();
                 }
         },
