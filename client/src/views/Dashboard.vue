@@ -218,8 +218,9 @@ export default{
         setupDashboard: function(){
             axios.all([this.getTransactions(), this.getTags(), this.getCategories()])
                 .then(axios.spread((transactions, tags, categories) => {
-                    this.tags = this.parseTransactions(tags.data, transactions.data)
+                    this.tags = this.parseTransactions(tags.data, transactions.data);
                     this.categories = this.parseCategories(this.tags, categories.data);
+                    this.clientCategories = categories.data
                 }))
                 .catch(() => {
                     this.$store.dispatch('logoutUser');
