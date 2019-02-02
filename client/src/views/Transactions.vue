@@ -175,66 +175,31 @@ export default{
         },
         parseTransactions: function(transactions, tags){
             // Parsing out all previously tagged transactions
-            // tags.map(tag => {
-            //     if (tag.description && tag.amount){
-            //             tag.transactions = transactions.filter(transaction =>{
-            //                 if (transaction.withdrawl){
-            //                     return (transaction.description.toUpperCase().includes(tag.description.toUpperCase()) && Number(transaction.withdrawl) === Number(tag.amount))
-            //                 }else{
-            //                     return (transaction.description.toUpperCase().includes(tag.description.toUpperCase()) && Number(transaction.deposit) === Number(tag.amount))
-            //                 }
-            //             });
-            //
-            //     }else if (!tag.description && tag.amount){
-            //             tag.transactions = transactions.filter(transaction => {
-            //                 if (transaction.withdrawl){
-            //                     return (Number(transaction.withdrawl) === Number(tag.amount))
-            //                 }else{
-            //                     return (Number(transaction.deposit) === Number(tag.amount))
-            //                 }
-            //             });
-            //
-            //     }else if(!tag.amount && tag.description){
-            //         tag.transactions = transactions.filter(transaction => transaction.description.toUpperCase().includes(tag.description.toUpperCase()))
-            //     }
-            // }
-            // );
-            // return tags;
+            tags.map(tag => {
+                if (tag.description && tag.amount){
+                        transactions = transactions.filter(transaction =>{
+                            if (transaction.withdrawl){
+                                return (!transaction.description.toUpperCase().includes(tag.description.toUpperCase()) && Number(transaction.withdrawl) !== Number(tag.amount))
+                            }else{
+                                return (!transaction.description.toUpperCase().includes(tag.description.toUpperCase()) && Number(transaction.deposit) !== Number(tag.amount))
+                            }
+                        });
 
-            //
-            // tags.forEach(tag => {
-            //     transactions.forEach(transaction => {
-            //         if (tag.description && tag.amount){
-            //             if (!transaction.deposit){
-            //                 if (transaction.description.toUpperCase().includes(tag.description.toUpperCase()) && transaction.withdrawl === tag.amount){
-            //                     transactions.splice(transactions.indexOf(transaction), 1);
-            //                 }
-            //             }else{
-            //                 if (transaction.description.toUpperCase().includes(tag.description.toUpperCase()) && transaction.deposit === tag.amount){
-            //                     transactions.splice(transactions.indexOf(transaction), 1);
-            //                 }
-            //             }
-            //         }
-            //         else if (!tag.amount){
-            //             if(transaction.description.toUpperCase().includes(tag.description.toUpperCase())){
-            //                 transactions.splice(transactions.indexOf(transaction), 1);
-            //             }
-            //
-            //         }
-            //         else if (!tag.description){
-            //             if(!transaction.deposit){
-            //                 if(transaction.withdrawl === tag.amount){
-            //                     transactions.splice(transactions.indexOf(transaction), 1);
-            //                 }
-            //             }else{
-            //                 if(transaction.deposit === tag.amount){
-            //                     transactions.splice(transactions.indexOf(transaction), 1);
-            //                 }
-            //             }
-            //         }
-            //     })
-            // })
-            // return transactions;
+                }else if (!tag.description && tag.amount){
+                        transactions = transactions.filter(transaction => {
+                            if (transaction.withdrawl){
+                                return (Number(transaction.withdrawl) !== Number(tag.amount))
+                            }else{
+                                return (Number(transaction.deposit) !== Number(tag.amount))
+                            }
+                        });
+
+                }else if(!tag.amount && tag.description){
+                    transactions = transactions.filter(transaction => !transaction.description.toUpperCase().includes(tag.description.toUpperCase()))
+                }
+            }
+            );
+            return transactions;
         },
         sortTransactions: function(transactions){
             let unsortedTransactions = transactions;
@@ -272,6 +237,7 @@ export default{
                 });
                 trans_obj.count = trans_obj.transactions.length;
             });
+            console.log(sortedTransactions);
             return sortedTransactions;
         },
         getTransactions: function(){
@@ -290,8 +256,10 @@ export default{
             axios.all([this.getTransactions(), this.getTags()])
                 .then(axios.spread((transactions, tags) => {
                     this.userTags = tags.data;
+                    console.log(transactions.data.length);
                     transactions.data = this.parseTransactions(transactions.data, tags.data);
                     this.info = this.sortTransactions(transactions.data);
+                    console.log(transactions.data.length);
                 }))
                 .catch(() => {
                     this.$store.dispatch('logoutUser');

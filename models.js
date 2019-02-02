@@ -107,7 +107,7 @@ return Users.sync()
     .then(() => {
         return Users.findOrCreate({
             where: {
-                email: userObj.email,
+                email: userObj.email.toLowerCase(),
                 password: userObj.password
             }
         })
@@ -148,7 +148,7 @@ module.exports.createUserCategory = (object, user) => {
         .then(() => {
             return Categories.findOrCreate({
                 where: {
-                    name: object.category,
+                    name: object.category.toUpperCase(),
                     user: user
                 }
             })
@@ -226,8 +226,8 @@ module.exports.insertRowTag = object =>{
         .then(() => {
             return Tags.findOrCreate({
                 where: {
-                    category: object.category,
-                    description: object.description,
+                    category: object.category.toUpperCase(),
+                    description: object.description.toUpperCase(),
                     amount: object.amount,
                     user: object.user}
                 }
