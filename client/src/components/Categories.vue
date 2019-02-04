@@ -1,5 +1,6 @@
 <template>
     <div>
+        {{test}}
         <div v-if="clientResponseClass">
             <b-alert show :variant="clientResponseClass">
                 {{clientResponse}}
@@ -38,7 +39,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import api from '../services/api';
 
 export default {
     name: 'Categories',
@@ -47,6 +48,7 @@ export default {
         },
     data () {
         return {
+            test: '',
             options: Array(),
             clientResponse: null,
             clientResponseClass: null
@@ -55,8 +57,8 @@ export default {
     methods:{
         addCategory: function(){
             const category = {category: this.$refs.categoryinput.value.toUpperCase()};
-            axios
-                .post('http://localhost:5000/categories', {category: this.$refs.categoryinput.value.toUpperCase()}, {headers: {authorization: `Bearer ${this.$store.state.token}`}})
+            api()
+                .post('categories', {category: this.$refs.categoryinput.value.toUpperCase()})
                 .then(response => {
                     if(response.data.created){
                         // referencing the response from findOrCreate method of sequelize
@@ -70,8 +72,8 @@ export default {
                     }
                 })
                 .then(() => {
-                    axios
-                        .get('http://localhost:5000/categories', {headers: {authorization: `Bearer ${this.$store.state.token}`}})
+                    api()
+                        .get('categories')
                         .then(response => {
                             this.options = response.data.map(object => {
                                 if (object.name === category.category.toUpperCase()){
@@ -92,8 +94,8 @@ export default {
         },
 
     created () {
-        axios
-            .get('http://localhost:5000/categories', {headers: {authorization: `Bearer ${this.$store.state.token}`}})
+        api()
+            .get('categories')
             .then(response => {
                 response.data.forEach(object => {
                     this.options.push({value: object.name, text: object.name.toUpperCase()});

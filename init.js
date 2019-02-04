@@ -21,21 +21,12 @@ const todo = `
     FEATURES / TO DO:\x1b[0m\x1b[47m
 \x1b[30m
 - Unit tests
+- Bug: filtering out $ only when tag specifies description and $$ Acct bal rebate is a good example
 - Add an API service for vue to manage the api requests
 - Limit user requests to prevent spamming (express-rate-limit or something similar)
-- Put logged in / logged out feedback and registration feedback on the nav component so it persists with page redirect
 - Convert complicated template variables to computed properties
-- Add taxable option and tax rate to tags
-- Add feature to allow user to just use transaction descriptions instead of making their own tags
-- Fix weird bug in transactions page that doesn't input the category sometimes, and also gets the table all messed up
 - Add date range selection functionality to Dashboard.vue, Transactions.vue & History.vue
 - Dashboard charts, money flow in and out
-- View categories & tags
-- Remove categories & tag
-- Upload data functionality
-- User authentication & login
--- Don't forget to remove all instances of 'warren' from user field
-- Index/about/register/login pages styling and text, better nav bar, etc..
 \x1b[0m`;
 
 m.keepsimple_db.authenticate()

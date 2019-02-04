@@ -101,6 +101,7 @@
 
 <script>
 import axios from 'axios'
+import api from '../services/api';
 
 export default{
     data () {
@@ -117,9 +118,7 @@ export default{
     },
     methods:{
         removeTag: function(id){
-            axios.delete(`http://localhost:5000/tags/${id}`, {
-                headers: {
-                    authorization: `Bearer ${this.$store.state.token}`}})
+            api().delete(`tags/${id}`)
                 .then(response => {
                     if (response.status === 200){
                         this.clientResponseClass = 'success text-center';
@@ -137,9 +136,7 @@ export default{
                 })
         },
         removeCategory: function(id){
-            axios.delete(`http://localhost:5000/categories/${id}`, {
-                headers: {
-                    authorization: `Bearer ${this.$store.state.token}`}})
+            api().delete(`categories/${id}`)
                 .then(response => {
                     if (response.status === 200){
                         this.clientResponseClass = 'success text-center';
@@ -201,19 +198,13 @@ export default{
             return categories;
         },
         getTransactions: function(){
-            return axios.get('http://localhost:5000/transactions', {
-                headers: {
-                    authorization: `Bearer ${this.$store.state.token}`}})
+            return api().get('transactions')
         },
         getTags: function(){
-            return axios.get('http://localhost:5000/tags', {
-                headers: {
-                    authorization: `Bearer ${this.$store.state.token}`}})
+            return api().get('tags')
         },
         getCategories: function(){
-            return axios.get('http://localhost:5000/categories', {
-                headers: {
-                    authorization: `Bearer ${this.$store.state.token}`}})
+            return api().get('categories')
         },
         setupDashboard: function(){
             axios.all([this.getTransactions(), this.getTags(), this.getCategories()])

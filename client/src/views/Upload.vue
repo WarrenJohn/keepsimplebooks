@@ -44,7 +44,7 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
+import api from '../services/api';
 
 export default{
     data () {
@@ -77,9 +77,7 @@ export default{
             }else{
                 const formData = new FormData()
                 formData.append('bank', this.selectedFile)
-                axios.post('http://localhost:5000/transactions/upload', formData, {
-                    headers: {
-                        authorization: `Bearer ${this.$store.state.token}`}})
+                api().post('transactions/upload', formData)
                     .then(response => {
                         if (response.status === 201){
                         this.clientResponseClass = 'success text-center';

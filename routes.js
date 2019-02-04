@@ -152,7 +152,6 @@ module.exports = app => {
                         res.status(500).send();
                     })
                 });
-                // m.insertBulkRowsBank(u.createObjArray(u.handleCSV(req.file.buffer)));
             }else if (req.file.originalname.split('.').pop() !== 'csv' && req.file.mimetype !== 'application/vnd.ms-excel'){
                 res.status(415).send();
             }else if (req.file.size > 1000000){

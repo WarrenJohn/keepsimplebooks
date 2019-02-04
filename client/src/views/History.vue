@@ -7,8 +7,9 @@
   </div>
 </template>
 <script>
+// import axios from 'axios';
+import api from '@/services/api';
 
-import axios from 'axios';
 
 export default{
     data () {
@@ -41,10 +42,8 @@ export default{
     methods:{},
 
     created () {
-        axios
-        .get('http://localhost:5000/transactions', {
-            headers: {
-                authorization: `Bearer ${this.$store.state.token}`}})
+        api()
+        .get('transactions')
         .then(response => (this.info = response.data))
         .catch(() => {
             this.$store.dispatch('logoutUser');

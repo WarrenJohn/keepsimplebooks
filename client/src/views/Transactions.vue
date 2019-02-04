@@ -97,7 +97,8 @@
 
 <script>
 import axios from 'axios';
-import Categories from '@/components/Categories.vue'
+import api from '../services/api';
+import Categories from '@/components/Categories.vue';
 
 export default{
     name: 'category',
@@ -147,11 +148,8 @@ export default{
         },
         addTag: function(){
             this.tag.description = this.tag.description.toUpperCase()
-            axios
-                .post('http://localhost:5000/tags',
-                        {tag: this.tag},
-                        {headers: {
-                            authorization: `Bearer ${this.$store.state.token}`}})
+            api()
+                .post('tags', {tag: this.tag})
                 .then(response => {
                     if(response.data.created){
                         // 'created' is referencing the response from findOrCreate method of sequelize
@@ -237,29 +235,20 @@ export default{
                 });
                 trans_obj.count = trans_obj.transactions.length;
             });
-            console.log(sortedTransactions);
             return sortedTransactions;
         },
         getTransactions: function(){
-            return axios.get('http://localhost:5000/transactions',{
-                headers: {
-                    authorization: `Bearer ${this.$store.state.token}`,
-                    user: this.$store.state.user}});
+            return api().get('transactions');
         },
         getTags: function(){
-            return axios.get('http://localhost:5000/tags',{
-                headers: {
-                    authorization: `Bearer ${this.$store.state.token}`,
-                    user: this.$store.state.user}});
+            return api().get('tags');
         },
         setupTransactionsPage: function(){
             axios.all([this.getTransactions(), this.getTags()])
                 .then(axios.spread((transactions, tags) => {
                     this.userTags = tags.data;
-                    console.log(transactions.data.length);
                     transactions.data = this.parseTransactions(transactions.data, tags.data);
                     this.info = this.sortTransactions(transactions.data);
-                    console.log(transactions.data.length);
                 }))
                 .catch(() => {
                     this.$store.dispatch('logoutUser');
