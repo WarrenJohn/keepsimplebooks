@@ -21,7 +21,6 @@ const todo = `
     FEATURES / TO DO:\x1b[0m\x1b[47m
 \x1b[30m
 - Unit tests
-- Bug: filtering out $ only when tag specifies description and $$ Acct bal rebate is a good example
 - Add an API service for vue to manage the api requests
 - Limit user requests to prevent spamming (express-rate-limit or something similar)
 - Convert complicated template variables to computed properties

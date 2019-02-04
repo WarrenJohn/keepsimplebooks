@@ -173,30 +173,26 @@ export default{
         },
         parseTransactions: function(transactions, tags){
             // Parsing out all previously tagged transactions
+
             tags.map(tag => {
                 if (tag.description && tag.amount){
-                        transactions = transactions.filter(transaction =>{
-                            if (transaction.withdrawl){
-                                return (!transaction.description.toUpperCase().includes(tag.description.toUpperCase()) && Number(transaction.withdrawl) !== Number(tag.amount))
-                            }else{
-                                return (!transaction.description.toUpperCase().includes(tag.description.toUpperCase()) && Number(transaction.deposit) !== Number(tag.amount))
-                            }
-                        });
-
+                    transactions = transactions.filter(transaction =>
+                        (!transaction.description.toUpperCase().includes(tag.description.toUpperCase()) && Number(transaction.withdrawl) !== Number(tag.amount))
+                            ||
+                        (!transaction.description.toUpperCase().includes(tag.description.toUpperCase()) && Number(transaction.deposit) !== Number(tag.amount))
+                        )
                 }else if (!tag.description && tag.amount){
-                        transactions = transactions.filter(transaction => {
-                            if (transaction.withdrawl){
-                                return (Number(transaction.withdrawl) !== Number(tag.amount))
-                            }else{
-                                return (Number(transaction.deposit) !== Number(tag.amount))
-                            }
-                        });
-
+                    transactions = transactions.filter(transaction => (
+                        (Number(transaction.withdrawl) !== Number(tag.amount))
+                            ||
+                        (Number(transaction.deposit) !== Number(tag.amount))
+                    ))
                 }else if(!tag.amount && tag.description){
-                    transactions = transactions.filter(transaction => !transaction.description.toUpperCase().includes(tag.description.toUpperCase()))
+                    transactions = transactions.filter(transaction =>
+                        (!transaction.description.toUpperCase().includes(tag.description.toUpperCase()))
+                    )
                 }
-            }
-            );
+            })
             return transactions;
         },
         sortTransactions: function(transactions){
@@ -248,9 +244,11 @@ export default{
                 .then(axios.spread((transactions, tags) => {
                     this.userTags = tags.data;
                     transactions.data = this.parseTransactions(transactions.data, tags.data);
+                    console.log(transactions.data.length);
                     this.info = this.sortTransactions(transactions.data);
                 }))
-                .catch(() => {
+                .catch((err) => {
+                    console.log(err);
                     this.$store.dispatch('logoutUser');
                     this.$router.push('login');
                 });
