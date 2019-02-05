@@ -173,26 +173,31 @@ export default{
         },
         parseTransactions: function(transactions, tags){
             // Parsing out all previously tagged transactions
-
+            let tagged= Array();
             tags.map(tag => {
                 if (tag.description && tag.amount){
-                    transactions = transactions.filter(transaction =>
-                        (!transaction.description.toUpperCase().includes(tag.description.toUpperCase()) && Number(transaction.withdrawl) !== Number(tag.amount))
-                            ||
-                        (!transaction.description.toUpperCase().includes(tag.description.toUpperCase()) && Number(transaction.deposit) !== Number(tag.amount))
-                        )
-                }else if (!tag.description && tag.amount){
-                    transactions = transactions.filter(transaction => (
-                        (Number(transaction.withdrawl) !== Number(tag.amount))
-                            ||
-                        (Number(transaction.deposit) !== Number(tag.amount))
-                    ))
-                }else if(!tag.amount && tag.description){
-                    transactions = transactions.filter(transaction =>
-                        (!transaction.description.toUpperCase().includes(tag.description.toUpperCase()))
-                    )
+                        tagged.push(...transactions.filter(transaction =>
+                                (transaction.description.toUpperCase().includes(tag.description.toUpperCase()) && Number(transaction.withdrawl) == Number(tag.amount))
+                                ||
+                                (transaction.description.toUpperCase().includes(tag.description.toUpperCase()) && Number(transaction.deposit) == Number(tag.amount))
+                        ));
+                }if (!tag.description && tag.amount){ // were previously an else if
+                        tagged.push(...transactions.filter(transaction =>
+                                (Number(transaction.withdrawl) == Number(tag.amount))
+                                ||
+                                (Number(transaction.deposit) == Number(tag.amount))
+                        ));
+                }if(!tag.amount && tag.description){ // were previously an else if
+                    tagged.push(...transactions.filter(transaction => transaction.description.toUpperCase().includes(tag.description.toUpperCase())))
                 }
-            })
+            });
+
+            tagged.map(tag => {
+                if(transactions.indexOf(tag) !== -1){
+                    transactions.splice(transactions.indexOf(tag), 1);
+                }
+            });
+
             return transactions;
         },
         sortTransactions: function(transactions){
@@ -242,10 +247,13 @@ export default{
         setupTransactionsPage: function(){
             axios.all([this.getTransactions(), this.getTags()])
                 .then(axios.spread((transactions, tags) => {
+                    let parsedTransactions = transactions.data;
                     this.userTags = tags.data;
-                    transactions.data = this.parseTransactions(transactions.data, tags.data);
-                    console.log(transactions.data.length);
-                    this.info = this.sortTransactions(transactions.data);
+                    console.log('len before parse ',parsedTransactions.length);
+                    parsedTransactions = this.parseTransactions(transactions.data, tags.data);
+                    console.log('len after parse ', parsedTransactions.length);
+
+                    this.info = this.sortTransactions(parsedTransactions);
                 }))
                 .catch((err) => {
                     console.log(err);

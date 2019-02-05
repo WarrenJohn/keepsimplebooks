@@ -156,23 +156,24 @@ export default{
         parseTransactions: function(tags, transactions){
             tags.map(tag => {
                 if (tag.description && tag.amount){
-                    tag.transactions = transactions.filter(transaction => (
-                        (transaction.description.toUpperCase().includes(tag.description.toUpperCase()) && Number(transaction.withdrawl) === Number(tag.amount))
-                        ||
-                        (transaction.description.toUpperCase().includes(tag.description.toUpperCase()) && Number(transaction.deposit) === Number(tag.amount))
-                    ))
-                }else if (!tag.description && tag.amount){
-                    tag.transactions = transactions.filter(transaction => (
-                        (Number(transaction.withdrawl) === Number(tag.amount))
-                        ||
-                        (Number(transaction.deposit) === Number(tag.amount))
-                    ))
-                }else if(!tag.amount && tag.description){
-                    tag.transactions = transactions.filter(transaction => (
-                        transaction.description.toUpperCase().includes(tag.description.toUpperCase())
-                    ))
+                        tag.transactions = transactions.filter(transaction =>
+                            (transaction.description.toUpperCase().includes(tag.description.toUpperCase()) && Number(transaction.withdrawl) === Number(tag.amount))
+                            ||
+                            (transaction.description.toUpperCase().includes(tag.description.toUpperCase()) && Number(transaction.deposit) === Number(tag.amount))
+                        );
+
+                }if (!tag.description && tag.amount){
+                        tag.transactions = transactions.filter(transaction =>
+                            (Number(transaction.withdrawl) === Number(tag.amount))
+                            ||
+                            (Number(transaction.deposit) === Number(tag.amount))
+                        );
+
+                }if(!tag.amount && tag.description){
+                    tag.transactions = transactions.filter(transaction => transaction.description.toUpperCase().includes(tag.description.toUpperCase()))
                 }
-            })
+            }
+            );
             return tags;
         },
         parseCategories: function(parsedTags, categories){
