@@ -255,8 +255,7 @@ export default{
 
                     this.info = this.sortTransactions(parsedTransactions);
                 }))
-                .catch((err) => {
-                    console.log(err);
+                .catch(() => {
                     this.$store.dispatch('logoutUser');
                     this.$router.push('login');
                 });
