@@ -23,7 +23,8 @@ const todo = `
 - Unit tests
 - Limit user requests to prevent spamming (express-rate-limit or something similar)
 - Convert complicated template variables to computed properties
-- Consideration: making current categories subcategories to allow for more encapsulation of the data. i.e. grouping categories.
+- Don't allow user to submit tag without first confirming it has been added
+- Consideration: making current categories into subcategories to allow for more encapsulation of the data. i.e. grouping categories.
 - SORTING Options: Add date range selection functionality to Dashboard.vue, Transactions.vue & History.vue, sort by alphabetical, etc..
 - Dashboard charts, money flow in and out
 \x1b[0m`;
