@@ -249,9 +249,7 @@ export default{
                 .then(axios.spread((transactions, tags) => {
                     let parsedTransactions = transactions.data;
                     this.userTags = tags.data;
-                    console.log('len before parse ',parsedTransactions.length);
                     parsedTransactions = this.parseTransactions(transactions.data, tags.data);
-                    console.log('len after parse ', parsedTransactions.length);
 
                     this.info = this.sortTransactions(parsedTransactions);
                 }))
