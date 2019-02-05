@@ -23,7 +23,7 @@ const todo = `
 - Unit tests
 - Limit user requests to prevent spamming (express-rate-limit or something similar)
 - Convert complicated template variables to computed properties
-- SORTING Options: Add date range selection functionality to Dashboard.vue, Transactions.vue & History.vue
+- SORTING Options: Add date range selection functionality to Dashboard.vue, Transactions.vue & History.vue, sort by alphabetical, etc..
 - Dashboard charts, money flow in and out
 \x1b[0m`;
 
