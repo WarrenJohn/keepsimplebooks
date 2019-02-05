@@ -17,13 +17,14 @@
                                     <th scope="col">Name</th>
                                     <th scope="col">Amount</th>
                                 </tr>
+                            </thead>
                                 <tr v-for="(category, index) in categories" :key="index+'_category'">
                                     <td>{{category.name.toUpperCase()}}</td>
                                     <td  v-if="category.sum < 0" class="lead text-danger">$({{Math.abs(category.sum).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}})</td>
                                     <td v-else class="lead">${{category.sum.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}}</td>
                                 </tr>
-                            </thead>
                         </table>
+                        <h2 v-else class="text-center">Nothing here yet!</h2>
                     </b-row>
                 </b-col>
                 <b-col class="text-center">

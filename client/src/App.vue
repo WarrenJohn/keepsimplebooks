@@ -32,11 +32,16 @@
                     @click="logout"
                     variant="light" size="sm">Log out
                 </b-nav-item>
-
             </b-navbar-nav>
         </b-navbar-nav>
     </b-navbar>
+
     <router-view/>
+
+    <footer>
+        <b-alert variant="primary" style="margin-top:5rem; padding-bottom:12rem" show>
+        </b-alert>
+    </footer>
   </div>
 </template>
 
@@ -54,8 +59,8 @@ export default {
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css?family=Questrial');
+@import url('https://fonts.googleapis.com/css?family=Quicksand');
 #app{
-    font-family: 'Questrial'
+    font-family: 'Quicksand'
 }
 </style>
