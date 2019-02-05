@@ -177,15 +177,15 @@ export default{
             tags.map(tag => {
                 if (tag.description && tag.amount){
                         tagged.push(...transactions.filter(transaction =>
-                                (transaction.description.toUpperCase().includes(tag.description.toUpperCase()) && Number(transaction.withdrawl) == Number(tag.amount))
+                                (transaction.description.toUpperCase().includes(tag.description.toUpperCase()) && Number(transaction.withdrawl) === Number(tag.amount))
                                 ||
-                                (transaction.description.toUpperCase().includes(tag.description.toUpperCase()) && Number(transaction.deposit) == Number(tag.amount))
+                                (transaction.description.toUpperCase().includes(tag.description.toUpperCase()) && Number(transaction.deposit) === Number(tag.amount))
                         ));
                 }if (!tag.description && tag.amount){ // were previously an else if
                         tagged.push(...transactions.filter(transaction =>
-                                (Number(transaction.withdrawl) == Number(tag.amount))
+                                (Number(transaction.withdrawl) === Number(tag.amount))
                                 ||
-                                (Number(transaction.deposit) == Number(tag.amount))
+                                (Number(transaction.deposit) === Number(tag.amount))
                         ));
                 }if(!tag.amount && tag.description){ // were previously an else if
                     tagged.push(...transactions.filter(transaction => transaction.description.toUpperCase().includes(tag.description.toUpperCase())))
