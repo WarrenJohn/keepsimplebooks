@@ -21,10 +21,9 @@ const todo = `
     FEATURES / TO DO:\x1b[0m\x1b[47m
 \x1b[30m
 - Unit tests
-- Add an API service for vue to manage the api requests
 - Limit user requests to prevent spamming (express-rate-limit or something similar)
 - Convert complicated template variables to computed properties
-- Add date range selection functionality to Dashboard.vue, Transactions.vue & History.vue
+- SORTING Options: Add date range selection functionality to Dashboard.vue, Transactions.vue & History.vue
 - Dashboard charts, money flow in and out
 \x1b[0m`;
 
