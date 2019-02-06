@@ -1,5 +1,11 @@
 <template>
   <div id="app">
+
+      <link rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
+      integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+      crossorigin="anonymous">
+
     <b-navbar toggleable="md" variant="primary" type="dark" sticky>
       <b-navbar-brand class="text-white" to="/">keepsimple</b-navbar-brand>
         <!-- Right aligned nav items -->
