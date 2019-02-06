@@ -93,7 +93,7 @@
                 </b-alert>
                 <p>Tagged Transaction</p>
                 <b-alert show>
-                    <p class="lead">Category: <b class="text-primary">MORTGAGE</b></p>
+                    <p class="lead mt-3">Category: <b class="text-primary">MORTGAGE</b></p>
                     <p class="lead">Description: <b class="text-primary">RBC PMT MTG</b></p>
                     <p class="lead">Amount: <b class="text-primary">$500</b></p>
                 </b-alert>
