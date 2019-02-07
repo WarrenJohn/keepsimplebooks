@@ -23,7 +23,6 @@ const todo = `
 - Encrypt financial data
 - Unit tests
 - Limit user requests to prevent spamming (express-rate-limit or something similar)
-- Prevent user from adding blank tag
 - Don't allow user to submit tag without first confirming it has been added
 - Consideration: making current categories into subcategories to allow for more encapsulation of the data. i.e. grouping categories.
 - Flair text for when things are empty (like no uploaded documents), etc..
