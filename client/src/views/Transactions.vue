@@ -101,7 +101,7 @@ import api from '../services/api';
 import Categories from '@/components/Categories.vue';
 
 export default{
-    name: 'category',
+    name: 'transactions',
     components: {
       Categories
   },
@@ -139,6 +139,7 @@ export default{
                     this.clientResponse = 'Description or Amount are required!';
                     return;
                 }
+                if (this.tag.category )
                 if (this.tag.description || !this.tag.amount) {
                     return this.addTag();
                 }
