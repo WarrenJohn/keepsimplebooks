@@ -1,6 +1,5 @@
 <template>
     <div>
-        {{test}}
         <div v-if="clientResponseClass">
             <b-alert show :variant="clientResponseClass">
                 {{clientResponse}}
@@ -48,7 +47,6 @@ export default {
         },
     data () {
         return {
-            test: '',
             options: Array(),
             clientResponse: null,
             clientResponseClass: null
