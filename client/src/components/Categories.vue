@@ -16,7 +16,7 @@
                     class="form-control" type="text" placeholder="New expense category" ref="categoryinput" />
                 <b-button variant="success"
                     size="sm"
-                    @click="addCategory()">+
+                    @click="validateCategory()">+
                 </b-button>
                 </div>
             </b-collapse>
@@ -53,6 +53,17 @@ export default {
         }
     },
     methods:{
+        validateCategory: function(){
+            const category = this.$refs.categoryinput.value.toUpperCase();
+            for (let i = 0; i < category.length; i++){
+                if (category[i] !== " "){
+                    this.addCategory();
+                }
+            }
+            this.clientResponseClass = "warning text-center";
+            this.clientResponse = "Category cannot be blank!";
+            setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
+        },
         addCategory: function(){
             const category = {category: this.$refs.categoryinput.value.toUpperCase()};
             api()
