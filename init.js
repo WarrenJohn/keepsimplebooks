@@ -4,16 +4,6 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path');
 
-const rateLimit = require("express-rate-limit");
-
-
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 200 // limit each IP to 100 requests per windowMs
-});
-
-//  apply to all requests
-
 const m = require('./models');
 
 const app = express();
@@ -21,6 +11,11 @@ const port = process.env.PORT;
 
 // express-rate-limit
 app.enable("trust proxy"); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
+const rateLimit = require("express-rate-limit");
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 200 // limit each IP to 100 requests per windowMs
+});
 
 app.use(bodyParser.json());
 app.use(limiter);
