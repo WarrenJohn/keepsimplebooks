@@ -1,13 +1,13 @@
 <template>
-  <div class="history">
-    <h1>This is the History page</h1>
+  <div class="history text-center">
+    <h1 class="m-5">Transactions history</h1>
     <div class="container">
         <b-table striped hover small :items="info" :fields="fields"></b-table>
     </div>
   </div>
 </template>
 <script>
-// import axios from 'axios';
+
 import api from '@/services/api';
 
 

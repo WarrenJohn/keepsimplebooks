@@ -1,9 +1,15 @@
 <template>
   <div class="dashboard">
-    <h1>Dashboard</h1>
-        <b-container class="bv-example-row">
+        <b-container class="mt-5">
+            <p
+                v-if="total > 0"
+                class="text-center">Net total ${{ netTotal }}</p>
+            <p
+                v-else
+                class="text-danger text-center">Net total $({{ netTotal }})</p>
             <b-row>
-                <b-col>
+                <b-col></b-col>
+                <b-col cols="8">
                     <h3 class="text-center">Totals</h3>
                     <div v-if="clientResponseClass">
                         <b-alert show :variant="clientResponseClass">
@@ -11,7 +17,7 @@
                         </b-alert>
                     </div>
                     <b-row>
-                        <table v-if="categories.length > 0">
+                        <table v-if="categories.length > 0" class="m-auto">
                             <thead>
                                 <tr>
                                     <th scope="col">Name</th>
@@ -20,24 +26,14 @@
                             </thead>
                                 <tr v-for="(category, index) in categories" :key="index+'_category'">
                                     <td>{{category.name.toUpperCase()}}</td>
-                                    <td  v-if="category.sum < 0" class="lead text-danger">$({{Math.abs(category.sum).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}})</td>
-                                    <td v-else class="lead">${{category.sum.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}}</td>
+                                    <td  v-if="category.sum < 0" class="lead text-danger">$({{mutateNumber(category.sum)}})</td>
+                                    <td v-else class="lead">${{mutateNumber(category.sum)}}</td>
                                 </tr>
                         </table>
                         <h2 v-else class="text-center">Nothing here yet!</h2>
                     </b-row>
                 </b-col>
-                <b-col class="text-center">
-                    <h3>Net Total</h3>
-                    <p class="lead text-danger"
-                    v-if="total < 0">
-                        $({{total.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}})
-                    </p>
-                    <p class="lead"
-                    v-else>
-                        ${{total.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}}
-                    </p>
-                </b-col>
+                <b-col></b-col>
             </b-row>
             <br>
             <b-row class="text-center">
@@ -118,6 +114,12 @@ export default{
         }
     },
     methods:{
+        mutateNumber: function(num){
+            if (num > 0){
+                return num.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            }
+            return Math.abs(num).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        },
         removeTag: function(id){
             api().delete(`tags/${id}`)
                 .then(response => {
@@ -155,7 +157,7 @@ export default{
                 })
         },
         parseTransactions: function(tags, transactions){
-            tags.map(tag => {
+            tags.forEach(tag => {
                 if (tag.description && tag.amount){
                         tag.transactions = transactions.filter(transaction =>
                             (transaction.description.toUpperCase().includes(tag.description.toUpperCase()) && Number(transaction.withdrawl) === Number(tag.amount))
@@ -177,11 +179,11 @@ export default{
             );
             return tags;
         },
-        parseCategories: function(parsedTags, categories){
+        sumCategories: function(parsedTags, categories){
             categories.map(category => category.sum = 0)
-            categories.map(category => {
-                parsedTags.map(tag => {
-                    tag.transactions.map(transaction => {
+            categories.forEach(category => {
+                parsedTags.forEach(tag => {
+                    tag.transactions.forEach(transaction => {
                         if (category.name.toUpperCase() === tag.category.toUpperCase()){
                             if(transaction.withdrawl){
                                 category.sum -= Number(transaction.withdrawl)
@@ -207,8 +209,11 @@ export default{
             axios.all([this.getTransactions(), this.getTags(), this.getCategories()])
                 .then(axios.spread((transactions, tags, categories) => {
                     this.tags = this.parseTransactions(tags.data, transactions.data);
-                    this.categories = this.parseCategories(this.tags, categories.data);
+                    this.categories = this.sumCategories(this.tags, categories.data);
                     this.clientCategories = categories.data
+                    this.total = this.categories
+                        .map(category => (category.sum))
+                        .reduce((acc, cv) => (acc + cv))
                 }))
                 .catch(() => {
                     this.$store.dispatch('logoutUser');
@@ -216,8 +221,14 @@ export default{
                 });
         }
     },
+    computed:{
+        netTotal: function(){
+            // make the number look presentable
+            return Math.abs(this.total).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+    },
 
-    created () {
+    mounted () {
         this.setupDashboard();
     }
 }

@@ -1,7 +1,7 @@
 <template>
-  <div class="upload">
-    <h1>This is the Upload page</h1>
-    <div class="text-center">
+  <div class="upload text-center">
+    <h1 class="mt-5">Upload your documents</h1>
+    <div class="">
         <p class="lead">Make sure your columns are in the following order from left to right:</p>
         <p>Date, Description, Withdrawn, Deposited, Balance</p>
         <label class="btn btn-xs">
@@ -18,28 +18,6 @@
             </b-alert>
         </div>
     </div>
-    <ul>
-        <li>Select the file</li>
-        <li>Tag the columns</li>
-        <ul>
-            <li>Show 5 most recent transactions</li>
-            <li>Auto detect dates</li>
-            <li>Make suggestion of the following order and have user confirm/reject it</li>
-            <ul>
-                <li>Date</li>
-                <li>Description</li>
-                <li>Withdrawn</li>
-                <li>Deposited</li>
-                <li>Balance</li>
-            </ul>
-        </ul>
-        <li>Confirm the upload</li>
-        <li>Validate file type</li>
-    </ul>
-    <br>
-    {{uploadProgress}}
-    <br>
-    {{test}}
 
   </div>
 </template>
@@ -50,10 +28,8 @@ export default{
     data () {
         return {
             selectedFile: null,
-            uploadProgress: null,
             clientResponse: null,
             clientResponseClass: null,
-            test: null
         }
     },
     methods: {

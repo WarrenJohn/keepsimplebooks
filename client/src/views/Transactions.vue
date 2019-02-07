@@ -171,10 +171,10 @@ export default{
                     setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
                 })
         },
-        parseTransactions: function(transactions, tags){
+        filterTags: function(transactions, tags){
             // Parsing out all previously tagged transactions
             let tagged= Array();
-            tags.map(tag => {
+            tags.forEach(tag => {
                 if (tag.description && tag.amount){
                         tagged.push(...transactions.filter(transaction =>
                                 (transaction.description.toUpperCase().includes(tag.description.toUpperCase()) && Number(transaction.withdrawl) === Number(tag.amount))
@@ -192,7 +192,7 @@ export default{
                 }
             });
 
-            tagged.map(tag => {
+            tagged.forEach(tag => {
                 if(transactions.indexOf(tag) !== -1){
                     transactions.splice(transactions.indexOf(tag), 1);
                 }
@@ -249,8 +249,7 @@ export default{
                 .then(axios.spread((transactions, tags) => {
                     let parsedTransactions = transactions.data;
                     this.userTags = tags.data;
-                    parsedTransactions = this.parseTransactions(transactions.data, tags.data);
-
+                    parsedTransactions = this.filterTags(transactions.data, tags.data);
                     this.info = this.sortTransactions(parsedTransactions);
                 }))
                 .catch(() => {
