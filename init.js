@@ -4,13 +4,26 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path');
 
+const rateLimit = require("express-rate-limit");
+
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 200 // limit each IP to 100 requests per windowMs
+});
+
+//  apply to all requests
+
 const m = require('./models');
 
 const app = express();
 const port = process.env.PORT;
 
-app.use(express.static('./static'));
+// express-rate-limit
+app.enable("trust proxy"); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
+
 app.use(bodyParser.json());
+app.use(limiter);
 app.use(cors());
 
 require('./routes')(app);
@@ -22,7 +35,6 @@ const todo = `
 \x1b[30m
 - Encrypt financial data
 - Unit tests
-- Limit user requests to prevent spamming (express-rate-limit or something similar)
 - Don't allow user to submit tag without first confirming its category has been added
 - Consideration: making current categories into subcategories to allow for more encapsulation of the data. i.e. grouping categories.
 - Flair text for when things are empty (like no uploaded documents), etc..

@@ -50,7 +50,8 @@ export default{
                             setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
                         }
                     })
-                    .catch(() => {
+                    .catch((err) => {
+                        console.log(err);
                         this.clientResponseClass = 'danger text-center';
                         this.clientResponse = 'Something went wrong!';
                         setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
