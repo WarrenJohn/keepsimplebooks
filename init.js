@@ -28,6 +28,7 @@ const todo = `
 
     FEATURES / TO DO:\x1b[0m\x1b[47m
 \x1b[30m
+- Considering: interactive test for users to try before register
 - Delete all transactions option for user
 - Encrypt financial data / annonymize user's financial data
 - Unit tests
