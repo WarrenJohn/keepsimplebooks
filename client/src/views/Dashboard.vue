@@ -1,33 +1,40 @@
 <template>
   <div class="dashboard">
         <b-container class="mt-5">
-            <p
+            <h3
                 v-if="total > 0"
-                class="text-center">Net total ${{  netTotal  }}</p>
-            <p
+                class="text-center pb-5">Net total ${{  netTotal  }}</h3>
+            <h3
                 v-else
-                class="text-danger text-center">Net total $({{  netTotal  }})</p>
+                class="text-danger text-center pb-5">Net total $({{  netTotal  }})</h3>
             <b-row>
                 <b-col></b-col>
                 <b-col cols="8">
-                    <h3 class="text-center">Totals</h3>
                     <div v-if="clientResponseClass">
                         <b-alert show :variant="clientResponseClass">
                             {{ clientResponse }}
                         </b-alert>
                     </div>
                     <b-row>
-                        <table v-if="categories.length > 0" class="m-auto">
+                        <table v-if="categories.length > 0" class="m-auto table hover">
                             <thead>
                                 <tr>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Amount</th>
+                                    <th scope="col" class="sorting"
+                                        @click="sortAlpha()">
+                                        <i class="fas fa-arrows-alt-v"></i>
+                                        Name
+                                    </th>
+                                    <th scope="col" class="sorting"
+                                        @click="sortNumeric()">
+                                        Amount
+                                        <i class="fas fa-arrows-alt-v"></i>
+                                    </th>
                                 </tr>
                             </thead>
                                 <tr v-for="(category, index) in categories" :key="index+'_category'">
                                     <td>{{ category.name.toUpperCase() }}</td>
-                                    <td  v-if="category.sum < 0" class="lead text-danger">$({{ mutateNumber(category.sum) }})</td>
-                                    <td v-else class="lead">${{ mutateNumber(category.sum) }}</td>
+                                    <td  v-if="category.sum < 0" class="text-danger">$({{ mutateNumber(category.sum) }})</td>
+                                    <td v-else class="">${{ mutateNumber(category.sum) }}</td>
                                 </tr>
                         </table>
                         <h2 v-else class="text-center">Nothing here yet!</h2>
@@ -104,7 +111,19 @@ export default{
     data () {
         return {
             transactions: null,
+            fields: [
+                {
+                    key: "name",
+                    sortable: true
+                },
+                {
+                    key: "amount",
+                    sortable: true
+                }
+            ],
             categories: Array(),
+            alphaSort: false,
+            numericSort: false,
             clientCategories: null,
             tags: null,
             info: null,
@@ -196,6 +215,63 @@ export default{
             })
             return categories;
         },
+        sortAlpha: function(){
+            // sorting functionality for the table
+            if(this.alphaSort){
+                return this.categories.reverse()
+            }
+            let nameArray;
+            let indexArray = Array();
+            let newCategories = Array();
+            nameArray = this.categories
+                .map(category => (category.name))
+                .sort()
+            // using this type of loop as the break is needed to prevent the array from duplicating itself each time the function is called
+            for (let nm of nameArray){
+                for (let category of this.categories){
+                    if(nm == category.name){
+                        indexArray.push(this.categories.indexOf(category));
+                        break;
+                    }
+                }
+            }
+            indexArray.forEach(index => {
+                newCategories.push(this.categories[index])
+            })
+            this.numericSort = false;
+            this.alphaSort = true;
+            this.categories = newCategories;
+        },
+        sortNumeric: function(){
+            // sorting functionality for the table
+            if(this.numericSort){
+                return this.categories.reverse()
+            }
+            let amtArray;
+            let indexArray = Array()
+            let newCategories = Array();
+
+            // name passed in otherwise 2 identical amounts from different categories
+            // will cause all of them to have the same name when the index is pushed
+            amtArray = this.categories.map(category => ([category.name, category.sum]))
+
+            amtArray.sort((a ,b) => (a[1]-b[1]))
+            // using this type of loop as the break is needed to prevent the array from duplicating itself each time the function is called
+            for (let item of amtArray){
+                for (let category of this.categories){
+                    if(item[1] === category.sum && item[0] == category.name){
+                        indexArray.push(this.categories.indexOf(category))
+                        break;
+                    }
+                }
+            }
+            indexArray.forEach(index => {
+                newCategories.push(this.categories[index])
+            })
+            this.alphaSort = false;
+            this.numericSort = true;
+            this.categories = newCategories;
+        },
         getTransactions: function(){
             return api().get('transactions')
         },
@@ -214,6 +290,8 @@ export default{
                     this.total = this.categories
                         .map(category => (category.sum))
                         .reduce((acc, cv) => (acc + cv))
+                    // sort table alphabetically to start
+                    this.sortAlpha()
                 }))
                 .catch(() => {
                     this.$store.dispatch('logoutUser');
