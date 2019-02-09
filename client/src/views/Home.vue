@@ -34,10 +34,15 @@
                 <p>Simply upload your bank statements.</p>
             </b-col>
             <b-col>
+                <i class="fas fa-bolt fa-5x mb-3"></i>
+                <h4>Bookkeeping made simple</h4>
+                <p>Intentionally designed to be as simple as possible, to get you organised in less than an hour.</p>
+            </b-col>
+            <!-- <b-col>
                 <i class="fas fa-database fa-5x mb-3"></i>
                 <h4>Your banking records are encrypted</h4>
                 <p>All of your personal banking records are encrypted in our database. Only you have access to them.</p>
-            </b-col>
+            </b-col> -->
             <b-col>
                 <i class="fas fa-money-bill fa-5x mb-3"></i>
                 <h4>Categorize your expenses and income</h4>
@@ -45,15 +50,15 @@
             </b-col>
         </b-row>
 
-        <b-dropdown-divider class="mt-5 mb-5"></b-dropdown-divider>
-        <b-dropdown-divider class="mt-5 mb-5"></b-dropdown-divider>
+        <!-- <b-dropdown-divider class="mt-5 mb-5"></b-dropdown-divider>
+        <b-dropdown-divider class="mt-5 mb-5"></b-dropdown-divider> -->
 
-        <b-row>
+        <!-- <b-row>
             <b-col class="text-center text-muted">
                 <h2>Bookkeeping made simple, on purpose!</h2>
                 <p class="lead">Intentionally designed to be as simple as possible, to get you organised in less than an hour.</p>
             </b-col>
-        </b-row>
+        </b-row> -->
 
         <b-dropdown-divider class="mt-5 mb-5"></b-dropdown-divider>
         <b-dropdown-divider class="mt-5 mb-5"></b-dropdown-divider>

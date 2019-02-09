@@ -28,7 +28,7 @@ const todo = `
 
     FEATURES / TO DO:\x1b[0m\x1b[47m
 \x1b[30m
-- Encrypt financial data
+- Encrypt financial data / annonymize user's financial data
 - Unit tests
 - Don't allow user to submit tag without first confirming its category has been added
 - Consideration: making current categories into subcategories to allow for more encapsulation of the data. i.e. grouping categories.
