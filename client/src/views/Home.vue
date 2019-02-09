@@ -80,7 +80,7 @@
 
         <b-row class="text-center mt-5">
             <b-col class="text-muted">
-                <h3>Create a category</h3>
+                <h3>Create a category in the Transactions page</h3>
                 <p class="lead text-primary">"MORTGAGE PAYMENT"</p>
                 <p>Tagged transactions will be sorted under the selected category, and show you the net gain/loss.</p>
                 <i class="far fa-folder-open fa-7x"></i>
@@ -90,8 +90,12 @@
         <b-row class="text-center mt-5">
             <b-col class="text-muted">
                 <h3>Tag a transaction under that category</h3>
-                <p>Tag by the complete transaction description, and the exact amount, just the amount, or just a portion of the text. </p>
+                <p>Tag by the complete transaction description, and the exact amount, just the amount, or just a portion of the text.</p>
                 <i class="fas fa-tags fa-7x mb-5"></i>
+                <p>Click the tag button next to the transaction and modify it to your liking, or enter your own tag in.</p>
+                <div class="card">
+
+                </div>
                 <p>Original Transaction:</p>
                 <b-alert variant="warning" show>
                     <p class="lead text-primary mt-3">13124RBC PMT MTG | $500</p>
@@ -102,12 +106,13 @@
                     <p class="lead">Description: <b class="text-primary">RBC PMT MTG</b></p>
                     <p class="lead">Amount: <b class="text-primary">$500</b></p>
                 </b-alert>
-                <p>Once you add the tag, all matching transactions will automatically be hidden and you'll see the total $ on your dashboard.</p>
                 <p>
                     All transactions containing the text 'RBC PMT MTG' at the amount of $500 will be filed under mortgage.
                     You can exclude the amount, and catch all matching transactions at any amount. Or you can exclude the description entirely, and
                     match only the transaction amount.
                 </p>
+                <p>Once you add the tag, all matching transactions will automatically be hidden and you'll see the total $ on your dashboard.
+                    You can always remove tags and categories in the dashboard page.</p>
             </b-col>
         </b-row>
 
