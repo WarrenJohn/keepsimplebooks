@@ -3,17 +3,17 @@
         <b-container class="mt-5">
             <p
                 v-if="total > 0"
-                class="text-center">Net total ${{ netTotal }}</p>
+                class="text-center">Net total ${{  netTotal  }}</p>
             <p
                 v-else
-                class="text-danger text-center">Net total $({{ netTotal }})</p>
+                class="text-danger text-center">Net total $({{  netTotal  }})</p>
             <b-row>
                 <b-col></b-col>
                 <b-col cols="8">
                     <h3 class="text-center">Totals</h3>
                     <div v-if="clientResponseClass">
                         <b-alert show :variant="clientResponseClass">
-                            {{clientResponse}}
+                            {{ clientResponse }}
                         </b-alert>
                     </div>
                     <b-row>
@@ -25,9 +25,9 @@
                                 </tr>
                             </thead>
                                 <tr v-for="(category, index) in categories" :key="index+'_category'">
-                                    <td>{{category.name.toUpperCase()}}</td>
-                                    <td  v-if="category.sum < 0" class="lead text-danger">$({{mutateNumber(category.sum)}})</td>
-                                    <td v-else class="lead">${{mutateNumber(category.sum)}}</td>
+                                    <td>{{ category.name.toUpperCase() }}</td>
+                                    <td  v-if="category.sum < 0" class="lead text-danger">$({{ mutateNumber(category.sum) }})</td>
+                                    <td v-else class="lead">${{ mutateNumber(category.sum) }}</td>
                                 </tr>
                         </table>
                         <h2 v-else class="text-center">Nothing here yet!</h2>
@@ -51,14 +51,14 @@
                                 </thead>
                                 <tr v-for="(tag, index) in tags" :key="index+'_clienttag'">
                                     <td>
-                                        {{tag.category.toUpperCase()}}
+                                        {{ tag.category.toUpperCase() }}
                                     </td>
                                     <td v-if="tag.description">
-                                        {{tag.description.toUpperCase()}}
+                                        {{ tag.description.toUpperCase() }}
                                     </td>
                                     <td v-else>None</td>
                                     <td v-if="tag.amount">
-                                        {{tag.amount}}
+                                        {{ tag.amount }}
                                     </td>
                                     <td v-else>None</td>
                                     <td><b-button class="btn-danger btn-sm"
@@ -78,7 +78,7 @@
                                     </tr>
                                 </thead>
                                 <tr v-for="(category, index) in clientCategories" :key="index+'_clientCategories'">
-                                    <td>{{category.name.toUpperCase()}}</td>
+                                    <td>{{ category.name.toUpperCase() }}</td>
                                     <td><b-button class="btn-danger btn-sm"
                                         @click="removeCategory(category.id)">remove</b-button></td>
                                     </tr>

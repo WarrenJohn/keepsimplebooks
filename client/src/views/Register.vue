@@ -18,14 +18,14 @@
 
                     <div v-if="clientResponseClass" class="mt-3">
                         <b-alert show :variant="clientResponseClass">
-                            {{clientResponse}}
+                            {{ clientResponse }}
                         </b-alert>
                     </div>
                     <div v-if="postErrors.length > 0" class="mt-3">
                         <b-alert show variant="danger">
                             <ul>
                                 <li v-for="(error, index) in postErrors" :key="index+'_errors'">
-                                    {{error}}
+                                    {{ error }}
                                 </li>
                             </ul>
                         </b-alert>

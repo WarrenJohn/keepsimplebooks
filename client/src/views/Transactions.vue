@@ -20,20 +20,20 @@
                     </div>
             <div class="text-center">
                 <p v-if="tag.description && tag.amount && tag.category">
-                    Label all transactions that contain the text <b>'{{ tag.description.toUpperCase() }}'</b> and the exact amount of <b>'{{ tag.amount }}'</b> as
-                    <b>'{{ tag.category.toUpperCase() }}'</b>.
+                    Label all transactions that contain the text <b>'{{  tag.description.toUpperCase()  }}'</b> and the exact amount of <b>'{{  tag.amount  }}'</b> as
+                    <b>'{{  tag.category.toUpperCase()  }}'</b>.
                 </p>
                 <p v-else-if="!tag.description && tag.amount && tag.category">
-                    Label all transactions with the exact amount of <b>'{{ tag.amount }}'</b> as <b>'{{ tag.category.toUpperCase() }}'</b>.
+                    Label all transactions with the exact amount of <b>'{{  tag.amount  }}'</b> as <b>'{{  tag.category.toUpperCase()  }}'</b>.
                 </p>
                 <p v-else-if="!tag.amount && tag.description && tag.category">
-                    Label all transactions that contain the text <b>'{{ tag.description.toUpperCase() }}'</b> as <b>'{{ tag.category.toUpperCase() }}'</b>.
+                    Label all transactions that contain the text <b>'{{  tag.description.toUpperCase()  }}'</b> as <b>'{{  tag.category.toUpperCase()  }}'</b>.
                 </p>
                 <p v-else></p>
                 <b-button block variant="success" @click="validateTag">Add this tag</b-button>
                 <div v-if="clientResponseClass">
                     <b-alert show :variant="clientResponseClass">
-                        {{clientResponse}}
+                        {{ clientResponse }}
                     </b-alert>
                 </div>
             </div>
@@ -54,7 +54,7 @@
                             <tbody>
                                 <tr v-for="(line, index) in info" :key="index+'_transactions'" class="d-flex">
                                     <th scope="row" class="col-10">
-                                        <b-btn block href="#" variant="link">{{line.name}}</b-btn>
+                                        <b-btn block href="#" variant="link">{{ line.name }}</b-btn>
                                             <table class="table table-hover table-sm">
                                                 <thead>
                                                     <tr>
@@ -67,12 +67,12 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr v-for="(row, index) in line.transactions" :key="index + '-table'">
-                                                        <td scope="row" style="font-weight:normal">{{row.date}}</td>
-                                                        <td style="font-weight:normal" >{{ row.description }}</td>
+                                                        <td scope="row" style="font-weight:normal">{{ row.date }}</td>
+                                                        <td style="font-weight:normal" >{{  row.description  }}</td>
 
-                                                        <td style="font-weight:normal" class="text-danger" v-if="row.withdrawl > 0">$({{ row.withdrawl }})</td>
+                                                        <td style="font-weight:normal" class="text-danger" v-if="row.withdrawl > 0">$({{  row.withdrawl  }})</td>
 
-                                                        <td style="font-weight:normal" v-else>${{ row.deposit }}</td>
+                                                        <td style="font-weight:normal" v-else>${{  row.deposit  }}</td>
 
                                                         <td>
                                                             <b-button variant="outline-success"
@@ -84,7 +84,7 @@
                                                 </tbody>
                                             </table>
                                     </th>
-                                    <td class="col-1">{{ line.count }}</td>
+                                    <td class="col-1">{{  line.count  }}</td>
                                 </tr>
                             </tbody>
                         </table>

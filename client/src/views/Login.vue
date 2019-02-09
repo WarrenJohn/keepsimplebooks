@@ -12,7 +12,7 @@
 
                 <div v-if="clientResponseClass" class="mt-3">
                     <b-alert show :variant="clientResponseClass">
-                        {{clientResponse}}
+                        {{ clientResponse }}
                     </b-alert>
                 </div>
                 <button class="btn btn-success mt-2" type="button"

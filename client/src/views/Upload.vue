@@ -14,7 +14,7 @@
         </label>
         <div v-if="clientResponseClass">
             <b-alert show :variant="clientResponseClass">
-                {{clientResponse}}
+                {{ clientResponse }}
             </b-alert>
         </div>
     </div>
