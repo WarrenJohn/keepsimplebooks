@@ -166,7 +166,10 @@ module.exports = app => {
         const tokenReceived = req.headers.authorization.split(' ')[1];
         const token = jwt.verify(tokenReceived, jwtCert);
         if (token){
-            res.status(200).send();
+            m.deleteOne(req.params.id, token.email)
+                .then(() => {
+                    res.status(200).send();                    
+                })
         }else{
             res.status(403).send();
         }

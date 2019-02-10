@@ -43,6 +43,8 @@
                     <p class="p-5 text-center">
                         Select the transaction you'd like to tag but hitting the 'tag' button. Give it a category and specify
                         whether you'd like to track this transaction by the description, price, or both.
+                        <br> <br>
+                        Double click the remove button, to delete that transaction. You can remove all transactions in the dashboard.
                     </p>
                     <div class="container">
                         <table class="table table-hover table-sm" style="table-layout:fixed">
@@ -78,9 +80,15 @@
                                                         <td scope="row" style="font-weight:normal">{{ row.date }}</td>
                                                         <td style="font-weight:normal" >{{  row.description  }}</td>
 
-                                                        <td style="font-weight:normal" class="text-danger" v-if="row.withdrawl > 0">$({{  row.withdrawl  }})</td>
+                                                        <td style="font-weight:normal" class="text-danger"
+                                                            v-if="row.withdrawl > 0">
+                                                            $({{  row.withdrawl  }})
+                                                        </td>
 
-                                                        <td style="font-weight:normal" v-else>${{  row.deposit  }}</td>
+                                                        <td style="font-weight:normal"
+                                                            v-else>
+                                                            ${{  row.deposit  }}
+                                                        </td>
 
                                                         <td>
                                                             <b-button variant="outline-success"
@@ -88,6 +96,13 @@
                                                                 @click="createTag(row.id)">Tag
                                                             </b-button>
                                                         </td>
+                                                        <td>
+                                                            <b-button variant="outline-danger"
+                                                                size="sm"
+                                                                @dblclick="deleteOneTransaction(row.id)">Remove
+                                                            </b-button>
+                                                        </td>
+                                                        <!-- </td> -->
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -127,6 +142,24 @@ export default{
         }
     },
     methods:{
+        deleteOneTransaction: function(id){
+            api().delete(`/transactions${id}`)
+                .then(response => {
+                    if (response.status === 200){
+                        this.clientResponseClass = 'success text-center';
+                        this.clientResponse = 'Successfully deleted!';
+                        setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
+                        this.numericSort = false;
+                        this.setupTransactionsPage();
+                    }
+                })
+                .catch(() => {
+                    this.clientResponseClass = 'danger text-center';
+                    this.clientResponse = 'There was an issue!';
+                    setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
+                    this.setupTransactionsPage();
+                })
+        },
         createTag: function(id){
             // populating the inital tag when the user clicks the 'tag' button
             this.allTags.forEach(item => {
@@ -318,7 +351,7 @@ export default{
                     this.userTags = tags.data;
                     parsedTransactions = this.filterTags(transactions.data, tags.data);
                     this.info = this.sortTransactions(parsedTransactions);
-                    // sort table numerically descending to start                    
+                    // sort table numerically descending to start
                     this.sortNumeric()
                 }))
                 .catch(() => {

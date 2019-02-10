@@ -202,6 +202,14 @@ const userTransactions = user => {
         });
     };
 
+module.exports.deleteOne = (id, user) => {
+    return Bank.destroy({
+        where: {
+            id, user
+        }
+    })
+}
+
 module.exports.deleteAll = async user => {
     let response = await userTransactions(user)
     response = response.map(data => (data.id))
