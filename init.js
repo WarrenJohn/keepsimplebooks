@@ -35,6 +35,8 @@ const todo = `
 - Dashboard charts, money flow in and out
 \n
 CONSIDERATION:
+- ability to ignore/hide transactions
+-- might cause too much conflict with the tags.
 - making current categories into subcategories to allow for more encapsulation of the data. i.e. grouping categories.
 - interactive test for users to try before register
 - make 'add tag' box 'sticky' on transactions page
