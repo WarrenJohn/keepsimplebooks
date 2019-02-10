@@ -176,7 +176,13 @@ module.exports = app => {
         const tokenReceived = req.headers.authorization.split(' ')[1];
         const token = jwt.verify(tokenReceived, jwtCert);
         if (token){
-            res.status(200).send();
+            m.deleteAll(token.email)
+                .then(response => {
+                    res.status(200).send();
+                })
+                .catch(() => {
+                    res.status(500).send()
+                })
         }else{
             res.status(403).send();
         }

@@ -101,6 +101,8 @@ const Bank = keepsimple_db.define('transactions',{
         timestamps: true
     });
 
+// // // // // // // // // // // // // // // // // // // // // // // //
+
 // USER REGISTER AND LOG IN
 module.exports.registerUser = userObj => {
 return Users.sync()
@@ -129,6 +131,7 @@ module.exports.fetchUser = query => {
                 console.log('Get User Error: ', err);
             });
 }
+// // // // // // // // // // // // // // // // // // // // // // // //
 
 // EXPENSE CATEGORIES TABLE METHODS
 module.exports.getUserCategories = query => {
@@ -173,15 +176,16 @@ module.exports.deleteUserCategory = (id, user) => {
         })
 }
 
+// // // // // // // // // // // // // // // // // // // // // // // //
+
 // BANK TABLE METHODS
 // columns: [ 'id', 'transaction_date', 'description', 'withdrawl', 'deposit', 'balance', 'user', 'createdAt', 'updatedAt' ]
-module.exports.userTransactions = user => {
+const userTransactions = user => {
     return Bank.findAll({
         where: {user}
         })
         .then((data) => {
             let transactions = Array();
-            let descriptions = Array();
             data.map((obj) => {transactions.push({
                     id: obj.id,
                     date: obj.transaction_date,
@@ -190,7 +194,6 @@ module.exports.userTransactions = user => {
                     deposit: obj.deposit,
                     balance: obj.balance
                 });
-                descriptions.push(obj.description);
                 });
             return transactions;
         })
@@ -199,6 +202,15 @@ module.exports.userTransactions = user => {
         });
     };
 
+module.exports.deleteAll = async user => {
+    let response = await userTransactions(user)
+    response = response.map(data => (data.id))
+    return Bank.destroy({
+        where: {
+            id: response
+        }
+    })
+};
 // {fields: ['transaction_date', 'description', 'withdrawl', 'deposit', 'balance']}
 module.exports.insertBulkRowsBank = object_array => {
     return Bank.sync() // .sync() is called to make sure the table exists prior to inserting data
@@ -267,5 +279,4 @@ module.exports.deleteUserTag = (id, user) => {
 
 module.exports.Sequelize = Sequelize;
 module.exports.keepsimple_db = keepsimple_db;
-module.exports.Bank = Bank; // These aren't working for now
-module.exports.Bank = Tags; // These aren't working for now
+module.exports.userTransactions = userTransactions;

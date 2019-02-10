@@ -42,8 +42,7 @@
                 </b-col>
                 <b-col></b-col>
             </b-row>
-            <br>
-            <b-row class="text-center">
+            <b-row class="text-center pt-5">
                 <b-col>
                     <b-btn block href="#" v-b-toggle.tagsaccordion variant="info"><h3>Tags</h3></b-btn>
                         <b-collapse id="tagsaccordion" accordion="tags-accordion" role="tabpanel">
@@ -93,6 +92,28 @@
                         </b-collapse>
                 </b-col>
             </b-row>
+            <b-row class="text-center pt-5">
+                <b-col>
+
+                    <div v-if="deleteConfirm.isPossible">
+                        <b-btn variant="link" class="text-danger"
+                        @click="deleteConfirm.userConfirm = !deleteConfirm.userConfirm">
+                        <b>DELETE ALL UPLOADED TRANSACTIONS</b>
+                    </b-btn>
+
+                        <div v-if="deleteConfirm.userConfirm">
+                            <p class="lead">Are you sure?</p>
+                            <b-btn variant="danger"
+                            @click="deleteTransactions()">
+                            Delete
+                        </b-btn>
+
+                        </div>
+                    <p>This will not delete any of your tags, or categories. Just the transaction records that were uploaded.</p>
+                    </div>
+
+                </b-col>
+            </b-row>
         </b-container>
   </div>
 </template>
@@ -105,6 +126,7 @@ export default{
     data () {
         return {
             transactions: null,
+            deleteConfirm: {isPossible: null, userConfirm: false},
             fields: [
                 {
                     key: "name",
@@ -127,6 +149,24 @@ export default{
         }
     },
     methods:{
+        deleteTransactions: function(){
+            api().delete('transactions/all')
+                .then(response => {
+                    if (response.status === 200){
+                        this.clientResponseClass = 'success text-center';
+                        this.clientResponse = 'Successfully deleted!';
+                        setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
+                        this.deleteConfirm.userConfirm = false
+                        this.setupDashboard();
+                    }
+                })
+                .catch(() => {
+                    this.clientResponseClass = 'danger text-center';
+                    this.clientResponse = 'There was an issue!';
+                    setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
+                    this.setupDashboard();
+                })
+        },
         mutateNumber: function(num){
             if (num > 0){
                 return num.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -278,6 +318,7 @@ export default{
         setupDashboard: function(){
             axios.all([this.getTransactions(), this.getTags(), this.getCategories()])
                 .then(axios.spread((transactions, tags, categories) => {
+                    this.deleteConfirm.isPossible = Boolean(transactions.data.length);
                     this.tags = this.parseTransactions(tags.data, transactions.data);
                     this.categories = this.sumCategories(this.tags, categories.data);
                     this.clientCategories = categories.data
