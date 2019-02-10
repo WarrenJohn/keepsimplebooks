@@ -32,8 +32,6 @@ const todo = `
 - Encrypt financial data / annonymize user's financial data
 - Unit tests
 - Don't allow user to submit tag without first confirming its category has been added
-- Flair text for when things are empty (like no uploaded documents), etc..
-- SORTING Options: Add date range selection functionality to Dashboard.vue, Transactions.vue & History.vue, sort by alphabetical, etc..
 - Dashboard charts, money flow in and out
 \n
 CONSIDERATION:
