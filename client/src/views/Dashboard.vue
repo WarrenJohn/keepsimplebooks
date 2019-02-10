@@ -21,13 +21,13 @@
                                 <tr>
                                     <th scope="col" class="sorting"
                                         @click="sortAlpha()">
-                                        <i class="fas fa-arrows-alt-v"></i>
+                                        <i class="fas fa-arrows-alt-v pr-3"></i>
                                         Name
                                     </th>
                                     <th scope="col" class="sorting"
                                         @click="sortNumeric()">
                                         Amount
-                                        <i class="fas fa-arrows-alt-v"></i>
+                                        <i class="fas fa-arrows-alt-v pl-3"></i>
                                     </th>
                                 </tr>
                             </thead>
