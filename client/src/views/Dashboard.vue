@@ -94,12 +94,6 @@
                 </b-col>
             </b-row>
         </b-container>
-    <ul>
-        <li>Send to accountant function</li>
-        <ul>
-            <li>Send summary with option to include full breakdown</li>
-        </ul>
-    </ul>
   </div>
 </template>
 

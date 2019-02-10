@@ -28,15 +28,20 @@ const todo = `
 
     FEATURES / TO DO:\x1b[0m\x1b[47m
 \x1b[30m
-- Considering: interactive test for users to try before register
 - Delete all transactions option for user
 - Encrypt financial data / annonymize user's financial data
 - Unit tests
 - Don't allow user to submit tag without first confirming its category has been added
-- Consideration: making current categories into subcategories to allow for more encapsulation of the data. i.e. grouping categories.
 - Flair text for when things are empty (like no uploaded documents), etc..
 - SORTING Options: Add date range selection functionality to Dashboard.vue, Transactions.vue & History.vue, sort by alphabetical, etc..
 - Dashboard charts, money flow in and out
+\n
+CONSIDERATION:
+- making current categories into subcategories to allow for more encapsulation of the data. i.e. grouping categories.
+- interactive test for users to try before register
+- make 'add tag' box 'sticky' on transactions page
+- Send to accountant function
+-- Send summary with option to include full breakdown
 \x1b[0m`;
 
 m.keepsimple_db.authenticate()

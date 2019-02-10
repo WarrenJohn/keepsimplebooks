@@ -1,6 +1,7 @@
 <template>
     <div id="transactions">
         <b-container fluid>
+            <!-- {{info}} -->
             <b-row class="m-3">
                 <b-col sm="4" class="p-5">
                     <div>
@@ -47,8 +48,15 @@
                         <table class="table table-hover table-sm" style="table-layout:fixed">
                             <thead>
                                 <tr class="d-flex">
-                                    <th scope="col" class="col-10">Description</th>
-                                    <th scope="col" class="col-1">#</th>
+                                    <th scope="col" class="col-10"
+                                        @click="sortAlpha()">
+                                        <i class="fas fa-arrows-alt-v pr-3"></i>
+                                        Description
+                                    </th>
+                                    <th scope="col" class="col-1"
+                                        @click="sortNumeric()">
+                                        #<i class="fas fa-arrows-alt-v pl-3"></i>
+                                </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -112,6 +120,8 @@ export default{
             tag: { category: '', description: '', amount: '', user: '' },
             postedTags: Array(),
             info: null,
+            alphaSort: false,
+            numericSort: false,
             clientResponse: null,
             clientResponseClass: null
         }
@@ -213,7 +223,7 @@ export default{
             });
             sortedDescriptions.forEach(item => {
                 sortedTransactions.push({
-                    // This is the main 'transaction' that is used for the table accordion
+                    // This is the main 'transaction' that is used for the table
                     // all other transactions with the same description (but potentially different amounts)
                     // are stored in the transactions array in this object
                     id: '',
@@ -239,6 +249,62 @@ export default{
             });
             return sortedTransactions;
         },
+        sortAlpha: function(){
+            // sorting functionality for the table
+            if(this.alphaSort){
+                return this.info.reverse()
+            }
+            let nameArray;
+            let indexArray = Array();
+            let newTransactions = Array();
+            nameArray = this.info
+                .map(line => (line.name))
+                .sort()
+            // using this type of loop as the break is needed to prevent the array from duplicating itself each time the function is called
+            for (let nm of nameArray){
+                for (let line of this.info){
+                    if(nm == line.name){
+                        indexArray.push(this.info.indexOf(line));
+                        break;
+                    }
+                }
+            }
+            indexArray.forEach(index => {
+                newTransactions.push(this.info[index])
+            })
+            this.numericSort = false;
+            this.alphaSort = true;
+            this.info = newTransactions;
+        },
+        sortNumeric: function(){
+            // sorting functionality for the table
+            if(this.numericSort){
+                return this.info.reverse()
+            }
+            let cntArray;
+            let indexArray = Array()
+            let newTransactions = Array();
+
+            // name passed in otherwise 2 identical amounts from different categories
+            // will cause all of them to have the same name when the index is pushed
+            cntArray = this.info.map(line => ([line.name, line.count]))
+            cntArray.sort((a ,b) => (b[1]-a[1]))
+            // using this type of loop as the break is needed to prevent the array from duplicating itself each time the function is called
+            for (let item of cntArray){
+                for (let line of this.info){
+                    if(item[1] === line.count && item[0] == line.name){
+                        indexArray.push(this.info.indexOf(line))
+                        break;
+                    }
+                }
+            }
+            indexArray.forEach(index => {
+                newTransactions.push(this.info[index])
+            })
+            this.alphaSort = false;
+            this.numericSort = true;
+            this.info = newTransactions;
+        },
         getTransactions: function(){
             return api().get('transactions');
         },
@@ -252,6 +318,8 @@ export default{
                     this.userTags = tags.data;
                     parsedTransactions = this.filterTags(transactions.data, tags.data);
                     this.info = this.sortTransactions(parsedTransactions);
+                    // sort table numerically descending to start                    
+                    this.sortNumeric()
                 }))
                 .catch(() => {
                     this.$store.dispatch('logoutUser');
