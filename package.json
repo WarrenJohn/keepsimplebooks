@@ -33,7 +33,7 @@
   "scripts": {
     "start": "node init.js",
     "dev": "nodemon init.js",
-    "watch": "jest --watch *.js",
+    "watch": "jest --watchAll *.test.js",
     "test": "jest"
   },
   "repository": {
