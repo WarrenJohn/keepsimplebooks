@@ -3,7 +3,7 @@ uploads/
 instance/
 node_modules/
 accountactivity.*
-test.*
+ignore.*
 __pycache__
 accountactivity.*
 *.txt

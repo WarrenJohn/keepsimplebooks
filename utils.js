@@ -25,7 +25,7 @@ module.exports.registerUser = user => {
     if (user.password !== user.confirmPassword){
         errors.push('Passwords do not match!');
     }
-    if (user.password.length < 4){
+    if (user.password.length <= 4){
         errors.push('Password must be at least 5 characters!');
     }
 
