@@ -31,9 +31,9 @@ const todo = `
 - Encrypt financial data / annonymize user's financial data
 - Unit tests
 - Don't allow user to submit tag without first confirming its category has been added
-- Dashboard charts, money flow in and out
 \n
 CONSIDERATION:
+- Dashboard charts, money flow in and out
 - ability to ignore/hide transactions
 -- might cause too much conflict with the tags.
 -- might be better to just allow them to delete the transactions instead of tracking & hiding them
