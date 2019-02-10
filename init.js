@@ -32,7 +32,7 @@ const todo = `
 - Unit tests
 - Don't allow user to submit tag without first confirming its category has been added
 - express-rate-limit adjustment / removal on delete API routes
-\n
+
 CONSIDERATION:
 - Dashboard charts, money flow in and out
 - making current categories into subcategories to allow for more encapsulation of the data. i.e. grouping categories.
