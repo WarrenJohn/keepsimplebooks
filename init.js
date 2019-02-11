@@ -44,8 +44,6 @@ const todo = `
 
     FEATURES / TO DO:\x1b[0m\x1b[47m
 \x1b[30m
-- Unit tests
-- Don't allow user to submit tag without first confirming its category has been added
 
 CONSIDERATION:
 - Dashboard charts, money flow in and out
