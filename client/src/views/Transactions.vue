@@ -150,6 +150,7 @@ export default{
                         this.clientResponse = 'Successfully deleted!';
                         setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
                         this.numericSort = false;
+                        this.alphaSort = false;
                         this.setupTransactionsPage();
                     }
                 })
