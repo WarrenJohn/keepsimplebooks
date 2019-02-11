@@ -214,6 +214,7 @@ module.exports = app => {
             // removing extra spaces to normalize data
             tag.description = tag.description.replace(/ +(?= )/g, '');
             tag.amount = tag.amount.replace(/ /g, '');
+            tag.user = token.email;
             m.insertRowTag(tag)
             .then(response => {
                 res.status(201).send(response);

@@ -87,9 +87,8 @@ export default {
                             this.options = response.data.map(object => {
                                 if (object.name === category.category.toUpperCase()){
                                     return {value: object.name, text: object.name.toUpperCase(), selected: true}
-                                }else{
-                                    return {value: object.name, text: object.name.toUpperCase(), selected: false}
                                 }
+                                return {value: object.name, text: object.name.toUpperCase(), selected: false}
                             }
                             );
                         });

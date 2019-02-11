@@ -132,6 +132,7 @@ export default{
         return {
             allTags: Array(),
             userTags: Array(),
+            categories: null,
             tag: { category: '', description: '', amount: '', user: '' },
             postedTags: Array(),
             info: null,
@@ -171,25 +172,36 @@ export default{
                 }
             })
         },
-        validateTag: function(){
+        validateTag: async function(){
+            // get categories before validation
+            let categories = await api().get('categories')
+            categories = categories.data.map(category => (category.name))
+            const userCategoryExists = categories.indexOf(this.tag.category.toUpperCase());
             // validate user created tag
-                if (!this.tag.category){
-                    this.clientResponseClass = 'warning text-center';
-                    this.clientResponse = 'Category is required!';
-                    return;
-                }
-                if (!this.tag.description && !this.tag.amount){
-                    this.clientResponseClass = 'warning text-center';
-                    this.clientResponse = 'Description or Amount are required!';
-                    return;
-                }
-                if (this.tag.category )
-                if (this.tag.description || !this.tag.amount) {
-                    return this.addTag();
-                }
-                if (!this.tag.description || this.tag.amount) {
-                    return this.addTag();
-                }
+            if (!this.tag.category){
+                this.clientResponseClass = 'warning text-center';
+                this.clientResponse = 'Category is required!';
+                setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
+                return;
+            }
+            if (userCategoryExists === -1){
+                this.clientResponseClass = 'warning text-center';
+                this.clientResponse = 'Category must be added first!';
+                setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
+                return;
+            }
+            if (!this.tag.description && !this.tag.amount){
+                this.clientResponseClass = 'warning text-center';
+                this.clientResponse = 'Description or Amount are required!';
+                setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
+                return;
+            }
+            if (this.tag.description || !this.tag.amount) {
+                return this.addTag();
+            }
+            if (!this.tag.description || this.tag.amount) {
+                return this.addTag();
+            }
         },
         addTag: function(){
             this.tag.description = this.tag.description.toUpperCase()
