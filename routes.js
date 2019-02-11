@@ -14,10 +14,6 @@ const jwtCert = process.env.JWT_SECRET_KEY;
 
 
 module.exports = app => {
-    app.get('/', (req, res) =>{
-        res.status(200).send('Index');
-        }
-    );
 
     // Users: registering, logging in and modifying users
     app.get('/users', u.hasToken, (req, res) =>{
@@ -168,7 +164,10 @@ module.exports = app => {
         if (token){
             m.deleteOne(req.params.id, token.email)
                 .then(() => {
-                    res.status(200).send();                    
+                    res.status(200).send();
+                })
+                .catch(() => {
+                    res.status(500).send()
                 })
         }else{
             res.status(403).send();

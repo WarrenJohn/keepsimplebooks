@@ -117,7 +117,7 @@ return Users.sync()
         return {user, created};
     })
     .catch(err => {
-        console.log("Create User Category Error: ", err);
+        throw new Error("Create User Category Error: ", err);
         });
     });
 }
@@ -128,7 +128,7 @@ module.exports.fetchUser = query => {
                 return data;
             })
             .catch(err => {
-                console.log('Get User Error: ', err);
+                throw new Error('Get User Error: ', err);
             });
 }
 // // // // // // // // // // // // // // // // // // // // // // // //
@@ -142,7 +142,7 @@ module.exports.getUserCategories = query => {
             return data;
         })
         .catch(err => {
-            console.log("Get User Category Error: ", err);
+            throw new Error("Get User Category Error: ", err);
             });
     };
 
@@ -159,7 +159,7 @@ module.exports.createUserCategory = (object, user) => {
             return {user, created};
         })
         .catch(err => {
-            console.log("Create User Category Error: ", err);
+            throw new Error("Create User Category Error: ", err);
             });
         });
     };
@@ -198,7 +198,7 @@ const userTransactions = user => {
             return transactions;
         })
         .catch(err => {
-            console.log("Get Transactions Error: ", err);
+            throw new Error("Get Transactions Error: ", err);
         });
     };
 
@@ -226,7 +226,7 @@ module.exports.insertBulkRowsBank = object_array => {
             return Bank.bulkCreate(object_array);
         })
         .catch(err => {
-            console.log("Insert Bulk Rows(Transactions) Error: ", err);
+            throw new Error("Insert Bulk Rows(Transactions) Error: ", err);
         });
     };
 
@@ -236,7 +236,7 @@ module.exports.insertRowBank = object =>{
             return Bank.create(object);
         })
         .catch(err => {
-            console.log(err);
+            throw new Error(err);
         });
     };
 
@@ -257,7 +257,7 @@ module.exports.insertRowTag = object =>{
             return {tag, created};
         })
         .catch(err => {
-            console.log("Insert Row Tags Error: ", err);
+            throw new Error("Insert Row Tags Error: ", err);
         });
     };
 
@@ -269,7 +269,7 @@ module.exports.getUserTags = query => {
             return data;
         })
         .catch(err => {
-            console.log("Insert Single Row(Transactions) Error: ", err);
+            throw new Error("Insert Single Row(Transactions) Error: ", err);
         });
     };
 

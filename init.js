@@ -12,13 +12,29 @@ const port = process.env.PORT;
 // express-rate-limit
 app.enable("trust proxy"); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
 const rateLimit = require("express-rate-limit");
-const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 200 // limit each IP to 200 requests per windowMs
+
+const userLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000, // 1 hour
+    max: 15 // limit each IP to 300 requests per windowMs
 });
 
+const transactionsLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 300
+});
+
+const tagsLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000,
+    max: 300
+});
+
+app.use('/users/', userLimiter);
+app.use('/transactions/', transactionsLimiter);
+app.use('/tags/', tagsLimiter);
+app.use('/categories/', tagsLimiter);
+// //
+
 app.use(bodyParser.json());
-app.use(limiter);
 app.use(cors());
 
 require('./routes')(app);
@@ -30,7 +46,6 @@ const todo = `
 \x1b[30m
 - Unit tests
 - Don't allow user to submit tag without first confirming its category has been added
-- express-rate-limit adjustment / removal on delete API routes
 
 CONSIDERATION:
 - Dashboard charts, money flow in and out
