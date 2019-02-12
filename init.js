@@ -39,9 +39,9 @@ app.use(cors());
 
 if (process.env.NODE_ENV === 'production'){
     // static folder
-    app.use(express.static(__dirname + '/public/'))
+    app.use(express.static(__dirname + '/client/dist/'))
     // handle SPA
-    app.get(/.*/, (req, res) => res.sendFile(__dirname + '/client/index.html'))
+    app.get(/.*/, (req, res) => res.sendFile(__dirname + '/client/dist/index.html'))
 }
 
 require('./routes')(app);
