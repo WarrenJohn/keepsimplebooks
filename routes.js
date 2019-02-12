@@ -15,48 +15,104 @@ const jwtCert = process.env.JWT_SECRET_KEY;
 
 module.exports = app => {
 
+// GET
     // Users: registering, logging in and modifying users
-    app.get('/users', u.hasToken, (req, res) =>{
+    app.get('API/users', u.hasToken, (req, res) =>{
         const tokenReceived = req.headers.authorization.split(' ')[1];
-    const token = jwt.verify(tokenReceived, jwtCert);
+        const token = jwt.verify(tokenReceived, jwtCert);
         if (token){
             res.status(200).send('Users');
         }else{
             res.status(403).send()
         }
-        }
+    }
     );
 
-    app.post('/users/login', (req, res) => {
-        m.fetchUser(req.body.email)
-            .then(response => {
-                const user = response.dataValues;
-                if(response){
-                    bcrypt.compare(req.body.password, user.password, (err, bcryptResponse) => {
-                        if (bcryptResponse){
-                            // password is correct
-                            try{
-                                // 86400 seconds is 1 day
-                                // {expiresIn: 30}
-                                jwt.sign(user, jwtCert, {expiresIn: 86400}, (err, token) => {
-                                    res.status(200).send({result: true, token, user});
-                                });
-                            }catch(err){
-                                res.status(500).send();
-                            }
-                        }else{
-                            // password is incorrect
-                            res.status(200).send(false);
-                        }
-                    })
-                }
+    // Transactions uploading, viewing, tagging and deleting transactions
+    //  u.hasToken, verifyToken,
+    app.get('API/transactions', u.hasToken, (req, res) =>{
+        const tokenReceived = req.headers.authorization.split(' ')[1];
+        const token = jwt.verify(tokenReceived, jwtCert);
+        if (token){
+            // reversed to get newest transactions at the top
+            m.userTransactions(token.email)
+            .then(data => {
+                res.status(200).send(data.reverse());
             })
             .catch(err => {
-                res.status(500).send()
+                res.status(500).send();
+            });
+        }else{
+            res.status(403).send();
+        }
+    }
+    );
+
+    app.get('API/tags', u.hasToken, (req, res) => {
+        const tokenReceived = req.headers.authorization.split(' ')[1];
+        const token = jwt.verify(tokenReceived, jwtCert);
+        if (token){
+            m.getUserTags(token.email)
+            .then(response => {
+                res.status(200).send(response);
             })
+            .catch(() => {
+                res.status(500).send();
+            });
+        }else{
+            res.status(403).send();
+        }
+    })
+
+    // Expense categories: Adding, retrieving, removing
+    app.get('API/categories', u.hasToken, (req, res) =>{
+        const tokenReceived = req.headers.authorization.split(' ')[1];
+        const token = jwt.verify(tokenReceived, jwtCert);
+        if (token){
+            m.getUserCategories(token.email)
+            .then(data => {
+                res.status(200).send(data);
+            })
+            .catch(() => {
+                res.status(500).send();
+            });
+        }else{
+            res.status(403).send();
+        }
+    }
+    );
+
+// POST
+    app.post('API/users/login', (req, res) => {
+        m.fetchUser(req.body.email)
+        .then(response => {
+            const user = response.dataValues;
+            if(response){
+                bcrypt.compare(req.body.password, user.password, (err, bcryptResponse) => {
+                    if (bcryptResponse){
+                        // password is correct
+                        try{
+                            // 86400 seconds is 1 day
+                            // {expiresIn: 30}
+                            jwt.sign(user, jwtCert, {expiresIn: 86400}, (err, token) => {
+                                res.status(200).send({result: true, token, user});
+                            });
+                        }catch(err){
+                            res.status(500).send();
+                        }
+                    }else{
+                        // password is incorrect
+                        res.status(200).send(false);
+                    }
+                })
+            }
+        })
+        .catch(err => {
+            res.status(500).send()
+        })
     });
 
-    app.post('/users/register', (req, res) =>{
+    app.post('API/users/register', (req, res) =>{
         const user = req.body;
         let errors = u.registerUser(user);
 
@@ -89,40 +145,10 @@ module.exports = app => {
         }else{
             res.status(200).send({errors});
         }
-        }
-    );
-    app.patch('/users',  u.hasToken, (req, res) =>{
-        const tokenReceived = req.headers.authorization.split(' ')[1];
-    const token = jwt.verify(tokenReceived, jwtCert);
-        if (token){
-            res.status(200).send('Users');
-        }else{
-            res.status(403).send()
-        }
-        }
-    );
-
-    // Transactions uploading, viewing, tagging and deleting transactions
-    //  u.hasToken, verifyToken,
-    app.get('/transactions', u.hasToken, (req, res) =>{
-        const tokenReceived = req.headers.authorization.split(' ')[1];
-        const token = jwt.verify(tokenReceived, jwtCert);
-        if (token){
-            // reversed to get newest transactions at the top
-            m.userTransactions(token.email)
-            .then(data => {
-                res.status(200).send(data.reverse());
-            })
-            .catch(err => {
-                res.status(500).send();
-            });
-        }else{
-            res.status(403).send();
-        }
     }
     );
 
-    app.post('/transactions/upload', u.hasToken, upload.single('bank'), (req, res) => {
+    app.post('API/transactions/upload', u.hasToken, upload.single('bank'), (req, res) => {
         const tokenReceived = req.headers.authorization.split(' ')[1];
         const token = jwt.verify(tokenReceived, jwtCert);
         if (token){
@@ -158,55 +184,7 @@ module.exports = app => {
         }
     })
 
-    app.delete('/transactions:id', u.hasToken, (req, res) => {
-        const tokenReceived = req.headers.authorization.split(' ')[1];
-        const token = jwt.verify(tokenReceived, jwtCert);
-        if (token){
-            m.deleteOne(req.params.id, token.email)
-                .then(() => {
-                    res.status(200).send();
-                })
-                .catch(() => {
-                    res.status(500).send()
-                })
-        }else{
-            res.status(403).send();
-        }
-    })
-
-    app.delete('/transactions/all', u.hasToken, (req, res) => {
-        const tokenReceived = req.headers.authorization.split(' ')[1];
-        const token = jwt.verify(tokenReceived, jwtCert);
-        if (token){
-            m.deleteAll(token.email)
-                .then(response => {
-                    res.status(200).send();
-                })
-                .catch(() => {
-                    res.status(500).send()
-                })
-        }else{
-            res.status(403).send();
-        }
-    })
-
-    app.get('/tags', u.hasToken, (req, res) => {
-        const tokenReceived = req.headers.authorization.split(' ')[1];
-        const token = jwt.verify(tokenReceived, jwtCert);
-        if (token){
-            m.getUserTags(token.email)
-            .then(response => {
-                res.status(200).send(response);
-            })
-            .catch(() => {
-                res.status(500).send();
-            });
-        }else{
-            res.status(403).send();
-        }
-    })
-
-    app.post('/tags', u.hasToken, (req, res) =>{
+    app.post('API/tags', u.hasToken, (req, res) =>{
         const tokenReceived = req.headers.authorization.split(' ')[1];
         const token = jwt.verify(tokenReceived, jwtCert);
         if (token){
@@ -223,47 +201,10 @@ module.exports = app => {
         }else{
             res.status(403).send();
         }
-        }
-    );
-
-    app.delete('/tags/:id', u.hasToken, (req, res) =>{
-        const tokenReceived = req.headers.authorization.split(' ')[1];
-        const token = jwt.verify(tokenReceived, jwtCert);
-        if (token){
-            m.deleteUserTag(req.params.id, token.email)
-            .then(response => {
-                if (response === 1){
-                    res.status(200).send();
-                }else if (response === 0){
-                    res.status(404).send();
-                }else{
-                    res.status(500).send();
-                }
-            })
-        }else{
-            res.status(403).send();
-        }
-        }
-    );
-
-    // Expense categories: Adding, retrieving, removing
-    app.get('/categories', u.hasToken, (req, res) =>{
-        const tokenReceived = req.headers.authorization.split(' ')[1];
-        const token = jwt.verify(tokenReceived, jwtCert);
-        if (token){
-            m.getUserCategories(token.email)
-            .then(data => {
-                res.status(200).send(data);
-            })
-            .catch(() => {
-                res.status(500).send();
-            });
-        }else{
-            res.status(403).send();
-        }
     }
     );
-    app.post('/categories', u.hasToken, (req, res) =>{
+
+    app.post('API/categories', u.hasToken, (req, res) =>{
         const tokenReceived = req.headers.authorization.split(' ')[1];
         const token = jwt.verify(tokenReceived, jwtCert);
         if (token){
@@ -280,9 +221,63 @@ module.exports = app => {
         }else{
             res.status(403).send();
         }
-        }
+    }
     );
-    app.delete('/categories/:id', u.hasToken, (req, res) =>{
+
+// DELETE
+    app.delete('API/transactions:id', u.hasToken, (req, res) => {
+        const tokenReceived = req.headers.authorization.split(' ')[1];
+        const token = jwt.verify(tokenReceived, jwtCert);
+        if (token){
+            m.deleteOne(req.params.id, token.email)
+            .then(() => {
+                res.status(200).send();
+            })
+            .catch(() => {
+                res.status(500).send()
+            })
+        }else{
+            res.status(403).send();
+        }
+    })
+
+    app.delete('API/transactions/all', u.hasToken, (req, res) => {
+        const tokenReceived = req.headers.authorization.split(' ')[1];
+        const token = jwt.verify(tokenReceived, jwtCert);
+        if (token){
+            m.deleteAll(token.email)
+            .then(response => {
+                res.status(200).send();
+            })
+            .catch(() => {
+                res.status(500).send()
+            })
+        }else{
+            res.status(403).send();
+        }
+    })
+
+    app.delete('API/tags/:id', u.hasToken, (req, res) =>{
+        const tokenReceived = req.headers.authorization.split(' ')[1];
+        const token = jwt.verify(tokenReceived, jwtCert);
+        if (token){
+            m.deleteUserTag(req.params.id, token.email)
+            .then(response => {
+                if (response === 1){
+                    res.status(200).send();
+                }else if (response === 0){
+                    res.status(404).send();
+                }else{
+                    res.status(500).send();
+                }
+            })
+        }else{
+            res.status(403).send();
+        }
+    }
+    );
+
+    app.delete('API/categories/:id', u.hasToken, (req, res) =>{
         const tokenReceived = req.headers.authorization.split(' ')[1];
         const token = jwt.verify(tokenReceived, jwtCert);
         if (token){
@@ -303,6 +298,18 @@ module.exports = app => {
         }else{
             res.status(403).send();
         }
+    }
+    );
+
+// PATCH
+    app.patch('API/users',  u.hasToken, (req, res) =>{
+        const tokenReceived = req.headers.authorization.split(' ')[1];
+        const token = jwt.verify(tokenReceived, jwtCert);
+        if (token){
+            res.status(200).send('Users');
+        }else{
+            res.status(403).send()
         }
+    }
     );
 };
