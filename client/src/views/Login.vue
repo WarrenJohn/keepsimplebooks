@@ -38,7 +38,7 @@ export default{
     methods: {
         submitLogin: function(){
             if (this.email && this.password){
-                axios.post('http://localhost:5000/users/login', {email: this.email, password: this.password})
+                axios.post('/API/users/login', {email: this.email, password: this.password})
                     .then(response => {
                         if (response.data.result){
                             this.$store.dispatch('setToken', response.data.token)
