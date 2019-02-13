@@ -156,7 +156,7 @@ export default{
                         this.clientResponseClass = 'success text-center';
                         this.clientResponse = 'Successfully deleted!';
                         setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
-                        this.deleteConfirm.userConfirm = false
+                        this.deleteConfirm.userConfirm = false;
                         this.setupDashboard();
                     }
                 })
@@ -169,9 +169,9 @@ export default{
         },
         mutateNumber: function(num){
             if (num > 0){
-                return num.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                return num.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             }
-            return Math.abs(num).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            return Math.abs(num).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         },
         removeTag: function(id){
             api().delete(`tags/${id}`)
@@ -226,7 +226,7 @@ export default{
                         );
 
                 }if(!tag.amount && tag.description){
-                    tag.transactions = transactions.filter(transaction => transaction.description.toUpperCase().includes(tag.description.toUpperCase()))
+                    tag.transactions = transactions.filter(transaction => transaction.description.toUpperCase().includes(tag.description.toUpperCase()));
                 }
             }
             );
@@ -252,14 +252,14 @@ export default{
         sortAlpha: function(){
             // sorting functionality for the table
             if(this.alphaSort){
-                return this.categories.reverse()
+                return this.categories.reverse();
             }
             let nameArray;
             let indexArray = Array();
             let newCategories = Array();
             nameArray = this.categories
                 .map(category => (category.name))
-                .sort()
+                .sort();
             // using this type of loop as the break is needed to prevent the array from duplicating itself each time the function is called
             for (let nm of nameArray){
                 for (let category of this.categories){
@@ -270,7 +270,7 @@ export default{
                 }
             }
             indexArray.forEach(index => {
-                newCategories.push(this.categories[index])
+                newCategories.push(this.categories[index]);
             })
             this.numericSort = false;
             this.alphaSort = true;
@@ -279,41 +279,41 @@ export default{
         sortNumeric: function(){
             // sorting functionality for the table
             if(this.numericSort){
-                return this.categories.reverse()
+                return this.categories.reverse();
             }
             let amtArray;
-            let indexArray = Array()
+            let indexArray = Array();
             let newCategories = Array();
 
             // name passed in otherwise 2 identical amounts from different categories
             // will cause all of them to have the same name when the index is pushed
-            amtArray = this.categories.map(category => ([category.name, category.sum]))
+            amtArray = this.categories.map(category => ([category.name, category.sum]));
 
-            amtArray.sort((a ,b) => (a[1]-b[1]))
+            amtArray.sort((a ,b) => (a[1]-b[1]));
             // using this type of loop as the break is needed to prevent the array from duplicating itself each time the function is called
             for (let item of amtArray){
                 for (let category of this.categories){
                     if(item[1] === category.sum && item[0] == category.name){
-                        indexArray.push(this.categories.indexOf(category))
+                        indexArray.push(this.categories.indexOf(category));
                         break;
                     }
                 }
             }
             indexArray.forEach(index => {
-                newCategories.push(this.categories[index])
+                newCategories.push(this.categories[index]);
             })
             this.alphaSort = false;
             this.numericSort = true;
             this.categories = newCategories;
         },
         getTransactions: function(){
-            return api().get('transactions')
+            return api().get('transactions');
         },
         getTags: function(){
-            return api().get('tags')
+            return api().get('tags');
         },
         getCategories: function(){
-            return api().get('categories')
+            return api().get('categories');
         },
         setupDashboard: function(){
             axios.all([this.getTransactions(), this.getTags(), this.getCategories()])
@@ -321,16 +321,17 @@ export default{
                     this.deleteConfirm.isPossible = Boolean(transactions.data.length);
                     this.tags = this.parseTransactions(tags.data, transactions.data);
                     this.categories = this.sumCategories(this.tags, categories.data);
-                    this.clientCategories = categories.data
+                    this.clientCategories = categories.data;
                     this.total = this.categories
                         .map(category => (category.sum))
-                        .reduce((acc, cv) => (acc + cv))
+                        .reduce((acc, cv) => (acc + cv));
                     // sort table alphabetically to start
-                    this.sortAlpha()
+                    this.sortAlpha();
                 }))
-                .catch(() => {
-                    this.$store.dispatch('logoutUser');
-                    this.$router.push('login')
+                .catch((err) => {
+                    console.log(err);
+                    // this.$store.dispatch('logoutUser');
+                    // this.$router.push('login');
                 });
         }
     },
