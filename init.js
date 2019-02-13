@@ -49,9 +49,7 @@ const todo = `
     FEATURES / TO DO:\x1b[0m\x1b[47m
 \x1b[30m
 PRODUCTION ERRORS:
-- Dashboard.vue:
-    TypeError: "reduce of empty array with no initial value"
--Categories being added multiple times.
+-sorting not working right after adding a tag
 -routes not being handled correctly on refresh or when directly navigating to them
 -Too much padding on tags and categories accordions (Dashboard.vue)
 
