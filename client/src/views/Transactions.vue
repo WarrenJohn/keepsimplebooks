@@ -5,7 +5,32 @@
             <b-row class="m-3">
                 <b-col sm="4" class="p-5">
                     <div>
-                        <categories v-model="tag.category"/>
+                        <!-- Categories -->
+                        <b-btn v-b-toggle.collapse1 size="sm" variant="link sm">Add expense category</b-btn>
+                        <b-collapse id=collapse1 class="mt-2">
+                            <div class="input-group">
+                            <input
+                                v-model="tag.category"
+                                class="form-control" type="text" placeholder="New expense category" />
+                            <b-button variant="success"
+                                size="sm"
+                                @click="validateCategory()">+
+                            </b-button>
+                            </div>
+                        </b-collapse>
+                        <select
+                        :value="tag.category"
+                        class="form-control" name="categories">
+                            <option disabled selected value>Please select an option</option>
+
+                            <option
+                            v-for="(option, index) in categoryOptions"
+                            :value="option.text"
+                            :selected="option.selected"
+                            :key="index+'-category'">
+                                {{option.text}}
+                            </option>
+                        </select>
 
                         <b-form-input type="text"
                             placeholder="Description"
@@ -47,6 +72,7 @@
                         Double click the remove button, to delete that transaction. You can remove all transactions in the dashboard.
                     </p>
                     <div class="container">
+                        <!-- Transactions -->
                         <table class="table table-hover table-sm" style="table-layout:fixed">
                             <thead>
                                 <tr class="d-flex">
@@ -121,20 +147,18 @@
 <script>
 import axios from 'axios';
 import api from '../services/api';
-import Categories from '@/components/Categories.vue';
 
 export default{
     name: 'transactions',
     components: {
-      Categories
-  },
+    },
     data () {
         return {
+            categoryOptions: null,
             allTags: Array(),
             userTags: Array(),
             categories: null,
             tag: { category: '', description: '', amount: '', user: '' },
-            postedTags: Array(),
             info: null,
             alphaSort: false,
             numericSort: false,
@@ -143,6 +167,52 @@ export default{
         }
     },
     methods:{
+        validateCategory: function(){
+            const categoryLen = this.tag.category.length;
+            for (let i = 0; i < categoryLen; i++){
+                if (this.tag.category[i] !== " "){
+                    this.addCategory();
+                }
+            }
+            this.clientResponseClass = "warning text-center";
+            this.clientResponse = "Category cannot be blank!";
+            setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
+        },
+        addCategory: function(){
+            api()
+                .post('categories', {category: this.tag.category.toUpperCase()})
+                .then(response => {
+                    if(response.data.created){
+                        // referencing the response from findOrCreate method of sequelize
+                        this.clientResponseClass = "success text-center";
+                        this.clientResponse = "Category successfully added!";
+                        setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
+                    }else{
+                        this.clientResponseClass = "warning text-center";
+                        this.clientResponse = "Category already exists!";
+                        setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
+                    }
+                })
+                .then(() => {
+                    api()
+                        .get('categories')
+                        .then(response => {
+                            this.categoryOptions = response.data.map(object => {
+                                if (object.name === this.tag.category.toUpperCase()){
+                                    // auto select category that was just added
+                                    return {value: object.name, text: object.name.toUpperCase(), selected: true}
+                                }
+                                return {value: object.name, text: object.name.toUpperCase(), selected: false}
+                            }
+                            );
+                        });
+                })
+                .catch(() => {
+                    this.clientResponseClass = "danger text-center";
+                    this.clientResponse = "Something went wrong!";
+                    setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
+                })
+            },
         deleteOneTransaction: function(id){
             api().delete(`/transactions${id}`)
                 .then(response => {
@@ -351,6 +421,9 @@ export default{
             this.numericSort = true;
             this.info = newTransactions;
         },
+        getCategories: function(){
+            return api().get('categories');
+        },
         getTransactions: function(){
             return api().get('transactions');
         },
@@ -358,8 +431,9 @@ export default{
             return api().get('tags');
         },
         setupTransactionsPage: function(){
-            axios.all([this.getTransactions(), this.getTags()])
-                .then(axios.spread((transactions, tags) => {
+            axios.all([this.getTransactions(), this.getTags(), this.getCategories()])
+                .then(axios.spread((transactions, tags, categories) => {
+                    this.categoryOptions = categories.data.map(object => ({value: object.name, text: object.name.toUpperCase()}))
                     let parsedTransactions = transactions.data;
                     this.userTags = tags.data;
                     parsedTransactions = this.filterTags(transactions.data, tags.data);

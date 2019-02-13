@@ -52,7 +52,7 @@ PRODUCTION ERRORS:
 - Dashboard.vue:
     TypeError: "reduce of empty array with no initial value"
 -Categories being added multiple times.
--routes not being handled correctly on refresh or when directly navigating to them 
+-routes not being handled correctly on refresh or when directly navigating to them
 -Too much padding on tags and categories accordions (Dashboard.vue)
 
 CONSIDERATION:
