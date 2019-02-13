@@ -127,16 +127,6 @@ export default{
         return {
             transactions: null,
             deleteConfirm: {isPossible: null, userConfirm: false},
-            fields: [
-                {
-                    key: "name",
-                    sortable: true
-                },
-                {
-                    key: "amount",
-                    sortable: true
-                }
-            ],
             categories: Array(),
             alphaSort: false,
             numericSort: false,
@@ -322,16 +312,18 @@ export default{
                     this.tags = this.parseTransactions(tags.data, transactions.data);
                     this.categories = this.sumCategories(this.tags, categories.data);
                     this.clientCategories = categories.data;
-                    this.total = this.categories
-                        .map(category => (category.sum))
-                        .reduce((acc, cv) => (acc + cv));
+
+                    if (this.categories.length !== 0){
+                        this.total = this.categories
+                            .map(category => (category.sum))
+                            .reduce((acc, cv) => (acc + cv));
+                    }
                     // sort table alphabetically to start
                     this.sortAlpha();
                 }))
-                .catch((err) => {
-                    console.log(err);
-                    // this.$store.dispatch('logoutUser');
-                    // this.$router.push('login');
+                .catch(() => {
+                    this.$store.dispatch('logoutUser');
+                    this.$router.push('login');
                 });
         }
     },
