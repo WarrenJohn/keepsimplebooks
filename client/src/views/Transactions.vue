@@ -19,7 +19,7 @@
                             </div>
                         </b-collapse>
                         <select
-                        :value="tag.category"
+                        v-model="tag.category"
                         class="form-control" name="categories">
                             <option disabled selected value>Please select an option</option>
 
@@ -155,6 +155,7 @@ export default{
     data () {
         return {
             categoryOptions: null,
+            categorySelected: '',
             allTags: Array(),
             userTags: Array(),
             categories: null,
@@ -290,6 +291,8 @@ export default{
                     }
                 })
                 .then(() => {
+                    this.numericSort = false;
+                    this.alphaSort = false;
                     this.setupTransactionsPage();
                 })
                 .catch(() => {
