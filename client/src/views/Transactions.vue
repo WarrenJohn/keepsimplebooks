@@ -201,7 +201,7 @@ export default{
                             this.categoryOptions = response.data.map(object => {
                                 if (object.name === this.tag.category.toUpperCase()){
                                     // auto select category that was just added
-                                    return {value: object.name, text: object.name.toUpperCase(), selected: true}
+                                    this.tag.category = object.name.toUpperCase();
                                 }
                                 return {value: object.name, text: object.name.toUpperCase(), selected: false}
                             }

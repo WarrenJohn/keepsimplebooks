@@ -7,6 +7,7 @@
             <h3
                 v-else
                 class="text-danger text-center pb-5">Net total $({{  netTotal  }})</h3>
+
             <b-row>
                 <b-col></b-col>
                 <b-col cols="8">
@@ -16,7 +17,7 @@
                         </b-alert>
                     </div>
                     <b-row>
-                        <table v-if="categories.length > 0" class="m-auto table hover">
+                        <table v-if="categories.length > 0 && !hideMain" class="m-auto table hover">
                             <thead>
                                 <tr>
                                     <th scope="col" class="sorting"
@@ -37,14 +38,20 @@
                                     <td v-else class="">${{ mutateNumber(category.sum) }}</td>
                                 </tr>
                         </table>
-                        <h2 v-else class="text-center">Nothing here yet!</h2>
+                        <h2 v-else-if="categories.length === 0" class="text-center">Nothing here yet!</h2>
                     </b-row>
                 </b-col>
-                <b-col></b-col>
+                <b-col class="p-2">
+                    <p v-if="!hideMain" @click="hideMain = !hideMain"><i class="far fa-eye-slash"></i></p>
+                    <p v-if="hideMain" @click="hideMain = !hideMain"><i class="far fa-eye"></i></p>
+                </b-col>
             </b-row>
+
             <b-row class="text-center pt-5">
                 <b-col>
-                    <b-btn block href="#" v-b-toggle.tagsaccordion variant="info"><h3>Tags</h3></b-btn>
+                    <b-btn block href="#" v-b-toggle.tagsaccordion variant="link">
+                        <h4>Tags</h4>
+                    </b-btn>
                         <b-collapse id="tagsaccordion" accordion="tags-accordion" role="tabpanel">
                             <table class="table table-sm">
                                 <thead>
@@ -74,7 +81,7 @@
                         </b-collapse>
                 </b-col>
                 <b-col>
-                    <b-btn block href="#" v-b-toggle.catsaccordion variant="info"><h3>Categories</h3></b-btn>
+                    <b-btn block href="#" v-b-toggle.catsaccordion variant="link"><h4>Categories</h4></b-btn>
                         <b-collapse id="catsaccordion" accordion="cats-accordion" role="tabpanel">
                             <table class="table table-sm">
                                 <thead>
@@ -83,15 +90,16 @@
                                         <th></th>
                                     </tr>
                                 </thead>
-                                <tr v-for="(category, index) in clientCategories" :key="index+'_clientCategories'">
-                                    <td>{{ category.name.toUpperCase() }}</td>
-                                    <td><b-button class="btn-danger btn-sm"
-                                        @click="removeCategory(category.id)">remove</b-button></td>
+                                    <tr v-for="(category, index) in clientCategories" :key="index+'_clientCategories'">
+                                        <td>{{ category.name.toUpperCase() }}</td>
+                                        <td><b-button class="btn-danger btn-sm"
+                                            @click="removeCategory(category.id)">remove</b-button></td>
                                     </tr>
                                 </table>
                         </b-collapse>
                 </b-col>
             </b-row>
+
             <b-row class="text-center pt-5">
                 <b-col>
 
@@ -125,6 +133,7 @@ import api from '../services/api';
 export default{
     data () {
         return {
+            hideMain: false,
             transactions: null,
             deleteConfirm: {isPossible: null, userConfirm: false},
             categories: Array(),
