@@ -35,8 +35,7 @@ export default{
     methods: {
         onFileChanged (event) {
             const selectedFile = event.target.files[0];
-            const correctSize = selectedFile.size < 1000000;
-            if (selectedFile.name.split('.').pop() === 'csv' && selectedFile.type === 'application/vnd.ms-excel' && correctSize){
+            if (selectedFile.name.split('.').pop() === 'csv' && selectedFile.type === 'application/vnd.ms-excel'){
                 this.selectedFile = selectedFile;
             }
             else{
