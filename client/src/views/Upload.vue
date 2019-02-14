@@ -35,12 +35,12 @@ export default{
     methods: {
         onFileChanged (event) {
             const selectedFile = event.target.files[0];
-            if (selectedFile.name.split('.').pop() === 'csv' && selectedFile.type === 'application/vnd.ms-excel'){
+            if (selectedFile.type === 'application/vnd.ms-excel'){
                 this.selectedFile = selectedFile;
             }
             else{
                 this.clientResponseClass = 'danger text-center';
-                this.clientResponse = 'Wrong file type(.csv only) or file too large (1 mb limit)';
+                this.clientResponse = 'Wrong file type(.csv only)';
                 setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 10000);
             }
         },
