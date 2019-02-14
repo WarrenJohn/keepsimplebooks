@@ -1,40 +1,44 @@
 <template>
-  <div class="text-center">
-    <h1 class="p-4">Logo here</h1>
-    <b-container fluid class="text-center p-4">
-        <b-row class="mb-3">
+  <div class="text-center bg-light">
+    <b-container fluid class="text-center">
+        <b-row class="userinput">
             <b-col></b-col>
-            <b-col class=" mx-auto p-3">
-                <form>
-                    <input class="form-control" type="email" name="email" placeholder="Email" required
-                    v-model="email"/>
-                    <br />
-                    <input class="form-control" type="password" name="password" placeholder="Password" required
-                    v-model="password"/>
-                    <br />
-                    <input class="form-control" type="password" name="confirmpassword" placeholder="Confirm password" required
-                    v-model="confirmPassword"
-                    @change="pwMatch()"/>
+            <div class="card">
+                <b-col class=" mx-auto p-3">
+                    <img class="img-fluid" src="../assets/logo.png" style="width:auto; height: 5rem" />
+                    <h1 class="logo">keepsimplebooks</h1>
+                    <p class="lead">Register</p>
+                    <form>
+                        <input class="form-control" type="email" name="email" placeholder="Email" required
+                        v-model="email"/>
+                        <br />
+                        <input class="form-control" type="password" name="password" placeholder="Password" required
+                        v-model="password"/>
+                        <br />
+                        <input class="form-control" type="password" name="confirmpassword" placeholder="Confirm password" required
+                        v-model="confirmPassword"
+                        @change="pwMatch()"/>
 
-                    <div v-if="clientResponseClass" class="mt-3">
-                        <b-alert show :variant="clientResponseClass">
-                            {{ clientResponse }}
-                        </b-alert>
-                    </div>
-                    <div v-if="postErrors.length > 0" class="mt-3">
-                        <b-alert show variant="danger">
-                            <ul>
-                                <li v-for="(error, index) in postErrors" :key="index+'_errors'">
-                                    {{ error }}
-                                </li>
-                            </ul>
-                        </b-alert>
-                    </div>
+                        <div v-if="clientResponseClass" class="mt-3">
+                            <b-alert show :variant="clientResponseClass">
+                                {{ clientResponse }}
+                            </b-alert>
+                        </div>
+                        <div v-if="postErrors.length > 0" class="mt-3">
+                            <b-alert show variant="danger">
+                                <ul>
+                                    <li v-for="(error, index) in postErrors" :key="index+'_errors'">
+                                        {{ error }}
+                                    </li>
+                                </ul>
+                            </b-alert>
+                        </div>
 
-                    <button class="btn btn-success" type="button"
-                    @click="registerUser">Register</button>
-                </form>
-                </b-col>
+                        <button class="btn btn-success" type="button"
+                        @click="registerUser">Register</button>
+                    </form>
+                    </b-col>
+                </div>
                 <b-col></b-col>
             </b-row>
     </b-container>

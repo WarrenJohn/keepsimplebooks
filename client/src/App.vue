@@ -7,7 +7,7 @@
       crossorigin="anonymous">
 
     <b-navbar toggleable="md" variant="primary" type="dark" sticky>
-      <b-navbar-brand class="text-white" to="/">keepsimple</b-navbar-brand>
+      <b-navbar-brand class="text-white logo" to="/">KS</b-navbar-brand>
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
             <b-navbar-nav tag="h6">
@@ -65,7 +65,16 @@ export default {
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/css?family=Viga');
 @import url('https://fonts.googleapis.com/css?family=Quicksand');
+.userinput{
+    padding-top: 8rem;
+    padding-bottom: 15rem;
+}
+.logo{
+    font-family: 'Viga';
+    font-weight: bold;
+}
 #app{
     font-family: 'Quicksand'
 }

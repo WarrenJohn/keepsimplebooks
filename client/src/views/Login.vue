@@ -1,25 +1,29 @@
 <template>
     <div class="text-center">
-      <h1 class="p-4">Logo here</h1>
-      <b-container fluid class="text-center p-4">
-          <b-row class="mb-3">
-            <b-col></b-col>
-            <b-col class=" mx-auto p-3">
-                <input class="form-control" type="email" name="email" placeholder="Email"
-                v-model="email"/>
-                <input class="form-control" type="password" name="password" placeholder="Password"
-                v-model="password"/>
+      <b-container fluid class="text-center">
+              <b-row class="userinput">
+                  <b-col></b-col>
+                  <div class="card">
+                  <b-col class=" mx-auto p-3">
+                      <img class="img-fluid" src="../assets/logo.png" style="width:auto; height: 5rem" />
+                      <h1 class="logo">keepsimplebooks</h1>
+                      <p class="lead">Login</p>
+                      <input class="form-control" type="email" name="email" placeholder="Email"
+                      v-model="email"/>
+                      <input class="form-control" type="password" name="password" placeholder="Password"
+                      v-model="password"/>
 
-                <div v-if="clientResponseClass" class="mt-3">
-                    <b-alert show :variant="clientResponseClass">
-                        {{ clientResponse }}
-                    </b-alert>
-                </div>
-                <button class="btn btn-success mt-2" type="button"
-                @click="submitLogin()">Login</button>
-            </b-col>
-            <b-col></b-col>
-        </b-row>
+                      <div v-if="clientResponseClass" class="mt-3">
+                          <b-alert show :variant="clientResponseClass">
+                              {{ clientResponse }}
+                          </b-alert>
+                      </div>
+                      <button class="btn btn-success mt-2" type="button"
+                      @click="submitLogin()">Login</button>
+                  </b-col>
+              </div>
+                  <b-col></b-col>
+              </b-row>
     </b-container>
   </div>
 </template>
