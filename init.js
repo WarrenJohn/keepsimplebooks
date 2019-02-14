@@ -50,7 +50,6 @@ const todo = `
 \x1b[30m
 PRODUCTION ERRORS:
 -routes not being handled correctly on refresh or when directly navigating to them
--Too much padding on tags and categories accordions (Dashboard.vue)
 
 CONSIDERATION:
 - Dashboard charts, money flow in and out
