@@ -35,6 +35,7 @@ export default{
     methods: {
         onFileChanged (event) {
             const selectedFile = event.target.files[0];
+            console.log(selectedFile.type);
             if (selectedFile.type === 'application/vnd.ms-excel'){
                 this.selectedFile = selectedFile;
             }
