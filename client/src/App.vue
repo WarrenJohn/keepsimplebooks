@@ -7,7 +7,7 @@
       crossorigin="anonymous">
 
     <b-navbar toggleable="md" variant="primary" type="dark" sticky>
-      <b-navbar-brand class="text-white logo" to="/">KS</b-navbar-brand>
+      <b-navbar-brand class="text-white logo" to="/">keepsimplebooks</b-navbar-brand>
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
             <b-navbar-nav tag="h6">
