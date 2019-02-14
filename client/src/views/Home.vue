@@ -12,7 +12,7 @@
                     <b-btn variant="link" to="register">Get started now</b-btn>
             </b-col>
             <b-col class="text-center mt-5">
-                <img class="img-thumbnail img-fluid" src="../assets/keepsimple.jpg" />
+                <img class="img-thumbnail img-fluid" src="../assets/keepsimple-min.jpg" />
             </b-col>
         </b-row>
 
