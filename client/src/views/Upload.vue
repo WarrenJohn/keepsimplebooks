@@ -35,15 +35,15 @@ export default{
     methods: {
         onFileChanged (event) {
             const selectedFile = event.target.files[0];
-            console.log(selectedFile.type);
-            if (selectedFile.type === 'application/vnd.ms-excel'){
+            // const correctSize = selectedFile.size < 1000000;
+            // if (selectedFile.name.split('.').pop() === 'csv' && selectedFile.type === 'application/vnd.ms-excel' && correctSize){
                 this.selectedFile = selectedFile;
-            }
-            else{
-                this.clientResponseClass = 'danger text-center';
-                this.clientResponse = 'Wrong file type(.csv only)';
-                setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 10000);
-            }
+            // }
+            // else{
+            //     this.clientResponseClass = 'danger text-center';
+            //     this.clientResponse = 'Wrong file type(.csv only) or file too large (1 mb limit)';
+            //     setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 10000);
+            // }
         },
         onUpload() {
             if (!this.selectedFile){
