@@ -35,9 +35,6 @@ export default{
     methods: {
         onFileChanged (event) {
             const selectedFile = event.target.files[0];
-            // const fileName = selectedFile.name;
-            // console.log('name ',fileName);
-            // console.log('file ',selectedFile);
             const correctSize = selectedFile.size < 1000000;
             if (selectedFile.name.split('.').pop() === 'csv' && selectedFile.type === 'application/vnd.ms-excel' && correctSize){
                 this.selectedFile = selectedFile;
@@ -58,7 +55,6 @@ export default{
             }else{
                 const formData = new FormData()
                 formData.append('bank', this.selectedFile)
-                console.log(formData);
                 api().post('transactions/upload', formData)
                     .then(response => {
                         if (response.status === 201){
