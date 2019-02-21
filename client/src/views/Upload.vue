@@ -1,5 +1,7 @@
 <template>
   <div class="upload text-center">
+      <h1 class="text-danger mt-5">THIS IS FOR DEMONSTRATION PURPOSES ONLY</h1>
+      <h2 class="text-danger">DO NOT UPLOAD PERSONAL DATA</h2>
     <h1 class="mt-5">Upload your documents</h1>
     <div class="">
         <p class="lead">Make sure your columns are in the following order from left to right:</p>
