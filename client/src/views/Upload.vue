@@ -35,15 +35,20 @@ export default{
     methods: {
         onFileChanged (event) {
             const selectedFile = event.target.files[0];
-            // const correctSize = selectedFile.size < 1000000;
-            // if (selectedFile.name.split('.').pop() === 'csv' && selectedFile.type === 'application/vnd.ms-excel' && correctSize){
+            // const fileName = selectedFile.name;
+            // console.log('name ',fileName);
+            // console.log('file ',selectedFile);
+            const correctSize = selectedFile.size < 1000000;
+            if (selectedFile.name.split('.').pop() === 'csv' && selectedFile.type === 'application/vnd.ms-excel' && correctSize){
                 this.selectedFile = selectedFile;
-            // }
-            // else{
-            //     this.clientResponseClass = 'danger text-center';
-            //     this.clientResponse = 'Wrong file type(.csv only) or file too large (1 mb limit)';
-            //     setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 10000);
-            // }
+            }else if (selectedFile.name.split('.').pop() === 'csv' && selectedFile.type === 'text/csv' && correctSize){
+                this.selectedFile = selectedFile;
+            }
+            else{
+                this.clientResponseClass = 'danger text-center';
+                this.clientResponse = 'Wrong file type(.csv only) or file too large (1 mb limit)';
+                setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 10000);
+            }
         },
         onUpload() {
             if (!this.selectedFile){
@@ -53,6 +58,7 @@ export default{
             }else{
                 const formData = new FormData()
                 formData.append('bank', this.selectedFile)
+                console.log(formData);
                 api().post('transactions/upload', formData)
                     .then(response => {
                         if (response.status === 201){

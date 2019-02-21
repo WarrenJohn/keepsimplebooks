@@ -151,8 +151,31 @@ module.exports = app => {
     app.post('/API/transactions/upload', u.hasToken, upload.single('bank'), (req, res) => {
         const tokenReceived = req.headers.authorization.split(' ')[1];
         const token = jwt.verify(tokenReceived, jwtCert);
+        console.log(req.file.originalname, req.file.mimetype);
         if (token){
             if (req.file.originalname.split('.').pop() === 'csv' && req.file.mimetype === 'application/vnd.ms-excel'){
+                parse(req.file.buffer, {columns: false, trim: true}, (err, data) => {
+                    data.map(description => (
+                        // remove spaces in descriptions and re add them to make sure there are no double spaces
+                        description[1] = description[1].replace(/ +(?= )/g, '')
+                    ));
+                    // data is converted in an array of objects prior to db insertion
+                    m.insertBulkRowsBank(data.map(row => ({
+                        transaction_date: row[0],
+                        description: row[1],
+                        withdrawl: row[2],
+                        deposit: row[3],
+                        balance: row[4],
+                        user: token.email}))
+                    )
+                    .then(() => {
+                        res.status(201).send();
+                    })
+                    .catch(() => {
+                        res.status(500).send();
+                    })
+                });
+            }else if (req.file.originalname.split('.').pop() === 'csv' && req.file.mimetype === 'text/csv'){
                 parse(req.file.buffer, {columns: false, trim: true}, (err, data) => {
                     data.map(description => (
                         // remove spaces in descriptions and re add them to make sure there are no double spaces
