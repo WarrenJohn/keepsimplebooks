@@ -1,4 +1,4 @@
-# Keepsimplebooks
+# Keep simple books
 ## Simple book keeping app for generating balance sheets and P/L statements
 
 This app allows you to easily organise all your expenses. You set the categories and tags once, then upload your transactions as needed.
