@@ -6,15 +6,11 @@ This app allows you to easily organise all your expenses. You set the categories
 Obviously, all the transactions amounts and names below have been altered for this demonstration.
 
 ### Upload transactions
-
-
 ![alt text](howto/upload.png)
 
 Navigate to the 'Transactions' page.
 
 ### Start by adding a category
-
-
 ![alt text](howto/addcategory.png)
 
 Once the category is added, it will be automatically selected.
@@ -23,8 +19,6 @@ Once the category is added, it will be automatically selected.
 
 
 ### Tag a transaction that you want sorted under that category
-
-
 ![alt text](howto/transactions.png)
 
 You can see we have lots of recurring transactions from Allstate insurance, for an overhead view of our books this is useless. Let's get these 36
@@ -55,8 +49,6 @@ After adding these tags, I've removed all the car insurance payments from this s
 less than 2 minutes. The remaining transactions are for home insurance, which took another minute to add the appropriate tags for.
 
 ### Tagging by description
-
-
 If you have recurring deposits, or withdrawls that always contain the same set of words but the amounts are typically different you are able to tag
 the transaction by a substring.
 
@@ -85,14 +77,10 @@ substring 'RBC PYT MTG' and let the app deal with the rest.
 After adding the tag, you can see it's been handled.
 
 ### One time transactions
-
-
 One time transactions can be tracked by simply tagging the exact name and amount of the transactions under your preferred category.
 If you'd prefer to not track the transaction, you can double click the 'remove' button next to the transaction and it will be deleted from the database.
 
 ### Getting the net value
-
-
 You can also get the net gain or loss if you tag withdrawl transactions and deposit transactions under the same category.
 
 ![alt text](howto/acctbalrebate.png)
@@ -108,13 +96,17 @@ In the case of a rental property, you can tag the related transactions (rental i
 see what the net gain or loss is of that property very quickly.
 
 After navigating to the dashboard page you can view your generated balance sheet.
-|### Balance Sheet|### P/L Statement|
-|---|---|
-|![alt text](howto/balancesheet.png)|![alt text](howto/plstatement.png)|
-|An easy to read balance sheet is generated.|Since I tagged the condo fee's, mortgage payments, and all other associated costs and income I have effectively generated a Profit and Loss statement
-for this rental property.|
 
+### Balance Sheet:
+![alt text](howto/balancesheet.png)
 
+An easy to read balance sheet is generated.
+
+### P/L Statement:
+![alt text](howto/plstatement.png)
+
+Since I tagged the condo fee's, mortgage payments, and all other associated costs and income I have effectively generated a Profit and Loss statement
+for this rental property.
 
 ```
 Note: There is no setting to select whether you want a P/L statement or Balance Sheet.
@@ -125,8 +117,6 @@ categories for the condo fee's and mortgage payments just gives you a balance sh
 ```
 
 ### Deleting transactions
-
-
 You can navigate to the dashboard, click the red text 'DELETE ALL UPLOADED TRANSACTIONS' and then confirm by clicking the 'Delete' button.
 This will save all of your tags and categories, allowing you to create a balance sheet or p/l statement, print it off or save it.
 e.g.
@@ -134,6 +124,4 @@ You upload a bank statement for January, set all the tags and categories but don
 Next month, at the end of February you can upload the statement again and without doing any work you'll have an already generated balance sheet.
 
 ### Deleting categories and tags
-
-
 You can delete categories and tags by expanding either section on the dashboard page and clicking the 'remove' button next to the name.
