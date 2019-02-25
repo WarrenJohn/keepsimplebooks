@@ -172,7 +172,7 @@ export default{
             const categoryLen = this.tag.category.length;
             for (let i = 0; i < categoryLen; i++){
                 if (this.tag.category[i] !== " "){
-                    this.addCategory();
+                    return this.addCategory();
                 }
             }
             this.clientResponseClass = "warning text-center";
