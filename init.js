@@ -49,11 +49,6 @@ const todo = `
     FEATURES / TO DO:\x1b[0m\x1b[47m
 \x1b[30m
 PRODUCTION ERRORS:
-- Files not uploading on some machines.
--- https://scotch.io/tutorials/how-to-handle-file-uploads-in-vue-2
--- https://www.npmjs.com/package/mime-types
--- https://www.npmjs.com/package/mmmagic
-
 -routes not being handled correctly on refresh or when directly navigating to them
 
 CONSIDERATION:
