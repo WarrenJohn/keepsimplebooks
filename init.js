@@ -51,6 +51,10 @@ const todo = `
 PRODUCTION ERRORS:
 -routes not being handled correctly on refresh or when directly navigating to them
 
+TODO:
+- Encryption & Decryption working correctly. Store decrypted data in state to stop high load and only decrypt once.
+- Give user feedback via a status component during encryption and decryption and auto-redirect after upload button clicked.
+
 CONSIDERATION:
 - Dashboard charts, money flow in and out
 - making current categories into subcategories to allow for more encapsulation of the data. i.e. grouping categories.

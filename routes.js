@@ -37,9 +37,16 @@ module.exports = app => {
             // reversed to get newest transactions at the top
             m.userTransactions(token.email)
             .then(data => {
+                data.map(row => (
+                    row.date = u.decrypt(row.date),
+                    row.description = u.decrypt(row.description),
+                    row.withdrawl = u.decrypt(row.withdrawl),
+                    row.deposit = u.decrypt(row.deposit),
+                    row.balance = u.decrypt(row.balance)
+                ))
                 res.status(200).send(data.reverse());
             })
-            .catch(err => {
+            .catch(() => {
                 res.status(500).send();
             });
         }else{
@@ -151,7 +158,6 @@ module.exports = app => {
     app.post('/API/transactions/upload', u.hasToken, upload.single('bank'), (req, res) => {
         const tokenReceived = req.headers.authorization.split(' ')[1];
         const token = jwt.verify(tokenReceived, jwtCert);
-        console.log(req.file.originalname, req.file.mimetype);
         if (token){
             if (req.file.originalname.split('.').pop() === 'csv' && req.file.mimetype === 'application/vnd.ms-excel'){
                 parse(req.file.buffer, {columns: false, trim: true}, (err, data) => {
@@ -161,11 +167,11 @@ module.exports = app => {
                     ));
                     // data is converted in an array of objects prior to db insertion
                     m.insertBulkRowsBank(data.map(row => ({
-                        transaction_date: row[0],
-                        description: row[1],
-                        withdrawl: row[2],
-                        deposit: row[3],
-                        balance: row[4],
+                        transaction_date: u.encrypt(row[0]),
+                        description: u.encrypt(row[1]),
+                        withdrawl: u.encrypt(row[2]),
+                        deposit: u.encrypt(row[3]),
+                        balance: u.encrypt(row[4]),
                         user: token.email}))
                     )
                     .then(() => {
@@ -183,11 +189,11 @@ module.exports = app => {
                     ));
                     // data is converted in an array of objects prior to db insertion
                     m.insertBulkRowsBank(data.map(row => ({
-                        transaction_date: row[0],
-                        description: row[1],
-                        withdrawl: row[2],
-                        deposit: row[3],
-                        balance: row[4],
+                        transaction_date: u.encrypt(row[0]),
+                        description: u.encrypt(row[1]),
+                        withdrawl: u.encrypt(row[2]),
+                        deposit: u.encrypt(row[3]),
+                        balance: u.encrypt(row[4]),
                         user: token.email}))
                     )
                     .then(() => {
