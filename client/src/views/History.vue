@@ -7,10 +7,7 @@
   </div>
 </template>
 <script>
-
 import api from '@/services/api';
-
-
 export default{
     data () {
         return {
@@ -42,9 +39,13 @@ export default{
     methods:{},
 
     created () {
+        while (!this.$store.state.transactions){
+            // waiting for decryption
+        }
+        this.info = this.$store.state.transactions.map(o => (o));
         api()
-        .get('transactions')
-        .then(response => (this.info = response.data))
+        .get('users')
+        .then(() => {/* if no error then user still has token */})
         .catch(() => {
             this.$store.dispatch('logoutUser');
             this.$router.push('login');

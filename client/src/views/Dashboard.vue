@@ -315,10 +315,15 @@ export default{
             return api().get('categories');
         },
         setupDashboard: function(){
-            axios.all([this.getTransactions(), this.getTags(), this.getCategories()])
-                .then(axios.spread((transactions, tags, categories) => {
-                    this.deleteConfirm.isPossible = Boolean(transactions.data.length);
-                    this.tags = this.parseTransactions(tags.data, transactions.data);
+            axios.all([this.getTags(), this.getCategories()])
+                .then(axios.spread((tags, categories) => {
+                    // this.$store.dispatch('setTransactions', transactions.data)
+                    while (!this.$store.state.transactions){
+                        // waiting for decryption
+                    }
+                    const transactions = this.$store.state.transactions.map(o => (o))
+                    this.deleteConfirm.isPossible = Boolean(transactions.length);
+                    this.tags = this.parseTransactions(tags.data, transactions);
                     this.categories = this.sumCategories(this.tags, categories.data);
                     this.clientCategories = categories.data;
 

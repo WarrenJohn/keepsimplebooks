@@ -427,26 +427,28 @@ export default{
         getCategories: function(){
             return api().get('categories');
         },
-        getTransactions: function(){
-            return api().get('transactions');
-        },
         getTags: function(){
             return api().get('tags');
         },
         setupTransactionsPage: function(){
-            axios.all([this.getTransactions(), this.getTags(), this.getCategories()])
-                .then(axios.spread((transactions, tags, categories) => {
+            axios.all([this.getTags(), this.getCategories()])
+                .then(axios.spread((tags, categories) => {
+                    let parsedTransactions;
+                    while (!this.$store.state.transactions){
+                        // waiting for decryption
+                    }
+                    // object is mapped to create a new copy and avoid mutation of state.transactions
+                    const transactions = this.$store.state.transactions.map(obj => (obj))
                     this.categoryOptions = categories.data.map(object => ({value: object.name, text: object.name.toUpperCase()}))
-                    let parsedTransactions = transactions.data;
                     this.userTags = tags.data;
-                    parsedTransactions = this.filterTags(transactions.data, tags.data);
+                    parsedTransactions = this.filterTags(transactions, tags.data);
                     this.info = this.sortTransactions(parsedTransactions);
                     // sort table numerically descending to start
                     this.sortNumeric()
                 }))
                 .catch(() => {
-                    this.$store.dispatch('logoutUser');
-                    this.$router.push('login');
+                    // this.$store.dispatch('logoutUser');
+                    // this.$router.push('login');
                 });
         }
     },

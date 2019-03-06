@@ -54,6 +54,7 @@ PRODUCTION ERRORS:
 TODO:
 - Encryption & Decryption working correctly. Store decrypted data in state to stop high load and only decrypt once.
 - Give user feedback via a status component during encryption and decryption and auto-redirect after upload button clicked.
+-- Make upload async and have the 'status' component await the server response to change it from 'encrypting' to 'encrypted'
 
 CONSIDERATION:
 - Dashboard charts, money flow in and out
