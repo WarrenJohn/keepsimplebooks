@@ -42,14 +42,15 @@ export default{
         while (!this.$store.state.transactions){
             // waiting for decryption
         }
+        // object is mapped to create a new copy and avoid mutation of state.transactions
         this.info = this.$store.state.transactions.map(o => (o));
         api()
-        .get('users')
-        .then(() => {/* if no error then user still has token */})
-        .catch(() => {
-            this.$store.dispatch('logoutUser');
-            this.$router.push('login');
-        });
+            .get('users')
+            .then(() => {/* if no error then user still has token */})
+            .catch(() => {
+                this.$store.dispatch('logoutUser');
+                this.$router.push('login');
+            });
     }
 }
 </script>

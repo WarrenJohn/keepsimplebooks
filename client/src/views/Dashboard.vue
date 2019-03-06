@@ -317,10 +317,10 @@ export default{
         setupDashboard: function(){
             axios.all([this.getTags(), this.getCategories()])
                 .then(axios.spread((tags, categories) => {
-                    // this.$store.dispatch('setTransactions', transactions.data)
                     while (!this.$store.state.transactions){
                         // waiting for decryption
                     }
+                    // object is mapped to create a new copy and avoid mutation of state.transactions
                     const transactions = this.$store.state.transactions.map(o => (o))
                     this.deleteConfirm.isPossible = Boolean(transactions.length);
                     this.tags = this.parseTransactions(tags.data, transactions);
