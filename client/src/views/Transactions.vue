@@ -450,8 +450,8 @@ export default{
                     this.sortNumeric()
                 }))
                 .catch(() => {
-                    // this.$store.dispatch('logoutUser');
-                    // this.$router.push('login');
+                    this.$store.dispatch('logoutUser');
+                    this.$router.push('login');
                 });
         }
     },

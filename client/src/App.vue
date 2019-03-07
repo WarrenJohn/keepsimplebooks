@@ -7,7 +7,7 @@
       crossorigin="anonymous">
 
     <b-navbar toggleable="md" variant="primary" type="dark" sticky>
-        
+
         <b-navbar-brand
             v-if="!$store.state.userLoggedIn"
             class="text-white logo" to="/">keepsimplebooks
@@ -33,7 +33,7 @@
                     v-if="$store.state.userLoggedIn"
                     to="/transactions">Transactions</b-nav-item>
                 <b-nav-item
-                    v-if="$store.state.userLoggedIn"
+                    v-if="$store.state.userLoggedIn && $store.state.transactions"
                     to="/history">History</b-nav-item>
                 <b-nav-item
                     v-if="$store.state.userLoggedIn"

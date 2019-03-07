@@ -1,8 +1,11 @@
 <template>
   <div class="history text-center">
     <h1 class="m-5">Transactions history</h1>
-    <div class="container">
+    <div class="container" v-if="$store.state.transactions" >
         <b-table striped hover small :items="info" :fields="fields"></b-table>
+    </div>
+    <div v-else>
+
     </div>
   </div>
 </template>
@@ -36,21 +39,26 @@ export default{
             ]
         }
     },
-    methods:{},
+    methods:{
+        setupHistory: function(){
+            while (!this.$store.state.transactions){
+                // waiting for decryption
+            }
+            // object is mapped to create a new copy and avoid mutation of state.transactions
+            const transactions = this.$store.state.transactions.map(o => (o));
+            this.info = transactions
+            api()
+                .get('users')
+                .then(() => {/* if no error then user still has token */})
+                .catch(() => {
+                    this.$store.dispatch('logoutUser');
+                    this.$router.push('login');
+                });
+        }
+    },
 
     created () {
-        while (!this.$store.state.transactions){
-            // waiting for decryption
-        }
-        // object is mapped to create a new copy and avoid mutation of state.transactions
-        this.info = this.$store.state.transactions.map(o => (o));
-        api()
-            .get('users')
-            .then(() => {/* if no error then user still has token */})
-            .catch(() => {
-                this.$store.dispatch('logoutUser');
-                this.$router.push('login');
-            });
+        this.setupHistory();
     }
 }
 </script>

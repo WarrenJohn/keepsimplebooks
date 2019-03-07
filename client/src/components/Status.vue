@@ -1,5 +1,5 @@
 <template>
-    <b-alert v-if='!status' variant='warning' show>Decrypting</b-alert>
+    <b-alert v-if='!status' variant='danger' show>Decrypting</b-alert>
     <b-alert v-else variant='success' show>Decrypted</b-alert>
 </template>
 <script>
