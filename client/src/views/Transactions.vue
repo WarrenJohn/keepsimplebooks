@@ -4,65 +4,68 @@
             <!-- {{info}} -->
             <b-row class="m-3">
                 <b-col sm="4" class="p-5">
-                    <div>
-                        <!-- Categories -->
-                        <b-btn v-b-toggle.collapse1 size="sm" variant="link sm">Add expense category</b-btn>
-                        <b-collapse id=collapse1 class="mt-2">
-                            <div class="input-group">
-                            <input
-                                v-model="tag.category"
-                                class="form-control" type="text" placeholder="New expense category" />
-                            <b-button variant="success"
-                                size="sm"
-                                @click="validateCategory()">+
-                            </b-button>
+                    <div style="position:fixed; width:25%">
+                        <div>
+                            <!-- Categories -->
+                            <b-btn v-b-toggle.collapse1 size="sm" variant="link sm">Add expense category</b-btn>
+                            <b-collapse id=collapse1 class="mt-2">
+                                <div class="input-group">
+                                <input
+                                    v-model="tag.category"
+                                    class="form-control" type="text" placeholder="New expense category" />
+                                <b-button variant="success"
+                                    size="sm"
+                                    @click="validateCategory()">+
+                                </b-button>
+                                </div>
+                            </b-collapse>
+                            <select
+                            v-model="tag.category"
+                            class="form-control" name="categories">
+                                <option disabled selected value>Please select an option</option>
+
+                                <option
+                                v-for="(option, index) in categoryOptions"
+                                :value="option.text"
+                                :selected="option.selected"
+                                :key="index+'-category'">
+                                    {{option.text}}
+                                </option>
+                            </select>
+
+                            <b-form-input type="text"
+                                placeholder="Description"
+                                v-model="tag.description">
+                            </b-form-input>
+
+                            <b-form-input type="text"
+                                placeholder="Amount"
+                                v-model="tag.amount">
+                            </b-form-input>
+
+                            <b-dropdown-divider></b-dropdown-divider>
+                        </div>
+                        <div class="text-center">
+                            <p v-if="tag.description && tag.amount && tag.category">
+                                Label all transactions that contain the text <b>'{{  tag.description.toUpperCase()  }}'</b> and the exact amount of <b>'{{  tag.amount  }}'</b> as
+                                <b>'{{  tag.category.toUpperCase()  }}'</b>.
+                            </p>
+                            <p v-else-if="!tag.description && tag.amount && tag.category">
+                                Label all transactions with the exact amount of <b>'{{  tag.amount  }}'</b> as <b>'{{  tag.category.toUpperCase()  }}'</b>.
+                            </p>
+                            <p v-else-if="!tag.amount && tag.description && tag.category">
+                                Label all transactions that contain the text <b>'{{  tag.description.toUpperCase()  }}'</b> as <b>'{{  tag.category.toUpperCase()  }}'</b>.
+                            </p>
+                            <p v-else></p>
+                            <b-button block variant="success" @click="validateTag">Add this tag</b-button>
+                            <div v-if="clientResponseClass">
+                                <b-alert show :variant="clientResponseClass">
+                                    {{ clientResponse }}
+                                </b-alert>
                             </div>
-                        </b-collapse>
-                        <select
-                        v-model="tag.category"
-                        class="form-control" name="categories">
-                            <option disabled selected value>Please select an option</option>
-
-                            <option
-                            v-for="(option, index) in categoryOptions"
-                            :value="option.text"
-                            :selected="option.selected"
-                            :key="index+'-category'">
-                                {{option.text}}
-                            </option>
-                        </select>
-
-                        <b-form-input type="text"
-                            placeholder="Description"
-                            v-model="tag.description">
-                        </b-form-input>
-
-                        <b-form-input type="text"
-                            placeholder="Amount"
-                            v-model="tag.amount">
-                        </b-form-input>
-
-                        <b-dropdown-divider></b-dropdown-divider>
+                        </div>
                     </div>
-            <div class="text-center">
-                <p v-if="tag.description && tag.amount && tag.category">
-                    Label all transactions that contain the text <b>'{{  tag.description.toUpperCase()  }}'</b> and the exact amount of <b>'{{  tag.amount  }}'</b> as
-                    <b>'{{  tag.category.toUpperCase()  }}'</b>.
-                </p>
-                <p v-else-if="!tag.description && tag.amount && tag.category">
-                    Label all transactions with the exact amount of <b>'{{  tag.amount  }}'</b> as <b>'{{  tag.category.toUpperCase()  }}'</b>.
-                </p>
-                <p v-else-if="!tag.amount && tag.description && tag.category">
-                    Label all transactions that contain the text <b>'{{  tag.description.toUpperCase()  }}'</b> as <b>'{{  tag.category.toUpperCase()  }}'</b>.
-                </p>
-                <p v-else></p>
-                <b-button block variant="success" @click="validateTag">Add this tag</b-button>
-                <div v-if="clientResponseClass">
-                    <b-alert show :variant="clientResponseClass">
-                        {{ clientResponse }}
-                    </b-alert>
-                </div>
-            </div>
+
                 </b-col>
                 <b-col sm="8">
                     <p class="p-5 text-center">
