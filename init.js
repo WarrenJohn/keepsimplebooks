@@ -52,9 +52,8 @@ PRODUCTION ERRORS:
 -routes not being handled correctly on refresh or when directly navigating to them
 
 TODO:
-- Encryption & Decryption working correctly. Store decrypted data in state to stop high load and only decrypt once.
-- Give user feedback via a status component during encryption and decryption and auto-redirect after upload button clicked.
--- Make upload async and have the 'status' component await the server response to change it from 'encrypting' to 'encrypted'
+- Give user feedback via a status component during encryption and auto-redirect after upload button clicked.
+- Removing transactions need to affect state on transactions page
 
 CONSIDERATION:
 - Dashboard charts, money flow in and out

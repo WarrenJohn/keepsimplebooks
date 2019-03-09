@@ -41,11 +41,13 @@ export default{
     },
     methods:{
         setupHistory: function(){
-            while (!this.$store.state.transactions){
-                // waiting for decryption
+            let transactions;
+            if(this.$store.state.transactions){
+                // object is mapped to create a new copy and avoid mutation of state.transactions
+                transactions = this.$store.state.transactions.map(o => (o));
+            }else{
+                transactions = Array();
             }
-            // object is mapped to create a new copy and avoid mutation of state.transactions
-            const transactions = this.$store.state.transactions.map(o => (o));
             this.info = transactions
             api()
                 .get('users')

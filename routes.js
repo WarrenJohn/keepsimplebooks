@@ -159,55 +159,33 @@ module.exports = app => {
         const tokenReceived = req.headers.authorization.split(' ')[1];
         const token = jwt.verify(tokenReceived, jwtCert);
         if (token){
-            if (req.file.originalname.split('.').pop() === 'csv' && req.file.mimetype === 'application/vnd.ms-excel'){
-                parse(req.file.buffer, {columns: false, trim: true}, (err, data) => {
-                    data.map(description => (
-                        // remove spaces in descriptions and re add them to make sure there are no double spaces
-                        description[1] = description[1].replace(/ +(?= )/g, '')
-                    ));
-                    // data is converted in an array of objects prior to db insertion
-                    m.insertBulkRowsBank(data.map(row => ({
-                        transaction_date: u.encrypt(row[0]),
-                        description: u.encrypt(row[1]),
-                        withdrawl: u.encrypt(row[2]),
-                        deposit: u.encrypt(row[3]),
-                        balance: u.encrypt(row[4]),
-                        user: token.email}))
-                    )
-                    .then(() => {
-                        res.status(201).send();
-                    })
-                    .catch(() => {
-                        res.status(500).send();
-                    })
-                });
-            }else if (req.file.originalname.split('.').pop() === 'csv' && req.file.mimetype === 'text/csv'){
-                parse(req.file.buffer, {columns: false, trim: true}, (err, data) => {
-                    data.map(description => (
-                        // remove spaces in descriptions and re add them to make sure there are no double spaces
-                        description[1] = description[1].replace(/ +(?= )/g, '')
-                    ));
-                    // data is converted in an array of objects prior to db insertion
-                    m.insertBulkRowsBank(data.map(row => ({
-                        transaction_date: u.encrypt(row[0]),
-                        description: u.encrypt(row[1]),
-                        withdrawl: u.encrypt(row[2]),
-                        deposit: u.encrypt(row[3]),
-                        balance: u.encrypt(row[4]),
-                        user: token.email}))
-                    )
-                    .then(() => {
-                        res.status(201).send();
-                    })
-                    .catch(() => {
-                        res.status(500).send();
-                    })
-                });
-            }else if (req.file.originalname.split('.').pop() !== 'csv' && req.file.mimetype !== 'application/vnd.ms-excel'){
-                res.status(415).send();
-            }else if (req.file.size > 1000000){
+            if (req.file.size > 1000000){
                 res.status(413).send();
             }
+            parse(req.file.buffer, {columns: false, trim: true}, (err, data) => {
+                if (err){
+                    res.status(415).send();
+                }
+                data.map(description => (
+                    // remove spaces in descriptions and re add them to make sure there are no double spaces
+                    description[1] = description[1].replace(/ +(?= )/g, '')
+                ));
+                // data is converted in an array of objects prior to db insertion
+                m.insertBulkRowsBank(data.map(row => ({
+                    transaction_date: u.encrypt(row[0]),
+                    description: u.encrypt(row[1]),
+                    withdrawl: u.encrypt(row[2]),
+                    deposit: u.encrypt(row[3]),
+                    balance: u.encrypt(row[4]),
+                    user: token.email}))
+                )
+                .then(() => {
+                    res.status(201).send();
+                })
+                .catch(() => {
+                    res.status(500).send();
+                })
+            });
         }else{
             res.status(403).send();
         }

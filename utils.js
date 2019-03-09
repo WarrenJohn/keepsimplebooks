@@ -9,8 +9,8 @@ const jwtCert = process.env.JWT_SECRET_KEY;
 // encrypting financial data
 const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY;
 const SALT = process.env.ENCRYPTION_SALT;
-const ALGORITHM = 'aes-256-cbc';
-const IV_LENGTH = 16; // AES cipher block length is always 16
+const ALGORITHM = process.env.ALGORITHM;
+const IV_LENGTH = 16; // AES cipher block length is always 16 bytes
 
 module.exports.encrypt = text => {
     const iv = crypto.randomBytes(IV_LENGTH)

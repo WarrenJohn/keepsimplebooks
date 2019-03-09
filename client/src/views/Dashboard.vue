@@ -149,6 +149,7 @@ export default{
     },
     methods:{
         deleteTransactions: function(){
+            this.$store.dispatch('setTransactions', false);
             api().delete('transactions/all')
                 .then(response => {
                     if (response.status === 200){
@@ -317,11 +318,13 @@ export default{
         setupDashboard: function(){
             axios.all([this.getTags(), this.getCategories()])
                 .then(axios.spread((tags, categories) => {
-                    while (!this.$store.state.transactions){
-                        // waiting for decryption
+                    let transactions;
+                    if(this.$store.state.transactions){
+                        // object is mapped to create a new copy and avoid mutation of state.transactions
+                        transactions = this.$store.state.transactions.map(o => (o));
+                    }else{
+                        transactions = Array();
                     }
-                    // object is mapped to create a new copy and avoid mutation of state.transactions
-                    const transactions = this.$store.state.transactions.map(o => (o))
                     this.deleteConfirm.isPossible = Boolean(transactions.length);
                     this.tags = this.parseTransactions(tags.data, transactions);
                     this.categories = this.sumCategories(this.tags, categories.data);
