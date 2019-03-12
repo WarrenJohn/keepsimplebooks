@@ -30,10 +30,10 @@
                     v-if="$store.state.userLoggedIn"
                     to="/dashboard">Dashboard</b-nav-item>
                 <b-nav-item
-                    v-if="$store.state.userLoggedIn"
+                    v-if="$store.state.userLoggedIn && $store.state.transactions.length"
                     to="/transactions">Transactions</b-nav-item>
                 <b-nav-item
-                    v-if="$store.state.userLoggedIn && $store.state.transactions"
+                    v-if="$store.state.userLoggedIn && $store.state.transactions.length"
                     to="/history">History</b-nav-item>
                 <b-nav-item
                     v-if="$store.state.userLoggedIn"

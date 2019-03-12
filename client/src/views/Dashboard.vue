@@ -149,8 +149,8 @@ export default{
     },
     methods:{
         deleteTransactions: function(){
-            this.$store.dispatch('setTransactions', false);
-            api().delete('transactions/all')
+            this.$store.dispatch('setTransactions', Array());
+            api.delete('transactions/all')
                 .then(response => {
                     if (response.status === 200){
                         this.clientResponseClass = 'success text-center';
@@ -174,7 +174,7 @@ export default{
             return Math.abs(num).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         },
         removeTag: function(id){
-            api().delete(`tags/${id}`)
+            api.delete(`tags/${id}`)
                 .then(response => {
                     if (response.status === 200){
                         this.clientResponseClass = 'success text-center';
@@ -192,7 +192,7 @@ export default{
                 })
         },
         removeCategory: function(id){
-            api().delete(`categories/${id}`)
+            api.delete(`categories/${id}`)
                 .then(response => {
                     if (response.status === 200){
                         this.clientResponseClass = 'success text-center';
@@ -307,19 +307,19 @@ export default{
             this.categories = newCategories;
         },
         getTransactions: function(){
-            return api().get('transactions');
+            return api.get('transactions');
         },
         getTags: function(){
-            return api().get('tags');
+            return api.get('tags');
         },
         getCategories: function(){
-            return api().get('categories');
+            return api.get('categories');
         },
         setupDashboard: function(){
             axios.all([this.getTags(), this.getCategories()])
                 .then(axios.spread((tags, categories) => {
                     let transactions;
-                    if(this.$store.state.transactions){
+                    if(this.$store.state.transactions.length){
                         // object is mapped to create a new copy and avoid mutation of state.transactions
                         transactions = this.$store.state.transactions.map(o => (o));
                     }else{

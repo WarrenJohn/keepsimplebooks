@@ -20,7 +20,6 @@ module.exports.encrypt = text => {
     let encrypted = cipher.update(plain)
     encrypted = Buffer.concat([encrypted, cipher.final()])
     return iv.toString('base64') + ':' + encrypted.toString('base64')
-
 }
 
 module.exports.decrypt = text => {

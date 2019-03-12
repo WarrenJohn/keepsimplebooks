@@ -183,7 +183,7 @@ export default{
             setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
         },
         addCategory: function(){
-            api()
+            api
                 .post('categories', {category: this.tag.category.toUpperCase()})
                 .then(response => {
                     if(response.data.created){
@@ -198,7 +198,7 @@ export default{
                     }
                 })
                 .then(() => {
-                    api()
+                    api
                         .get('categories')
                         .then(response => {
                             this.categoryOptions = response.data.map(object => {
@@ -218,7 +218,7 @@ export default{
                 })
             },
         deleteOneTransaction: function(id){
-            api().delete(`/transactions${id}`)
+            api.delete(`/transactions${id}`)
                 .then(response => {
                     if (response.status === 200){
                         this.clientResponseClass = 'success text-center';
@@ -248,7 +248,7 @@ export default{
         },
         validateTag: async function(){
             // get categories before validation
-            let categories = await api().get('categories')
+            let categories = await api.get('categories')
             categories = categories.data.map(category => (category.name))
             const userCategoryExists = categories.indexOf(this.tag.category.toUpperCase());
             // validate user created tag
@@ -279,7 +279,7 @@ export default{
         },
         addTag: function(){
             this.tag.description = this.tag.description.toUpperCase()
-            api()
+            api
                 .post('tags', {tag: this.tag})
                 .then(response => {
                     if(response.data.created){
@@ -360,9 +360,25 @@ export default{
                     if (trans_obj.name === unsortedTrans_obj.description){
                         trans_obj.transactions.push(unsortedTrans_obj);
                         if (!unsortedTrans_obj.deposit){
-                                this.allTags.push({id: unsortedTrans_obj.id, category: '', description: unsortedTrans_obj.description, amount: unsortedTrans_obj.withdrawl, user: this.$store.state.user.email});
+                                this.allTags.push(
+                                    {
+                                        id: unsortedTrans_obj.id,
+                                        category: '',
+                                        description: unsortedTrans_obj.description,
+                                        amount: unsortedTrans_obj.withdrawl,
+                                        user: this.$store.state.user.email
+                                    }
+                                );
                         }else{
-                            this.allTags.push({id: unsortedTrans_obj.id, category: '', description: unsortedTrans_obj.description, amount: unsortedTrans_obj.deposit, user: this.$store.state.user.email});
+                            this.allTags.push(
+                                {
+                                    id: unsortedTrans_obj.id,
+                                    category: '', description:
+                                    unsortedTrans_obj.description,
+                                    amount: unsortedTrans_obj.deposit,
+                                    user: this.$store.state.user.email
+                                }
+                            );
                         }
                         trans_obj.id = unsortedTrans_obj.description;
                     }
@@ -428,21 +444,20 @@ export default{
             this.info = newTransactions;
         },
         getCategories: function(){
-            return api().get('categories');
+            return api.get('categories');
         },
         getTags: function(){
-            return api().get('tags');
+            return api.get('tags');
         },
         setupTransactionsPage: function(){
+            console.log('calling');
             axios.all([this.getTags(), this.getCategories()])
                 .then(axios.spread((tags, categories) => {
                     let parsedTransactions;
                     let transactions;
-                    if(this.$store.state.transactions){
+                    if(this.$store.state.transactions.length){
                         // object is mapped to create a new copy and avoid mutation of state.transactions
                         transactions = this.$store.state.transactions.map(o => (o));
-                    }else{
-                        transactions = Array();
                     }
                     this.categoryOptions = categories.data.map(object => ({value: object.name, text: object.name.toUpperCase()}))
                     this.userTags = tags.data;
@@ -451,9 +466,10 @@ export default{
                     // sort table numerically descending to start
                     this.sortNumeric()
                 }))
-                .catch(() => {
-                    this.$store.dispatch('logoutUser');
-                    this.$router.push('login');
+                .catch((err) => {
+                    console.log(err);
+                    // this.$store.dispatch('logoutUser');
+                    // this.$router.push('login');
                 });
         }
     },

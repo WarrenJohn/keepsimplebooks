@@ -49,7 +49,7 @@ export default{
                 transactions = Array();
             }
             this.info = transactions
-            api()
+            api
                 .get('users')
                 .then(() => {/* if no error then user still has token */})
                 .catch(() => {

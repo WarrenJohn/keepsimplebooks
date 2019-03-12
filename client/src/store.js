@@ -8,7 +8,7 @@ export default new Vuex.Store({
     state: {
         token: null,
         user: null,
-        transactions: null,
+        transactions: Array(),
         userLoggedIn: false
     },
     mutations: {
@@ -23,13 +23,18 @@ export default new Vuex.Store({
         setUser(state, user){
             state.user = user;
         },
+        extendTransactions(state, transactions){
+            // only used when uploading so the user doesn't
+            // need to wait for encryption AND decryption
+            state.transactions.push(...transactions);
+        },
         setTransactions(state, transactions){
             state.transactions = transactions;
         },
         logoutUser(state){
             state.token = null;
             state.user = null;
-            state.transactions = null;
+            state.transactions = Array();
             state.userLoggedIn = false;
         }
     },
@@ -40,11 +45,14 @@ export default new Vuex.Store({
         setUser({commit}, user){
             commit('setUser', user);
         },
+        extendTransactions({commit}, transactions){
+            commit('extendTransactions', transactions);
+        },
         setTransactions({commit}, transactions){
-                commit('setTransactions', transactions)
+            commit('setTransactions', transactions);
         },
         logoutUser({commit}){
-            commit('logoutUser')
+            commit('logoutUser');
         }
     }
 })

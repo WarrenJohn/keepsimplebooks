@@ -4,7 +4,7 @@ const fs = require('fs');
 const u = require('./utils');
 const m = require('./models');
 const multer = require('multer');
-const parse = require('csv-parse');
+const parse = require('csv-parse/lib/sync');
 const bcrypt = require('bcryptjs');
 
 const jwt = require('jsonwebtoken');
@@ -56,6 +56,7 @@ module.exports = app => {
     );
 
     app.get('/API/tags', u.hasToken, (req, res) => {
+        console.log('HERE DADDY HERE TAGS');
         const tokenReceived = req.headers.authorization.split(' ')[1];
         const token = jwt.verify(tokenReceived, jwtCert);
         if (token){
@@ -73,6 +74,7 @@ module.exports = app => {
 
     // Expense categories: Adding, retrieving, removing
     app.get('/API/categories', u.hasToken, (req, res) =>{
+        console.log('HERE DADDY HERE CATEOGIES');
         const tokenReceived = req.headers.authorization.split(' ')[1];
         const token = jwt.verify(tokenReceived, jwtCert);
         if (token){
@@ -162,30 +164,22 @@ module.exports = app => {
             if (req.file.size > 1000000){
                 res.status(413).send();
             }
-            parse(req.file.buffer, {columns: false, trim: true}, (err, data) => {
-                if (err){
-                    res.status(415).send();
-                }
-                data.map(description => (
-                    // remove spaces in descriptions and re add them to make sure there are no double spaces
-                    description[1] = description[1].replace(/ +(?= )/g, '')
-                ));
-                // data is converted in an array of objects prior to db insertion
-                m.insertBulkRowsBank(data.map(row => ({
+            let records = parse(req.file.buffer, {columns: false, trim: true})
+                .map(row => ({
                     transaction_date: u.encrypt(row[0]),
-                    description: u.encrypt(row[1]),
+                    // remove spaces in descriptions and re add them to make sure there are no double spaces
+                    description: u.encrypt(row[1].replace(/ +(?= )/g, '')),
                     withdrawl: u.encrypt(row[2]),
                     deposit: u.encrypt(row[3]),
                     balance: u.encrypt(row[4]),
-                    user: token.email}))
-                )
-                .then(() => {
-                    res.status(201).send();
-                })
-                .catch(() => {
-                    res.status(500).send();
-                })
-            });
+                    user: token.email
+                   }
+               )
+           );
+            console.log(records);
+            res.status(201).send()
+            // m.insertBulkRowsBank(records)
+
         }else{
             res.status(403).send();
         }

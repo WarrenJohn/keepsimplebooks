@@ -221,9 +221,9 @@ module.exports.deleteAll = async user => {
 };
 // {fields: ['transaction_date', 'description', 'withdrawl', 'deposit', 'balance']}
 module.exports.insertBulkRowsBank = object_array => {
-    return Bank.sync() // .sync() is called to make sure the table exists prior to inserting data
+    Bank.sync() // .sync() is called to make sure the table exists prior to inserting data
         .then(() => {
-            return Bank.bulkCreate(object_array);
+            Bank.bulkCreate(object_array);
         })
         .catch(err => {
             throw new Error("Insert Bulk Rows(Transactions) Error: ", err);
