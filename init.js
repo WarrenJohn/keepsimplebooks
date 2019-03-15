@@ -53,6 +53,7 @@ PRODUCTION ERRORS:
 
 TODO:
 - Removing transactions need to affect state on transactions page
+- Let user opt to never store their data
 
 CONSIDERATION:
 - Dashboard charts, money flow in and out
