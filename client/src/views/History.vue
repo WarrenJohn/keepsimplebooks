@@ -50,7 +50,7 @@ export default{
             }
             this.info = transactions
             api
-                .get('users')
+                .getRoute('users')
                 .then(() => {/* if no error then user still has token */})
                 .catch(() => {
                     this.$store.dispatch('logoutUser');

@@ -12,15 +12,19 @@ const SALT = process.env.ENCRYPTION_SALT;
 const ALGORITHM = process.env.ALGORITHM;
 const IV_LENGTH = 16; // AES cipher block length is always 16 bytes
 
-module.exports.encrypt = text => {
-    const iv = crypto.randomBytes(IV_LENGTH)
-    const key = crypto.scryptSync(ENCRYPTION_KEY, SALT, 32);
-    const plain = new Buffer.from(text)
-    const cipher = crypto.createCipheriv(ALGORITHM, key, iv);
-    let encrypted = cipher.update(plain)
-    encrypted = Buffer.concat([encrypted, cipher.final()])
-    return iv.toString('base64') + ':' + encrypted.toString('base64')
-}
+module.exports.encrypt = (text) => {
+    return new Promise ((resolve, reject) => {
+        const iv = crypto.randomBytes(IV_LENGTH)
+        crypto.scrypt(ENCRYPTION_KEY, SALT, 32, (err, derivedKey) => {
+            if (err) reject(err);
+            const plain = new Buffer.from(text)
+            const cipher = crypto.createCipheriv(ALGORITHM, derivedKey, iv);
+            let encrypted = cipher.update(plain)
+            encrypted = Buffer.concat([encrypted, cipher.final()])
+            resolve(iv.toString('base64') + ':' + encrypted.toString('base64'))
+        });
+    });
+};
 
 module.exports.decrypt = text => {
     const key = crypto.scryptSync(ENCRYPTION_KEY, SALT, 32);

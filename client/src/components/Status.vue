@@ -17,7 +17,7 @@ export default{
     },
     methods:{
         getTransactions: function(){
-            api.get('transactions')
+            api.getRoute('transactions')
                 .then(transactions => {
                     this.$store.dispatch('setTransactions', transactions.data);
                     this.status = true;
@@ -26,13 +26,7 @@ export default{
                     this.$store.dispatch('logoutUser');
                     this.$router.push('login');
                 })
-        },
-        // postTransactions: function(){
-        //     api.post('transactions', fileData)
-        //         .then(response => {
-        //             console.log('all done');
-        //         })
-        // }
+        }
     },
     created(){
         this.getTransactions();

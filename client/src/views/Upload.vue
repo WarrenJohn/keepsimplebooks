@@ -103,28 +103,25 @@ export default{
                 const formData = new FormData();
                 formData.append('bank', this.selectedFile);
                 this.$router.push('transactions');
-                console.log('a');
-                api.post('transactions/upload', formData)
-                console.log('b');
-                    // .then(response => {
-                    //     if (response.status === 201){
-                    //         console.log('done');
-                    //     this.clientResponseClass = 'success text-center';
-                    //     this.clientResponse = 'Files Uploaded!';
-                    //     setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
-                    //     }
-                    // })
-                    // .catch(error => {
-                    //     if (error.response.status === 415){
-                    //         this.clientResponseClass = 'danger text-center';
-                    //         this.clientResponse = 'Invalid file type';
-                    //         setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 10000);
-                    //     }else if (error.response.status === 413){
-                    //         this.clientResponseClass = 'danger text-center';
-                    //         this.clientResponse = 'File too large (1 mb limit)';
-                    //         setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 10000);
-                    //     }
-                    // });
+                api.uploadTransaction(formData)
+                    .then(response => {
+                        if (response.status === 201){
+                            this.clientResponseClass = 'success text-center';
+                            this.clientResponse = 'Files Uploaded!';
+                            setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
+                        }
+                    })
+                    .catch(error => {
+                        if (error.response.status === 415){
+                            this.clientResponseClass = 'danger text-center';
+                            this.clientResponse = 'Invalid file type';
+                            setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 10000);
+                        }else if (error.response.status === 413){
+                            this.clientResponseClass = 'danger text-center';
+                            this.clientResponse = 'File too large (1 mb limit)';
+                            setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 10000);
+                        }
+                    });
             }
         }
     }

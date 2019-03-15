@@ -183,7 +183,7 @@ export default{
             setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
         },
         addCategory: function(){
-            api
+            api()
                 .post('categories', {category: this.tag.category.toUpperCase()})
                 .then(response => {
                     if(response.data.created){
@@ -198,7 +198,7 @@ export default{
                     }
                 })
                 .then(() => {
-                    api
+                    api()
                         .get('categories')
                         .then(response => {
                             this.categoryOptions = response.data.map(object => {
@@ -218,7 +218,7 @@ export default{
                 })
             },
         deleteOneTransaction: function(id){
-            api.delete(`/transactions${id}`)
+            api.deleteTransaction(id)
                 .then(response => {
                     if (response.status === 200){
                         this.clientResponseClass = 'success text-center';
@@ -248,7 +248,7 @@ export default{
         },
         validateTag: async function(){
             // get categories before validation
-            let categories = await api.get('categories')
+            let categories = await api.getRoute('categories')
             categories = categories.data.map(category => (category.name))
             const userCategoryExists = categories.indexOf(this.tag.category.toUpperCase());
             // validate user created tag
@@ -279,7 +279,7 @@ export default{
         },
         addTag: function(){
             this.tag.description = this.tag.description.toUpperCase()
-            api
+            api()
                 .post('tags', {tag: this.tag})
                 .then(response => {
                     if(response.data.created){
@@ -444,13 +444,12 @@ export default{
             this.info = newTransactions;
         },
         getCategories: function(){
-            return api.get('categories');
+            return api.getRoute('categories');
         },
         getTags: function(){
-            return api.get('tags');
+            return api.getRoute('tags');
         },
         setupTransactionsPage: function(){
-            console.log('calling');
             axios.all([this.getTags(), this.getCategories()])
                 .then(axios.spread((tags, categories) => {
                     let parsedTransactions;
@@ -466,10 +465,9 @@ export default{
                     // sort table numerically descending to start
                     this.sortNumeric()
                 }))
-                .catch((err) => {
-                    console.log(err);
-                    // this.$store.dispatch('logoutUser');
-                    // this.$router.push('login');
+                .catch(() => {
+                    this.$store.dispatch('logoutUser');
+                    this.$router.push('login');
                 });
         }
     },

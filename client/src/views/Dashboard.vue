@@ -128,7 +128,7 @@
 
 <script>
 import axios from 'axios'
-import api from '../services/api';
+import api from '@/services/api';
 
 export default{
     data () {
@@ -150,7 +150,7 @@ export default{
     methods:{
         deleteTransactions: function(){
             this.$store.dispatch('setTransactions', Array());
-            api.delete('transactions/all')
+            api.deleteAllTransactions()
                 .then(response => {
                     if (response.status === 200){
                         this.clientResponseClass = 'success text-center';
@@ -174,7 +174,7 @@ export default{
             return Math.abs(num).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         },
         removeTag: function(id){
-            api.delete(`tags/${id}`)
+            api.deleteTag(id)
                 .then(response => {
                     if (response.status === 200){
                         this.clientResponseClass = 'success text-center';
@@ -192,7 +192,7 @@ export default{
                 })
         },
         removeCategory: function(id){
-            api.delete(`categories/${id}`)
+            api.deleteCategory(id)
                 .then(response => {
                     if (response.status === 200){
                         this.clientResponseClass = 'success text-center';
@@ -306,14 +306,11 @@ export default{
             this.numericSort = true;
             this.categories = newCategories;
         },
-        getTransactions: function(){
-            return api.get('transactions');
-        },
         getTags: function(){
-            return api.get('tags');
+            return api.getRoute('tags');
         },
         getCategories: function(){
-            return api.get('categories');
+            return api.getRoute('categories');
         },
         setupDashboard: function(){
             axios.all([this.getTags(), this.getCategories()])
