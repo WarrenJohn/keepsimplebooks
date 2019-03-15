@@ -52,7 +52,6 @@ PRODUCTION ERRORS:
 -routes not being handled correctly on refresh or when directly navigating to them
 
 TODO:
-- Give user feedback via a status component during encryption and auto-redirect after upload button clicked.
 - Removing transactions need to affect state on transactions page
 
 CONSIDERATION:
