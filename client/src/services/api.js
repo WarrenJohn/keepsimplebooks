@@ -1,21 +1,3 @@
-// import axios from 'axios';
-// import store from '../store';
-//
-// export default () => {
-//     return axios.create({
-//         baseURL: '/API/',
-//         headers: {'Authorization': `Bearer ${store.state.token}`}
-//     });
-// };
-// import axios from 'axios'; import store from '../store';
-// console.log('\n\n\n\n\n\n\n\n\nCREATE\n\n\n\n\n\n\n\n\n');
-//
-// let api = axios.create({
-//     baseURL: '/API/',
-//     headers: {'Authorization': `Bearer ${store.state.token}`}
-// });
-//
-// export default api;
 import axios from 'axios';
 import store from '../store';
 
