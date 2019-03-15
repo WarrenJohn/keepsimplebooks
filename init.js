@@ -56,6 +56,8 @@ TODO:
 
 CONSIDERATION:
 - Dashboard charts, money flow in and out
+- Balance Sheet yearly comparison
+-- Compare 2017 to 2018 by adding a second line to the totals
 - making current categories into subcategories to allow for more encapsulation of the data. i.e. grouping categories.
 -- Alternatively, allow user to create multiple profiles each with their own tags and categories so they can generate balance sheets,  P/L statements, etc..
 - interactive test for users to try before register
