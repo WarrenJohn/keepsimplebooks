@@ -31,22 +31,56 @@ module.exports = app => {
 
     // Transactions uploading, viewing, tagging and deleting transactions
     //  u.hasToken, verifyToken,
-    app.get('/API/transactions', u.hasToken, (req, res) =>{
+    app.get('/API/transactions', u.hasToken, async (req, res) =>{
         const tokenReceived = req.headers.authorization.split(' ')[1];
         const token = jwt.verify(tokenReceived, jwtCert);
         if (token){
             // reversed to get newest transactions at the top
-            m.userTransactions(token.email)
-            .then(data => {
-                data.map(row => (
-                    row.date = u.decrypt(row.date),
-                    row.description = u.decrypt(row.description),
-                    row.withdrawl = u.decrypt(row.withdrawl),
-                    row.deposit = u.decrypt(row.deposit),
-                    row.balance = u.decrypt(row.balance)
-                ))
-                res.status(200).send(data.reverse());
+            let data = await m.userTransactions(token.email)
+            // .then(data => {
+            bluebird.map(data, row => {
+                return Promise.all([
+                    u.decrypt(row.date),
+                    u.decrypt(row.description),
+                    u.decrypt(row.withdrawl),
+                    u.decrypt(row.deposit),
+                    u.decrypt(row.balance)
+                ])
             })
+            // })
+
+            .then(decrypted => {
+                // decrypted = decrypted.map(row => (
+                //     {
+                //         date: row[0],
+                //         description: row[1],
+                //         withdrawl: row[2],
+                //         deposit: row[3],
+                //         balance: row[4]
+                //     }
+                // ))
+                res.status(200).send(decrypted.map(row => (
+                    {
+                        date: row[0],
+                        description: row[1],
+                        withdrawl: row[2],
+                        deposit: row[3],
+                        balance: row[4]
+                    }
+                )).reverse());
+
+            })
+
+            // .then(data => {
+            //     data.map(row => (
+            //         row.date = u.decrypt(row.date),
+            //         row.description = u.decrypt(row.description),
+            //         row.withdrawl = u.decrypt(row.withdrawl),
+            //         row.deposit = u.decrypt(row.deposit),
+            //         row.balance = u.decrypt(row.balance)
+            //     ))
+            //     res.status(200).send(data.reverse());
+            // })
             .catch(() => {
                 res.status(500).send();
             });
@@ -164,31 +198,31 @@ module.exports = app => {
                 res.status(413).send();
             }
             let records = parse(req.file.buffer, {columns: false, trim: true})
-                bluebird.map(records, (row) => {return Promise.all(
-                    [
-                        u.encrypt(row[0]),
-                        u.encrypt(row[1].replace(/ +(?= )/g, '')),
-                        u.encrypt(row[2]),
-                        u.encrypt(row[3]),
-                        u.encrypt(row[4])
-                    ])
-                }
-                )
-                .then(records => {
-                    m.insertBulkRowsBank(
-                        records.map(row => (
-                            {
-                                transaction_date: row[0],
-                                // remove spaces in descriptions and re add them to make sure there are no double spaces
-                                description: row[1],
-                                withdrawl: row[2],
-                                deposit: row[3],
-                                balance: row[4],
-                                user: token.email
-                            }
-                        )
-                    ))
-                })
+            bluebird.map(records, (row) => {return Promise.all(
+                [
+                    u.encrypt(row[0]),
+                    // remove double spaces to normalize
+                    u.encrypt(row[1].replace(/ +(?= )/g, '')),
+                    u.encrypt(row[2]),
+                    u.encrypt(row[3]),
+                    u.encrypt(row[4])
+                ])
+            }
+            )
+            .then(records => {
+                m.insertBulkRowsBank(
+                    records.map(row => (
+                        {
+                            transaction_date: row[0],
+                            description: row[1],
+                            withdrawl: row[2],
+                            deposit: row[3],
+                            balance: row[4],
+                            user: token.email
+                        }
+                    )
+                ))
+            })
         }else{
             res.status(403).send();
         }

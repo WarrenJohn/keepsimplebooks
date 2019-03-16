@@ -14,8 +14,8 @@ const IV_LENGTH = 16; // AES cipher block length is always 16 bytes
 
 module.exports.encrypt = (text) => {
     return new Promise ((resolve, reject) => {
-        const iv = crypto.randomBytes(IV_LENGTH)
         crypto.scrypt(ENCRYPTION_KEY, SALT, 32, (err, derivedKey) => {
+            const iv = crypto.randomBytes(IV_LENGTH)
             if (err) reject(err);
             const plain = new Buffer.from(text)
             const cipher = crypto.createCipheriv(ALGORITHM, derivedKey, iv);
@@ -27,14 +27,18 @@ module.exports.encrypt = (text) => {
 };
 
 module.exports.decrypt = text => {
-    const key = crypto.scryptSync(ENCRYPTION_KEY, SALT, 32);
-    const textParts = text.split(':');
-    const iv = new Buffer.from(textParts.shift(), 'base64');
-    const encryptedText = new Buffer.from(textParts.join(':'), 'base64');
-    const decipher = crypto.createDecipheriv(ALGORITHM, key, iv);
-    let decrypted = decipher.update(encryptedText, 'base64', 'utf8');
-    decrypted += decipher.final('utf8');
-    return decrypted;
+    return new Promise((resolve, reject) => {
+        crypto.scrypt(ENCRYPTION_KEY, SALT, 32, (err, derivedKey) => {
+            if (err) reject(err);
+            const textParts = text.split(':');
+            const iv = new Buffer.from(textParts.shift(), 'base64');
+            const encryptedText = new Buffer.from(textParts.join(':'), 'base64');
+            const decipher = crypto.createDecipheriv(ALGORITHM, derivedKey, iv);
+            let decrypted = decipher.update(encryptedText, 'base64', 'utf8');
+            decrypted += decipher.final('utf8');
+            resolve(decrypted);
+        });
+    })
 }
 
 // verify token exists, and verify the actual token
