@@ -52,8 +52,8 @@ PRODUCTION ERRORS:
 -routes not being handled correctly on refresh or when directly navigating to them
 
 TODO:
-- Removing transactions need to affect state on transactions page
 - Let user opt to never store their data
+- User Profile route
 
 CONSIDERATION:
 - Dashboard charts, money flow in and out

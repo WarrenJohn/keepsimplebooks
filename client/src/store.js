@@ -31,6 +31,11 @@ export default new Vuex.Store({
         setTransactions(state, transactions){
             state.transactions = transactions;
         },
+        deleteOneTransaction(state, id){
+            state.transactions = state.transactions.filter(row => (
+                row.id != id
+            ))
+        },
         logoutUser(state){
             state.token = null;
             state.user = null;
@@ -50,6 +55,9 @@ export default new Vuex.Store({
         },
         setTransactions({commit}, transactions){
             commit('setTransactions', transactions);
+        },
+        deleteOneTransaction({commit}, id){
+            commit('deleteOneTransaction', id);
         },
         logoutUser({commit}){
             commit('logoutUser');

@@ -27,7 +27,7 @@
                     to="/login">Login
                 </b-nav-item>
                 <b-nav-item
-                    v-if="$store.state.userLoggedIn"
+                    v-if="$store.state.userLoggedIn && $store.state.transactions.length"
                     to="/dashboard">Dashboard</b-nav-item>
                 <b-nav-item
                     v-if="$store.state.userLoggedIn && $store.state.transactions.length"

@@ -47,7 +47,7 @@ export default{
                         if (response.data.result){
                             this.$store.dispatch('setToken', response.data.token)
                             this.$store.dispatch('setUser', response.data.user)
-                            this.$router.push('dashboard');
+                            this.$router.push('upload');
                         }else{
                             this.clientResponseClass = 'danger text-center';
                             this.clientResponse = 'Invalid credentials!';

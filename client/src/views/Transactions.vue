@@ -218,6 +218,7 @@ export default{
                 })
             },
         deleteOneTransaction: function(id){
+            this.$store.dispatch('deleteOneTransaction', id);
             api.deleteTransaction(id)
                 .then(response => {
                     if (response.status === 200){

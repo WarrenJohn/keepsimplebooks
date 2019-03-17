@@ -4,6 +4,7 @@ import store from '../store';
 class ApplicationAPI {
     constuctor()
     {
+        // not working, constructor not called when imported.
         this._axios = axios.create({
             baseURL: '/API/',
         });
@@ -16,6 +17,7 @@ class ApplicationAPI {
 
     uploadTransaction(transactionData)
     {
+        //return this._axios({...});
         return axios({
             method: 'post',
             url:'/API/transactions/upload',

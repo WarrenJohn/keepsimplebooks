@@ -19,10 +19,8 @@ export default{
         getTransactions: function(){
             api.getRoute('transactions')
                 .then(transactions => {
-                    console.log(transactions);
                     // check store next
                     this.$store.dispatch('setTransactions', transactions.data);
-                    console.log('store', this.$store.state.transactions);
                     this.status = true;
                 })
                 .catch(() => {

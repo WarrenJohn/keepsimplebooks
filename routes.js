@@ -37,9 +37,9 @@ module.exports = app => {
         if (token){
             // reversed to get newest transactions at the top
             let data = await m.userTransactions(token.email)
-            // .then(data => {
             bluebird.map(data, row => {
                 return Promise.all([
+                    row.id,
                     u.decrypt(row.date),
                     u.decrypt(row.description),
                     u.decrypt(row.withdrawl),
@@ -47,40 +47,21 @@ module.exports = app => {
                     u.decrypt(row.balance)
                 ])
             })
-            // })
-
             .then(decrypted => {
-                // decrypted = decrypted.map(row => (
-                //     {
-                //         date: row[0],
-                //         description: row[1],
-                //         withdrawl: row[2],
-                //         deposit: row[3],
-                //         balance: row[4]
-                //     }
-                // ))
-                res.status(200).send(decrypted.map(row => (
-                    {
-                        date: row[0],
-                        description: row[1],
-                        withdrawl: row[2],
-                        deposit: row[3],
-                        balance: row[4]
-                    }
-                )).reverse());
+                res.status(200).send(
+                    decrypted.map(row => (
+                        {
+                            id: row[0],
+                            date: row[1],
+                            description: row[2],
+                            withdrawl: row[3],
+                            deposit: row[4],
+                            balance: row[5]
+                        })
+                    ).reverse()
+                );
 
             })
-
-            // .then(data => {
-            //     data.map(row => (
-            //         row.date = u.decrypt(row.date),
-            //         row.description = u.decrypt(row.description),
-            //         row.withdrawl = u.decrypt(row.withdrawl),
-            //         row.deposit = u.decrypt(row.deposit),
-            //         row.balance = u.decrypt(row.balance)
-            //     ))
-            //     res.status(200).send(data.reverse());
-            // })
             .catch(() => {
                 res.status(500).send();
             });
@@ -277,7 +258,8 @@ module.exports = app => {
             .then(() => {
                 res.status(200).send();
             })
-            .catch(() => {
+            .catch((err) => {
+                console.log('route',err);
                 res.status(500).send()
             })
         }else{
