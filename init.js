@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const path = require('path');
+const history = require('connect-history-api-fallback');
 
 const m = require('./models');
 
@@ -28,6 +29,8 @@ const tagsLimiter = rateLimit({
     max: 300
 });
 
+app.use(history());
+
 app.use('/users/', userLimiter);
 app.use('/transactions/', transactionsLimiter);
 app.use('/tags/', tagsLimiter);
@@ -48,9 +51,6 @@ const todo = `
 
     FEATURES / TO DO:\x1b[0m\x1b[47m
 \x1b[30m
-PRODUCTION ERRORS:
--routes not being handled correctly on refresh or when directly navigating to them
-
 TODO:
 - Let user opt to never store their data
 - User Profile route
