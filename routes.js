@@ -179,18 +179,19 @@ module.exports = app => {
                 res.status(413).send();
             }
             let records = parse(req.file.buffer, {columns: false, trim: true})
-            bluebird.map(records, (row) => {return Promise.all(
-                [
-                    u.encrypt(row[0]),
-                    // remove double spaces to normalize
-                    u.encrypt(row[1].replace(/ +(?= )/g, '')),
-                    u.encrypt(row[2]),
-                    u.encrypt(row[3]),
-                    u.encrypt(row[4])
-                ])
-            }
-            )
-            .then(records => {
+            // Temporarily disabling the encryption of records
+            // bluebird.map(records, (row) => {return Promise.all(
+            //     [
+            //         u.encrypt(row[0]),
+            //         // remove double spaces to normalize
+            //         u.encrypt(row[1].replace(/ +(?= )/g, '')),
+            //         u.encrypt(row[2]),
+            //         u.encrypt(row[3]),
+            //         u.encrypt(row[4])
+            //     ])
+            // }
+            // )
+            // .then(records => {
                 m.insertBulkRowsBank(
                     records.map(row => (
                         {
@@ -203,7 +204,7 @@ module.exports = app => {
                         }
                     )
                 ))
-            })
+            // })
         }else{
             res.status(403).send();
         }

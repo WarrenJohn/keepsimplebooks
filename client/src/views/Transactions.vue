@@ -102,6 +102,7 @@
                                                         <th scope="col">Amount</th>
                                                         <th scope="col"></th>
                                                         <th scope="col"></th>
+                                                        <th scope="col"></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
