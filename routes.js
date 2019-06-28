@@ -35,7 +35,7 @@ module.exports = app => {
         const tokenReceived = req.headers.authorization.split(' ')[1];
         const token = jwt.verify(tokenReceived, jwtCert);
         if (token){
-            
+
             m.userTransactions(token.email)
             .then(transactions => {
                 res.status(200).send(transactions.reverse())
@@ -220,6 +220,7 @@ module.exports = app => {
     })
 
     app.post('/API/tags', u.hasToken, (req, res) =>{
+        console.log('\n\n\nTAG', req.body.tag, '\n\n\n');
         const tokenReceived = req.headers.authorization.split(' ')[1];
         const token = jwt.verify(tokenReceived, jwtCert);
         if (token){
@@ -240,10 +241,12 @@ module.exports = app => {
     );
 
     app.post('/API/categories', u.hasToken, (req, res) =>{
+        console.log('CATEGROY ADD', req.body);
         const tokenReceived = req.headers.authorization.split(' ')[1];
         const token = jwt.verify(tokenReceived, jwtCert);
         if (token){
             let categoryObj = req.body;
+            console.log('CATEGROY OBJ',categoryObj);
             categoryObj.category = categoryObj.category.replace(/ +(?= )/g, '');
             m.createUserCategory(categoryObj, token.email)
             .then(response => {

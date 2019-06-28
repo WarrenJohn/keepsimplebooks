@@ -184,8 +184,7 @@ export default{
             setTimeout(() => {this.clientResponseClass = null; this.clientResponse = null}, 3000);
         },
         addCategory: function(){
-            api()
-                .post('categories', {category: this.tag.category.toUpperCase()})
+            api.addCategory({category: this.tag.category.toUpperCase()})
                 .then(response => {
                     if(response.data.created){
                         // referencing the response from findOrCreate method of sequelize
@@ -199,8 +198,7 @@ export default{
                     }
                 })
                 .then(() => {
-                    api()
-                        .get('categories')
+                    api.getRoute('categories')
                         .then(response => {
                             this.categoryOptions = response.data.map(object => {
                                 if (object.name === this.tag.category.toUpperCase()){
@@ -281,8 +279,7 @@ export default{
         },
         addTag: function(){
             this.tag.description = this.tag.description.toUpperCase()
-            api()
-                .post('tags', {tag: this.tag})
+            api.addTag({tag: this.tag})
                 .then(response => {
                     if(response.data.created){
                         // 'created' is referencing the response from findOrCreate method of sequelize

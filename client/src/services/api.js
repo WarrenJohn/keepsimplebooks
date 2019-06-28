@@ -4,7 +4,6 @@ import store from '../store';
 class ApplicationAPI {
     constuctor()
     {
-        // not working, constructor not called when imported.
         this._axios = axios.create({
             baseURL: '/API/',
         });
@@ -31,6 +30,22 @@ class ApplicationAPI {
             method: 'get',
             url:`/API/${url}`,
             headers: this._getAuthHeader()
+        });
+    }
+    addTag(tag){
+        return axios({
+            method: 'post',
+            url:`/API/tags/`,
+            headers: this._getAuthHeader(),
+            data: tag
+        });
+    }
+    addCategory(category){
+        return axios({
+            method: 'post',
+            url:`/API/categories/`,
+            headers: this._getAuthHeader(),
+            data: category
         });
     }
     deleteTransaction(id){
