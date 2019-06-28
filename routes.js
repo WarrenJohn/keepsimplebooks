@@ -35,36 +35,45 @@ module.exports = app => {
         const tokenReceived = req.headers.authorization.split(' ')[1];
         const token = jwt.verify(tokenReceived, jwtCert);
         if (token){
-            // reversed to get newest transactions at the top
-            let data = await m.userTransactions(token.email)
-            bluebird.map(data, row => {
-                return Promise.all([
-                    row.id,
-                    u.decrypt(row.date),
-                    u.decrypt(row.description),
-                    u.decrypt(row.withdrawl),
-                    u.decrypt(row.deposit),
-                    u.decrypt(row.balance)
-                ])
-            })
-            .then(decrypted => {
-                res.status(200).send(
-                    decrypted.map(row => (
-                        {
-                            id: row[0],
-                            date: row[1],
-                            description: row[2],
-                            withdrawl: row[3],
-                            deposit: row[4],
-                            balance: row[5]
-                        })
-                    ).reverse()
-                );
-
+            
+            m.userTransactions(token.email)
+            .then(transactions => {
+                res.status(200).send(transactions.reverse())
             })
             .catch(() => {
                 res.status(500).send();
-            });
+            })
+            // This is the decryption of encrypted transactions
+            // reversed to get newest transactions at the top
+            // let data = await m.userTransactions(token.email)
+            // bluebird.map(data, row => {
+            //     return Promise.all([
+            //         row.id,
+            //         u.decrypt(row.date),
+            //         u.decrypt(row.description),
+            //         u.decrypt(row.withdrawl),
+            //         u.decrypt(row.deposit),
+            //         u.decrypt(row.balance)
+            //     ])
+            // })
+            // .then(decrypted => {
+            //     res.status(200).send(
+            //         decrypted.map(row => (
+            //             {
+            //                 id: row[0],
+            //                 date: row[1],
+            //                 description: row[2],
+            //                 withdrawl: row[3],
+            //                 deposit: row[4],
+            //                 balance: row[5]
+            //             })
+            //         ).reverse()
+            //     );
+            //
+            // })
+            // .catch(() => {
+            //     res.status(500).send();
+            // });
         }else{
             res.status(403).send();
         }

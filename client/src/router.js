@@ -8,7 +8,6 @@ import History from './views/History.vue';
 import Transactions from './views/Transactions.vue';
 import Upload from './views/Upload.vue';
 import store from './store';
-// import axios from 'axios';
 
 Vue.use(Router);
 

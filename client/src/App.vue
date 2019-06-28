@@ -8,11 +8,13 @@
 
     <b-navbar toggleable="md" variant="primary" type="dark" sticky>
 
-        <!-- goes in the navbar brand tag v-if="!$store.state.userLoggedIn" -->
-        <b-navbar-brand
+        <!-- <b-navbar-brand
             class="text-white logo" to="/">keepsimplebooks
+        </b-navbar-brand> -->
+        <b-navbar-brand
+            v-if="!$store.state.userLoggedIn" class="text-white" to="/">keepsimplebooks
         </b-navbar-brand>
-        <!-- <status v-else></status> -->
+        <status v-else></status>
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
             <b-navbar-nav tag="h6">
@@ -57,11 +59,11 @@
 </template>
 
 <script>
-// import Status from './components/Status.vue'
+import Status from './components/Status.vue'
 
 export default {
     components:{
-        // Status
+        Status
     },
     methods: {
         logout: function(){

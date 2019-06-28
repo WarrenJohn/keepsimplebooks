@@ -1,14 +1,15 @@
 <template>
     <div class="">
-        <b-alert v-if='!status' variant='danger' show>Decrypting</b-alert>
-        <b-alert v-else variant='success' show>Decrypted</b-alert>
+        <!-- <b-alert v-if='!status' variant='danger' show>Decrypting</b-alert>
+        <b-alert v-else variant='success' show>Decrypted</b-alert> -->
+        <b-alert v-if='!status' variant='danger' show>Fetching Data</b-alert>
+        <b-alert v-else variant='success' show>Data Retrieved</b-alert>
     </div>
 </template>
 <script>
 import api from '@/services/api';
 
 export default{
-    // props: ['uploaded'],
     name:'Status',
     data(){
         return{
